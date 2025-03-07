@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projects | Your Name</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header>
+    <nav class="navbar">
+      <div class="nav-logo">Your Name</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container projects-page">
+    <div class="floating-card">
+      <h1>Projects</h1>
+      <!-- Research Section -->
+      <section class="research-section">
+        <h2>Research</h2>
+        <!-- Instead of a grid, we’ll display each project card in a block 
+             with image on the right, consistent with your request. -->
+        
+        <!-- Research Card 1 -->
+        <div 
+          class="card project-card clickable-card" 
+          onclick="window.location='project-details.html'"
+        >
+          <div class="project-card-content">
+            <div class="project-text">
+              <h3>Research Project 1</h3>
+              <p>Short summary or highlight of the research.</p>
+            </div>
+            <div class="project-thumbnail">
+              <img src="assets/images/placeholder.jpg" alt="Research 1" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Research Card 2 -->
+        <div 
+          class="card project-card clickable-card" 
+          onclick="window.location='project-details.html'"
+        >
+          <div class="project-card-content">
+            <div class="project-text">
+              <h3>Research Project 2</h3>
+              <p>Short summary or highlight of the research.</p>
+            </div>
+            <div class="project-thumbnail">
+              <img src="assets/images/placeholder.jpg" alt="Research 2" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects Section -->
+      <section class="projects-section">
+        <h2>Other Projects</h2>
+        <!-- Same style as Research projects -->
+        <div 
+          class="card project-card clickable-card" 
+          onclick="window.location='project-details.html'"
+        >
+          <div class="project-card-content">
+            <div class="project-text">
+              <h3>Project Title 1</h3>
+              <p>A short summary of the project goes here.</p>
+            </div>
+            <div class="project-thumbnail">
+              <img src="assets/images/placeholder.jpg" alt="Project 1" />
+            </div>
+          </div>
+        </div>
+
+        <div 
+          class="card project-card clickable-card" 
+          onclick="window.location='project-details.html'"
+        >
+          <div class="project-card-content">
+            <div class="project-text">
+              <h3>Project Title 2</h3>
+              <p>A short summary of the project goes here.</p>
+            </div>
+            <div class="project-thumbnail">
+              <img src="assets/images/placeholder.jpg" alt="Project 2" />
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Your Name. All rights reserved.</p>
+  </footer>
+</body>
+</html>

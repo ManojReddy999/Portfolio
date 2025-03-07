@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home | Your Name</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header>
+    <nav class="navbar">
+      <div class="nav-logo">Manoj Manchala</div>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container home-page">
+    <!-- =========== Floating Card 1: Brief + GIF ========== -->
+    <div class="floating-card">
+      <section class="intro-section">
+        <div class="intro-text">
+          <h1>Hello, I'm Manoj Manchala</h1>
+          <p>
+            I'm a Robotics master's student at UC San Diego specializing in autonomous navigation, perception, and reinforcement learning. My current work focuses on developing advanced deep learning architectures for autonomous navigation and obstacle avoidance, utilizing state-of-the-art reinforcement learning and graph neural network techniques.
+          </p>
+          <p>
+            In my recent projects, I've developed sophisticated navigation algorithms that leverage 3D convolutional neural networks (CNNs) and graph neural networks (GNNs) to process sensory inputs such as depth maps and point clouds. My work includes creating custom reinforcement learning environments and developing innovative architectures like Point-GNN for precise 3D object detection in cluttered and dynamic scenarios.
+          </p>
+          <p>
+            With a strong foundation in reinforcement learning methodologies like PPO and SAC, I've successfully trained autonomous agents capable of complex interactions, navigation, and obstacle avoidance tasks. My approach integrates advanced perception methods and proactive decision-making, enabling systems to interact intelligently with their surroundings, even under uncertainty.
+          </p>
+        </div>
+        <div class="intro-gif">
+          <!-- Replace with your actual GIF or image -->
+          <img src="assets/images/car.gif" alt="Placeholder GIF" />
+        </div>
+      </section>
+    </div>
+
+    <!-- =========== Floating Card 2: Current Research (Full Width) ========== -->
+    <!-- Entire card is clickable; includes an image on the right. -->
+    <div 
+      class="card floating-card project-card clickable-card" 
+      onclick="window.location='projects.html'"
+    >
+      <div class="project-card-content">
+        <div class="project-text">
+          <h2>GNN-Driven Obstacle Avoidance with Multi-Surface Perception</h2>
+          <p>
+            I am developing a navigation and obstacle-avoidance framework that uses Graph Neural Networks (GNNs) and point cloud data to robustly plan safe paths in cluttered or complex environments. Currently, my approach builds a graph from 3D point clouds and applies GraphConv layers to iteratively learn obstacle relationships, enabling reactive and efficient avoidance behaviors. Going forward, I will augment this system with RGB data to classify and differentiate surfaces—such as roads, off-road terrain, and grass—that appear in the camera view. By fusing semantic surface information with GNN-based obstacle representations, the robot (or agent) will make more context-aware navigation decisions, improve its path planning in diverse terrains, and ultimately move toward truly autonomous mobility in varied environments.
+          </p>
+        </div>
+        <!-- Thumbnail image on the right -->
+        <div class="project-thumbnail">
+          <img src="assets/images/sample-research.png" alt="Research Thumbnail" />
+        </div>
+      </div>
+    </div>
+
+    <!-- =========== Floating Card 3: Recent Blogs (No images, full card clickable) ========== -->
+    <div class="floating-card">
+      <section class="recent-blogs-section">
+        <h2>Recent Blog Posts</h2>
+        <div class="cards-grid">
+          <!-- Blog Card 1 (clickable) -->
+          <div 
+            class="card clickable-card" 
+            onclick="window.location='blog-post.html'"
+          >
+            <h3>Blog Post Title 1</h3>
+            <p>
+              A short snippet of your blog post goes here. This entices readers
+              to click through for more details.
+            </p>
+          </div>
+          <!-- Blog Card 2 (clickable) -->
+          <div 
+            class="card clickable-card" 
+            onclick="window.location='blog-post.html'"
+          >
+            <h3>Blog Post Title 2</h3>
+            <p>
+              Another short snippet of your blog post to draw in visitors.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Your Name. All rights reserved.</p>
+  </footer>
+</body>
+</html>

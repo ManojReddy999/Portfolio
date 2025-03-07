@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume | Your Name</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header>
+    <nav class="navbar">
+      <div class="nav-logo">Your Name</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="resume.html" class="active">Resume</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container resume-page">
+    <div class="floating-card">
+      <div class="heading-buttons">
+        <h1>My Resume</h1>
+        <div class="button-group">
+          <a href="resume.pdf" download class="button">Download Resume (PDF)</a>
+        </div>
+      </div>
+      
+      <!-- Option 1: View inline with <iframe> or <embed> -->
+      <div class="resume-viewer">
+        <iframe src="resume.pdf" width="75%" height="800px">
+          Your browser does not support iframes. You can 
+          <a href="resume.pdf" download>download the PDF</a>.
+        </iframe>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Your Name. All rights reserved.</p>
+  </footer>
+</body>
+</html>
