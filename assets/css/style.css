@@ -17,31 +17,43 @@ html {
 
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;600&display=swap');
 
 /* 
   BODY
   - Using a soft pastel blue (#F0F4F8) for background
 */
 body {
-  font-family: 'Poppins', sans-serif;
-  background: #fff7d3;
+  font-family: 'Roboto', Arial, sans-serif;
+  background: #f5e4d7;
   color: #333;
   line-height: 1.6;
   /* Padding top for the fixed, floating navbar */
   padding-top: 100px;
 }
 
-/* Remove default link style */
+/* Style all links with a specific color */
 a {
-  text-decoration: none;
-  color: inherit;
+  color: #3498db; /* A nice blue color */
+  text-decoration: none; /* Remove underline if desired */
+  transition: color 0.3s;
 }
+
+/* Change color on hover */
+a:hover {
+  color: #2980b9; /* A darker blue */
+}
+
 
 p {
   margin-block-start: 1rem;
   margin-block-end: 1rem;
 }
 
+.large-list li {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
 
 /* 
   NAVBAR
@@ -104,6 +116,7 @@ p {
   padding: 0 1rem;
 }
 
+
 /* 
   FLOATING CARD for large sections 
   - Pastel tinted glass background
@@ -119,6 +132,47 @@ p {
 
   padding: 2rem;
   margin-bottom: 2rem;
+}
+
+.project-details-card {
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+
+  padding: 5rem;
+  margin-bottom: 2rem;
+}
+
+.project-details-card p {
+  font-size: 1.5rem;
+}
+
+.project-details-card h1 {
+  font-size: 2.2rem;
+}
+
+.project-details-card h2 {
+  font-size: 1.95rem;
+}
+
+.project-details-card h3 {
+  font-size: 1.75rem;
+  text-decoration: underline;
+}
+
+.project-details-card h4 {
+  font-size: 1.rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.project-details-gif img {
+  max-width: 400px;
+  border-radius: 16px;
 }
 
 /* 
@@ -193,14 +247,14 @@ p {
 }
 
 .project-thumbnail {
-  padding: 1.rem;
+  padding: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .project-thumbnail img {
-  max-width: 400px;
+  max-width: 350px;
   border-radius: 16px;
 }
 
@@ -311,6 +365,52 @@ footer {
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
+
+.media-row {
+  display: flex;
+  gap: 1rem; /* space between elements */
+  align-items: center; /* vertically center the media */
+  justify-content: center;
+  /* size: 50%; */
+}
+
+.media-row img,
+.media-row video {
+  /* flex: 1;        each element takes equal space */
+  max-width: 100%; /* responsive sizing */
+  height: auto;   /* maintain aspect ratio */
+}
+
+img {
+  max-width: 100%;
+  padding-top: 1rem;;
+  padding-bottom: 1rem;
+  height: auto;
+  display: block;
+}
+
+.img-small {
+  width: 300px;
+  height: auto;
+}
+
+.img-medium {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+  height: auto;
+}
+
+.img-large {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 800px;
+  height: auto;
+  object-fit: cover;
+}
+
 
 @media (max-width: 768px) {
   .about-section {

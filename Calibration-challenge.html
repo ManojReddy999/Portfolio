@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Details | Comma.ai Calibration Challenge</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <!-- Optionally include a math rendering library if you want equations rendered nicely -->
+  <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header>
+    <nav class="navbar">
+      <div class="nav-logo">Your Name</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container project-details-page">
+    <div class="floating-card project-details-card">
+      <!-- Top Row: Heading and optional buttons -->
+      <div class="heading-buttons">
+        <h1>Comma.ai Calibration Challenge</h1>
+        <div class="button-group">
+          <!-- Optional buttons (e.g., Live Demo, GitHub) -->
+          <a href="ECE228_project_report_12.pdf" target="_blank" class="button">Report</a>
+          <a href="#" class="button">GitHub</a>
+        </div>
+      </div>
+
+      <!-- Detailed Technical Blog Post -->
+      <article>
+        <p><em>By : Manoj Kumar Reddy Manchala, Sai Praneeth Potladurthy, Sesha Sai Rakesh Jonnavithula</em></p>
+        
+        <!-- Introduction -->
+        <section>
+          <h2>Introduction</h2>
+          <p>
+            Autonomous driving has pushed the boundaries of modern engineering, yet calibrating an onboard camera remains a critical challenge. In this project, we address the misalignment issue between the vehicle’s coordinate system and its onboard camera by predicting the vehicle’s motion direction—specifically, the pitch and yaw angles—from monocular camera feeds. This blog delves into the technical aspects of our approach, including optical flow extraction, vanishing point estimation, and the design of a hybrid Conv-LSTM network.
+          </p>
+          <!-- Suggested image: A snapshot of raw camera frames or an introductory diagram -->
+          <!-- <img src="assets/images/intro_image.jpg" alt="Introduction Image" /> -->
+        </section>
+        
+        <!-- Project Overview and Objectives -->
+        <section>
+          <h2>Project Overview and Objectives</h2>
+          <p>
+            Our primary objective was to develop an efficient calibration tool that uses deep learning to estimate pitch and yaw from camera inputs. By accurately predicting these parameters, the system helps to refine camera alignment, ensuring that the vehicle's control system receives reliable visual data. We focused on overcoming challenges such as dynamic lighting, noise in the data, and limited labeled datasets.
+          </p>
+        </section>
+        
+        <!-- Technical Background -->
+        <section>
+          <h2>Technical Background</h2>
+          <h3>Optical Flow Extraction</h3>
+          <p>
+            Optical flow is used to capture the motion between consecutive frames. We employed the Farneback method, which approximates the neighborhood of each pixel using quadratic polynomials. The motion vector <code>u = (u, v)</code> at each pixel is computed by minimizing the difference in pixel intensities between two frames:
+          </p>
+          <p>
+            <code>min ∑ [I<sub>t+1</sub>(x + u) - I<sub>t</sub>(x)]²</code>
+          </p>
+          <!-- Suggested image: Figure showing optical flow features -->
+           <div class="media-row">
+            <img src="assets/images/Calibration challenge/optical_img_2.png" alt="Optical Flow Features" class="img-small"/>
+            <img src="assets/images/Calibration challenge/optical_img_1.png" alt="Optical Flow Features" class="img-small"/>
+            <img src="assets/images/Calibration challenge/optical_img_3.png" alt="Optical Flow Features" class="img-small"/>
+           </div>
+          
+          <h3>Vanishing Point Estimation</h3>
+          <p>
+            The vanishing point is the point where parallel lines in a 3D space appear to converge in a 2D image. By estimating the coordinates of the vanishing point, we can derive a direction vector that, when combined with the vehicle's rotation matrix, yields the pitch and yaw angles. This method leverages salient features such as lane markings for accurate estimation.
+          </p>
+          <!-- Suggested image: Diagram of vanishing point detection -->
+          <img src="assets/images/Calibration challenge/vanishing_point.png" alt="Vanishing Point Detection" class="img-medium"/>
+        </section>
+        
+        <!-- Methodology -->
+        <section>
+          <h2>Methodology</h2>
+          <h3>Data Preprocessing</h3>
+          <p>
+            The dataset consisted of five one-minute videos captured at 20 fps. With limited labeled data (only 20% showing significant motion) and around 40% missing labels, we performed interpolation to fill in the gaps. In addition, optical flow features were computed for each frame and concatenated with the RGB images to form a five-channel input for our model.
+          </p>
+          <ul>
+            <li><strong>Frame Extraction:</strong> Videos were split into frames and resized to 256x256.</li>
+            <li><strong>Label Interpolation:</strong> Missing labels were estimated to maintain continuity.</li>
+            <li><strong>Feature Concatenation:</strong> Optical flow components were concatenated with RGB channels.</li>
+          </ul>
+          
+          <h3>Hybrid Conv-LSTM Architecture</h3>
+          <p>
+            To effectively capture both spatial and temporal features, we designed a hybrid Conv-LSTM network. The convolutional layers extract spatial features from each frame, while the LSTM layers capture temporal dependencies across the frame sequences. A final fully connected layer maps these features to the predicted pitch and yaw.
+          </p>
+          <!-- Suggested image: Diagram of the Conv-LSTM architecture (Figure 3 from the report) -->
+          <img src="assets/images/Calibration challenge/architecture.png" alt="Conv-LSTM Architecture Diagram" class="img-large"/>
+          
+          <h3>Training and Evaluation</h3>
+          <p>
+            We trained the model for 30 epochs using a batch size of 10 and a sequence length of 15 frames. The model was optimized with SGD (learning rate 0.0001, weight decay 0.001) and regularized using dropout (0.5). A weighted mean squared error loss function was used to address the data imbalance, especially since only 20% of the frames contained significant motion.
+          </p>
+          <!-- Suggested image: Graph or plot of training vs. test loss curves -->
+          <div class="media-row">
+            <img src="assets/images/Calibration challenge/without_optical_flow_loss.png" alt="Optical Flow Features" class="img-medium"/>
+            <img src="assets/images/Calibration challenge/only_optical_loss.png" alt="Optical Flow Features" class="img-medium"/>
+            <img src="assets/images/Calibration challenge/loss_curve.png" alt="Optical Flow Features" class="img-medium"/>
+          </div>
+          <h4>
+            <em> The images represent loss curves using - RGB images, Optical Flow features & combined RGB and Optical Flow features from left to right. </em> 
+          </h4>
+        </section>
+        
+        <!-- Experiments and Results -->
+        <section>
+          <h2>Experiments and Results</h2>
+          <p>
+            We experimented with three input configurations:
+          </p>
+          <ul class="large-list">
+            <li><strong>RGB Only:</strong> Processed only the raw image frames.</li>
+            <img src="assets/images/Calibration challenge/without_optical_flow_pitch_yaw.png" alt="Conv-LSTM Architecture Diagram" class="img-large"/>
+            <li><strong>Optical Flow Only:</strong> Used optical flow features exclusively.</li>
+            <img src="assets/images/Calibration challenge/only_optical_flow_pitch_yaw.png" alt="Conv-LSTM Architecture Diagram" class="img-large"/>
+            <li><strong>Combined Input:</strong> Fused both RGB and optical flow channels.</li>
+            <img src="assets/images/Calibration challenge/pitch_yaw_prediction.png" alt="Conv-LSTM Architecture Diagram" class="img-large"/>
+          </ul>
+          <p>
+            Our findings revealed that while the combined input provided a more robust representation, it also introduced higher variance in the predictions—likely due to noise from interpolated labels. Ultimately, our best model achieved an approximation error of about 21.7% in predicting pitch and yaw.
+          </p>
+        </section>
+        
+        <!-- Challenges, Observations, and Future Work -->
+        <section>
+          <h2>Challenges, Observations, and Future Work</h2>
+          <p>
+            Throughout the project, several challenges were encountered:
+          </p>
+          <ul>
+            <li>
+              <strong>Data Sparsity and Imbalance:</strong> Limited and inconsistent data made it difficult to train robust models.
+            </li>
+            <li>
+              <strong>Tuning the Loss Function:</strong> Balancing the weighted MSE loss was critical to focus on under-represented turning scenarios.
+            </li>
+            <li>
+              <strong>Computational Constraints:</strong> Pre-computed optical flow features increased computational overhead, affecting real-time applicability.
+            </li>
+          </ul>
+          <p>
+            Future work will explore advanced optical flow algorithms, alternative architectures (such as Vision Transformers), and real-time data processing to improve accuracy and efficiency.
+          </p>
+        </section>
+        
+        <!-- Conclusion -->
+        <section>
+          <h2>Conclusion</h2>
+          <p>
+            This project demonstrates a viable method for calibrating an onboard camera using deep learning. By combining optical flow with vanishing point detection within a hybrid Conv-LSTM framework, we achieved promising results in estimating vehicle pitch and yaw. While challenges remain—particularly with data sparsity and computational efficiency—the approach lays a solid foundation for further research and development in autonomous vehicle calibration.
+          </p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Your Name. All rights reserved.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Details | YouBot Motion Control</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <!-- Header / Navigation (if you use the same navbar across pages) -->
+  <header>
+    <nav class="navbar">
+      <div class="nav-logo">Your Name</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container project-details-page">
+    <div class="project-details-card">
+      <!-- Heading with optional buttons placed at the top-right -->
+      <div class="heading-buttons">
+        <h1>Motion Control of a Mobile Manipulator Robot (YouBot)</h1>
+        <div class="button-group">
+          <!-- Optional buttons; you can remove if not needed -->
+          <a href="https://www.youtube.com/playlist?list=PLNTqfp1IsYFb94NbPhJJMrlI-eNQuOVJU" target="_blank" class="button">Demo</a>
+          <a href="#" class="button">GitHub</a>
+        </div>
+      </div>
+
+      <!-- Blog Article -->
+      <article>
+        <p><em>By Manoj Kumar Reddy Manchala | MAE204 - Final Project</em></p>
+
+        <section>
+          <h2>Introduction</h2>
+          <p>
+            When I embarked on the challenge of designing a comprehensive control system for a mobile manipulator robot, I knew I was stepping into an exciting yet complex domain. My project focused on the YouBot—a versatile robot capable of performing pick-and-place operations autonomously. In this blog, I’ll take you through the journey of developing the control architecture, the challenges I faced, and the insights I gained along the way.
+          </p>
+          <img src="assets/images/Mobile Manipulator/Screenshot from 2025-03-12 11-46-40.png" alt="Introduction placeholder image" class="center-image" />
+        </section>
+
+        <section>
+          <h2>Project Overview and Objectives</h2>
+          <p>
+            The primary goal of the project was to enable the YouBot to navigate to a specified location, pick up an object, and place it at a target destination. To achieve this, I designed and implemented software components that simulated the robot’s kinematics, generated reference trajectories for the pick-and-place task, and developed a robust feedback control strategy to ensure smooth and precise execution.
+          </p>
+          <p>
+            The project was implemented in MATLAB using the Modern Robotics Toolbox, with simulation and visualization handled by CoppeliaSim, which offers a versatile platform for testing robotics applications in a controlled, virtual environment, allowing for the detailed observation and analysis of the robot's performance under various conditions.
+          </p>
+        </section>
+
+        <section>
+          <h2>Methodology</h2>
+          <h3>Kinematics Simulator (NextState Function)</h3>
+          <p>
+            This function predicted the robot’s next state using the Euler integration method based on the current state, velocities, and a defined time step. It provided the fundamental basis for planning the robot’s motion.
+          </p>
+          <h3>Reference Trajectory Generator (Trajectory_Generator Function)</h3>
+          <p>
+            The trajectory generator computed a series of configurations for the robot’s end-effector. It ensured a smooth transition between the initial and final positions, creating a continuous path for the pick-and-place operation.
+          </p>
+          <h3>Feedback Control (FeedbackControl Function)</h3>
+          <p>
+            The control strategy combined feedforward commands with a Proportional-Integral (PI) controller to minimize the error between the robot’s actual path and the reference trajectory. Careful tuning of the controller parameters (Kp and Ki) was critical to achieve effective error correction without causing overshoot or oscillations.
+          </p>
+        </section>
+
+        <section>
+          <h2>Implementation Details</h2>
+          <p>
+            The project was executed primarily in MATLAB, utilizing the Modern Robotics Toolbox for robot kinematics. Simulation and visualization were carried out in CoppeliaSim, with CSV-based communication linking MATLAB-generated trajectories to the virtual environment.
+          </p>
+          <img src="assets/images/placeholder.jpg" alt="Implementation placeholder image" />
+        </section>
+
+        <section>
+          <h2>Challenges and Struggles</h2>
+          <h3>Tuning the Controller</h3>
+          <p>
+            One of the toughest challenges was tuning the feedback controller. Achieving the optimal balance between the proportional (Kp) and integral (Ki) gains was crucial. I encountered issues like overshoot, slow convergence, and oscillations, all of which required careful adjustments.
+          </p>
+          <h3>Hard-Coding vs. Adaptability</h3>
+          <p>
+            Rather than relying on hard-coded values—which would only work for one set of conditions—I developed a fully adaptable system that could handle changes in initial and final configurations without losing performance.
+          </p>
+          <h3>Handling Singularities</h3>
+          <p>
+            Managing singularities during the calculation of the Jacobian inverse was another significant challenge. Implementing a pseudoinverse with a tolerance helped prevent instability near singular configurations.
+          </p>
+          <img src="assets/images/placeholder.jpg" alt="Challenges placeholder image" />
+        </section>
+
+        <section>
+          <h2>Results and Observations</h2>
+          <p>
+            Multiple test cases were evaluated & in all the cases, the initial configuration of the end-effector has at least 30 degrees of orientation error & 0.2m of position error from the first configuration on the reference trajectory:
+          </p>
+          <ul>
+            <h3><li><strong>Best Case:</strong> </li></h3>
+            <p>An optimized PI controller ensured smooth trajectory tracking with rapid error convergence.</p>
+            <div class="media-row">
+                <img src="assets/images/Mobile Manipulator/Best_case.png" alt="Introduction placeholder image"/>
+                <img src="assets/images/Mobile Manipulator/Best_Case.gif" alt="Introduction placeholder image"/>
+            </div>
+            <h3><li><strong>Overshoot Case:</strong> </li></h3>
+            <p>A less-tuned controller led to overshoots, highlighting the importance of proper tuning.</p>
+            <div class="media-row">
+                <img src="assets/images/Mobile Manipulator/Overshoot.png" alt="Introduction placeholder image" class="center-image"/>
+                <!-- <img src="assets/images/Mobile Manipulator/Overshoot.gif" alt="Introduction placeholder image"/> -->
+            </div>
+            <h3><li><strong>New Task Adaptability:</strong> </li></h3>
+            <p>The system successfully adapted to changes in task parameters, including a 90-degree orientation shift.</p>
+            <div class="media-row">
+                <img src="assets/images/Mobile Manipulator/New_Task.png" alt="Introduction placeholder image"/>
+                <img src="assets/images/Mobile Manipulator/New_Task.gif" alt="Introduction placeholder image"/>
+            </div>
+            <h3><li><strong>Slow Convergence and High Oscillations:</strong> </li></h3>
+            <p>These cases underscored the trade-offs between responsiveness and stability.</p>
+            <div class="media-row">
+                <img src="assets/images/Mobile Manipulator/Slow_Convergence.png" alt="Introduction placeholder image"/>
+                <img src="assets/images/Mobile Manipulator/High_Oscillations.png" alt="Introduction placeholder image"/>
+            </div>
+          </ul>
+          <p>
+            Detailed results were documented with error plots and video demonstrations.
+          </p>
+          <!-- <video width="320" height="240" controls>
+            <source src="assets/videos/placeholder.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video> -->
+        </section>
+
+        <section>
+          <h2>Lessons Learned and Future Work</h2>
+          <p>
+            This project deepened my understanding of robot motion control, kinematics, and the challenges of system integration. In the future, I plan to explore advanced control strategies and incorporate real-time sensor feedback to further enhance performance.
+          </p>
+        </section>
+
+        <section>
+          <h2>Conclusion</h2>
+          <p>
+            The journey of developing a control system for the YouBot was both challenging and rewarding. This project not only refined my technical skills but also offered valuable insights into robotics and autonomous systems. I hope this detailed account inspires further exploration and innovation in the field.
+          </p>
+          <p>
+            For more details, please refer to the full project report and the accompanying video demonstrations.
+          </p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Manoj Kumar Reddy Manchala. All rights reserved.</p>
+  </footer>
+</body>
+</html>

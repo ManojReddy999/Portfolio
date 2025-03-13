@@ -64,18 +64,71 @@
         </div>
       </section>
 
-      <!-- Projects Section -->
-      <section class="projects-section">
-        <h2>Other Projects</h2>
-        <!-- Same style as Research projects -->
+      <section class="research-section">
+        <h2>Motion Planning</h2>
+        <!-- Instead of a grid, we’ll display each project card in a block 
+             with image on the right, consistent with your request. -->
+        
+        <!-- Research Card 1 -->
         <div 
           class="card project-card clickable-card" 
           onclick="window.location='project-details.html'"
         >
           <div class="project-card-content">
             <div class="project-text">
-              <h3>Project Title 1</h3>
-              <p>A short summary of the project goes here.</p>
+              <h3>Research Project 1</h3>
+              <p>Short summary or highlight of the research.</p>
+            </div>
+            <div class="project-thumbnail">
+              <img src="assets/images/placeholder.jpg" alt="Research 1" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Research Card 2 -->
+        <div 
+          class="card project-card clickable-card" 
+          onclick="window.location='project-details.html'"
+        >
+          <div class="project-card-content">
+            <div class="project-text">
+              <h3>Dynamic Programming for Door & Key Navigation</h3>
+              <p> Developed a dynamic programming algorithm to compute optimal control policies for an autonomous agent navigating a Door & Key environment. The project formulates the task as an MDP—addressing both known and random map scenarios—and demonstrates how backward induction can yield cost‐minimizing action sequences for efficient autonomous navigation.</p>
+            </div>
+            <div class="project-thumbnail">
+              <img src="assets/images/Door-Key/5x5-normal.gif" alt="Research 2" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects Section -->
+      <section class="projects-section">
+        <h2>Technical Projects</h2>
+        <!-- Same style as Research projects -->
+        <div 
+        class="card project-card clickable-card" 
+        onclick="window.location='Calibration-challenge.html'"
+      >
+        <div class="project-card-content">
+          <div class="project-text">
+            <h3>Comma.ai Calibration challenge</h3>
+            <p>Developed an advanced deep learning solution to calibrate an onboard camera for autonomous vehicles by accurately predicting vehicle pitch and yaw. Our approach integrates optical flow and vanishing point techniques with a hybrid Conv-LSTM network to overcome data limitations and environmental challenges. This system refines camera alignment to improve vehicle control, and the complete code is available on GitHub.</p>
+          </div>
+          <div class="project-thumbnail">
+            <img src="assets/images/placeholder.jpg" alt="Project 1" />
+          </div>
+        </div>
+      </div>
+
+        <div 
+          class="card project-card clickable-card" 
+          onclick="window.location='Calibration-challenge.html'"
+        >
+          <div class="project-card-content">
+            <div class="project-text">
+              <h3>Comma.ai Calibration challenge</h3>
+              <p>Developed an advanced deep learning solution to calibrate an onboard camera for autonomous vehicles by accurately predicting vehicle pitch and yaw. Our approach integrates optical flow and vanishing point techniques with a hybrid Conv-LSTM network to overcome data limitations and environmental challenges. This system refines camera alignment to improve vehicle control, and the complete code is available on GitHub.</p>
             </div>
             <div class="project-thumbnail">
               <img src="assets/images/placeholder.jpg" alt="Project 1" />
@@ -85,15 +138,15 @@
 
         <div 
           class="card project-card clickable-card" 
-          onclick="window.location='project-details.html'"
+          onclick="window.location='Mobile-Manipulator.html'"
         >
           <div class="project-card-content">
             <div class="project-text">
-              <h3>Project Title 2</h3>
-              <p>A short summary of the project goes here.</p>
+              <h3>Motion Control of a Mobile Manipulator Robot (YouBot)</h3>
+              <p>Developed an adaptive control system for a YouBot to autonomously perform pick-and-place operations. The project features a MATLAB simulation that models the robot's kinematics, generates precise reference trajectories, and implements a robust feedforward-plus-PI feedback controller to minimize errors. Integration with CoppeliaSim enables realistic visualization and testing, ensuring smooth and accurate task execution under varying conditions.</p>
             </div>
             <div class="project-thumbnail">
-              <img src="assets/images/placeholder.jpg" alt="Project 2" />
+              <img src="assets/images/Mobile Manipulator/Best_Case.gif" alt="Project 2" />
             </div>
           </div>
         </div>
