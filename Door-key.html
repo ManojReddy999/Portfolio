@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Details | Dynamic Programming for Door & Key Navigation</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <!-- Optionally, include MathJax if you want to render equations -->
+  <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
+</head>
+<body>
+  <!-- Header / Navigation (if you use a common header) -->
+  <header>
+    <nav class="navbar">
+      <div class="nav-logo">Your Name</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container project-details-page">
+    <div class="floating-card project-details-card">
+      <!-- Heading with optional buttons -->
+      <div class="heading-buttons">
+        <h1>Dynamic Programming for Door & Key Navigation</h1>
+        <div class="button-group">
+          <!-- Optional buttons can be added here -->
+          <!-- <a href="#" class="button">Live Demo</a>
+          <a href="#" class="button">View on GitHub</a> -->
+        </div>
+      </div>
+
+      <!-- Detailed Blog Post -->
+      <article>
+        <p><em>By Manoj Kumar Reddy Manchala</em></p>
+        
+        <!-- Introduction -->
+        <section>
+          <h2>Introduction</h2>
+          <p>
+            Autonomous navigation in complex environments is a cornerstone of modern robotics.
+            In our project, we tackle a Door & Key environment where an agent (represented by a red
+            triangle) must navigate through obstacles, pick up a key, unlock doors, and reach a goal
+            (green square). We formulated the problem as a Markov Decision Process (MDP) and employed a
+            dynamic programming algorithm to compute an optimal control policy. This work lays a strong
+            foundation for applications in autonomous navigation and robotics.
+          </p>
+          <!-- Suggested image: A schematic of the Door & Key environment -->
+          <img src="assets/images/dp_environment.jpg" alt="Door & Key Environment Diagram" />
+        </section>
+        
+        <!-- Problem Formulation -->
+        <section>
+          <h2>Problem Formulation</h2>
+          <p>
+            We modeled the navigation problem as an MDP. For the <strong>Known Map</strong> scenario,
+            each state is represented as a tuple (x, y, o, k, d) where:
+          </p>
+          <ul>
+            <li><strong>x, y:</strong> grid position of the agent</li>
+            <li><strong>o:</strong> orientation (N, E, S, W)</li>
+            <li><strong>k:</strong> key possession (0 = no, 1 = yes)</li>
+            <li><strong>d:</strong> door status (0 = locked, 1 = unlocked)</li>
+          </ul>
+          <p>
+            In the <strong>Random Map</strong> case, additional variables such as door statuses, key
+            position index, and goal position index are incorporated to account for the dynamic elements.
+          </p>
+          <!-- Suggested image: Diagram showing state space and MDP formulation -->
+          <img src="assets/images/mdp_state_space.jpg" alt="MDP State Space Diagram" />
+        </section>
+        
+        <!-- Technical Approach -->
+        <section>
+          <h2>Technical Approach</h2>
+          <h3>Dynamic Programming Algorithm</h3>
+          <p>
+            Our algorithm computes the optimal policy using backward induction over a finite planning
+            horizon T. The process involves:
+          </p>
+          <ol>
+            <li>Initializing the value function for each state with high costs (∞) except at terminal states.</li>
+            <li>Iteratively updating the value function from t = T down to 0 using the stage cost (ℓ)
+              and the motion model f(x,u).</li>
+            <li>Extracting the control policy that minimizes the total expected cost from each state.</li>
+          </ol>
+          <p>
+            The pseudocode below illustrates the main idea:
+          </p>
+          <pre>
+Initialize policy(x) ← None for all x ∈ X
+Initialize V_T(x) ← ∞ for all x ∈ X, except V_T(x) = 0 for terminal states
+For t = T to 0:
+   For each state x ∈ X:
+      For each action u ∈ U:
+         Compute Q(u) = ℓ(x, u) + V_T(f(x, u))
+      Choose u* = argmin_u Q(u)
+      Set V_T(x) = Q(u*)
+      Update policy(x) = u*
+          </pre>
+          <!-- Suggested image: Flowchart of the DP algorithm -->
+          <img src="assets/images/dp_flowchart.jpg" alt="Dynamic Programming Flowchart" />
+        </section>
+        
+        <!-- Implementation Details -->
+        <section>
+          <h2>Implementation Details</h2>
+          <p>
+            The algorithm was implemented in Python. For the Known Map scenario, we computed a unique
+            control policy for each of the 7 environments provided in the starter code. For the Random Map,
+            a single policy was computed that handles any of the 36 8×8 environments with varying key and goal
+            positions. The motion model defines state transitions based on the agent’s actions (Move Forward,
+            Turn Left, Turn Right, Pick Up Key, and Unlock Door) and accounts for environmental constraints.
+          </p>
+          <p>
+            The cost function was designed to encourage the shortest path while penalizing incorrect terminal states.
+          </p>
+          <!-- Suggested image: Screenshot of code snippet or algorithm output -->
+          <img src="assets/images/code_screenshot.jpg" alt="Python Code Screenshot" />
+        </section>
+        
+        <!-- Results -->
+        <section>
+          <h2>Results</h2>
+          <p>
+            The dynamic programming algorithm produced control policies that successfully navigated the agent
+            through both the Known and Random Map scenarios. In the Known Map, different environments produced
+            distinct action sequences, while the Random Map policy demonstrated robust performance across 36
+            variations.
+          </p>
+          <p>
+            Visualizations of the agent’s trajectories confirm that the algorithm optimally selects actions such as
+            picking up keys, unlocking doors, and moving forward to minimize cost.
+          </p>
+          <!-- Suggested image: Trajectory plots from one of the environments -->
+          <img src="assets/images/dp_results.jpg" alt="Trajectory Plot" />
+          <!-- Optionally include a demo video -->
+          <video width="320" height="240" controls>
+            <source src="assets/videos/dp_demo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </section>
+        
+        <!-- Discussion and Future Work -->
+        <section>
+          <h2>Discussion and Future Work</h2>
+          <p>
+            While our dynamic programming approach successfully computes cost-optimal control policies, several challenges remain:
+          </p>
+          <ul>
+            <li><strong>Data Variability:</strong> The differing structures of the known maps and the variability in random maps require tailored state formulations.</li>
+            <li><strong>Computational Efficiency:</strong> The algorithm’s performance is sensitive to the planning horizon and state space size.</li>
+            <li><strong>Scalability:</strong> Future work will focus on optimizing the algorithm for larger environments and real-time applications.</li>
+          </ul>
+          <p>
+            Future enhancements may include integrating learning-based methods to adaptively adjust the cost function and improve policy generalization.
+          </p>
+        </section>
+        
+        <!-- Conclusion -->
+        <section>
+          <h2>Conclusion</h2>
+          <p>
+            This project demonstrates the effectiveness of dynamic programming in solving a complex navigation
+            problem in a Door & Key environment. By formulating the problem as an MDP and rigorously defining the state
+            and action spaces, we achieved robust performance in both fixed and randomized environments. The insights
+            gained here pave the way for more advanced autonomous navigation systems in robotics.
+          </p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Your Name. All rights reserved.</p>
+  </footer>
+</body>
+</html>

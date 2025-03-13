@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Details | Motion Planning in 3D</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <!-- Optionally, include MathJax for rendering equations -->
+  <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
+</head>
+<body>
+  <!-- Header / Navigation (if you use a common header) -->
+  <header>
+    <nav class="navbar">
+      <div class="nav-logo">Your Name</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container project-details-page">
+    <div class="floating-card project-details-card">
+      <!-- Top Row: Heading and optional buttons -->
+      <div class="heading-buttons">
+        <h1>Motion Planning in 3D: A* & RRT Approaches</h1>
+        <div class="button-group">
+          <!-- Optional buttons (e.g., Live Demo, GitHub) -->
+          <!-- <a href="#" class="button">Live Demo</a>
+          <a href="#" class="button">View on GitHub</a> -->
+        </div>
+      </div>
+
+      <!-- Detailed Technical Blog Post -->
+      <article>
+        <p><em>By Your Name for ECE276B: Planning & Learning in Robotics</em></p>
+        
+        <!-- Introduction -->
+        <section>
+          <h2>Introduction</h2>
+          <p>
+            Motion planning is a critical challenge in robotics—especially in 3D environments laden with obstacles.
+            In this project, we explore two distinct paradigms: a search-based A* algorithm and a sampling-based RRT*
+            approach. Our objective is to compute collision-free, cost-optimal paths from a given start point to a goal,
+            while balancing computational efficiency and path optimality. This work provides insights that are fundamental
+            for autonomous navigation in real-world applications.
+          </p>
+          <!-- Suggested image: An overview or schematic of a 3D environment with obstacles -->
+          <img src="assets/images/motion_planning_intro.jpg" alt="3D Motion Planning Environment" />
+        </section>
+        
+        <!-- Problem Formulation -->
+        <section>
+          <h2>Problem Formulation</h2>
+          <p>
+            We formalize the 3D motion planning problem as a deterministic shortest path problem in continuous space.
+            The environment is modeled as a rectangular prism, and obstacles are represented as axis-aligned bounding boxes (AABBs).
+            Given:
+          </p>
+          <ul>
+            <li><strong>Start:</strong> [xs, ys, zs]</li>
+            <li><strong>Goal:</strong> [xg, yg, zg]</li>
+            <li><strong>Obstacles:</strong> AABBs defined by [xmin, ymin, zmin, xmax, ymax, zmax]</li>
+          </ul>
+          <p>
+            The cost function is the path length:
+          </p>
+          <pre>
+J(P) = ∫₀¹ ||Ṗ(t)|| dt
+          </pre>
+          <!-- Suggested image: Diagram showing state space and discretization -->
+          <img src="assets/images/mdp_state_space.jpg" alt="MDP State Space Diagram" />
+        </section>
+        
+        <!-- Technical Approach: A* Algorithm -->
+        <section>
+          <h2>Technical Approach</h2>
+          <h3>Search-Based Planning with A*</h3>
+          <p>
+            The first approach involves discretizing the continuous space into a grid and applying the A* algorithm.
+            A* utilizes a cost function f(n) = g(n) + h(n), where g(n) is the cost from the start node to the current node,
+            and h(n) is the Euclidean distance to the goal. This heuristic guides the search towards the most promising paths.
+          </p>
+          <pre>
+Initialize open list with the start node
+while open list is not empty:
+    current ← node with lowest f(n)
+    if current is goal:
+        return path from start to goal
+    for each neighbor of current:
+        if neighbor is not traversable:
+            continue
+        tentative_g ← g(current) + cost(current, neighbor)
+        if tentative_g < g(neighbor) or neighbor not in open list:
+            set parent of neighbor to current
+            update g(neighbor) and f(neighbor)
+            add neighbor to open list if not already present
+end while
+          </pre>
+          <!-- Suggested image: Flowchart or diagram of A* algorithm -->
+          <img src="assets/images/a_star_flowchart.jpg" alt="A* Algorithm Flowchart" />
+          
+          <h3>Sampling-Based Planning with RRT*</h3>
+          <p>
+            In parallel, we implemented a sampling-based approach using RRT*. This algorithm randomly samples the space
+            and incrementally builds a tree of collision-free paths. While RRT* may produce suboptimal paths compared to A*,
+            its strength lies in efficiently handling high-dimensional spaces and complex obstacle configurations.
+          </p>
+          <!-- Suggested image: Diagram of RRT* tree expansion -->
+          <img src="assets/images/rrt_flowchart.jpg" alt="RRT* Algorithm Diagram" />
+        </section>
+        
+        <!-- Implementation Details -->
+        <section>
+          <h2>Implementation Details</h2>
+          <p>
+            Our implementation was done in Python. The continuous environment is discretized into a 3D grid for A*, while
+            collision checking between line segments and AABBs ensures safety. For the sampling-based method, we utilized the
+            'rrt-algorithms' Python library. We tested both algorithms on various environments—including simple setups and complex
+            ones like mazes, towers, and rooms—to evaluate their performance.
+          </p>
+          <!-- Suggested image: Screenshot of your Python code or simulation output -->
+          <img src="assets/images/code_screenshot.jpg" alt="Implementation Code Screenshot" />
+        </section>
+        
+        <!-- Results and Discussion -->
+        <section>
+          <h2>Results and Discussion</h2>
+          <p>
+            Our experiments reveal distinct trade-offs:
+          </p>
+          <ul>
+            <li><strong>A*:</strong> Achieves optimal paths in discretized environments. Path lengths varied from 8 to 77,
+              depending on the complexity of the environment.</li>
+            <li><strong>RRT*:</strong> Generally finds feasible, though sometimes suboptimal, paths with increased robustness
+              in high-dimensional, cluttered settings.</li>
+          </ul>
+          <p>
+            Visual comparisons (see figures below) illustrate that while A* is optimal in simpler environments, RRT* can handle
+            more complex spaces with irregular obstacles. The results also highlight differences in computation time and the
+            number of nodes explored by each algorithm.
+          </p>
+          <!-- Suggested images: Comparison plots of planned paths; possibly multiple images arranged in a media row -->
+          <img src="assets/images/results_comparison.jpg" alt="Comparison of Planned Paths" />
+          <video width="320" height="240" controls>
+            <source src="assets/videos/rrt_demo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </section>
+        
+        <!-- Discussion and Future Work -->
+        <section>
+          <h2>Discussion and Future Work</h2>
+          <p>
+            The experiments demonstrate that both algorithms have their strengths and limitations.
+            A* offers optimality in structured grids, whereas RRT* provides scalability in complex environments.
+            Future work could focus on hybrid methods that combine the strengths of both approaches or on enhancing the
+            collision checking module to further improve planning efficiency.
+          </p>
+        </section>
+        
+        <!-- Conclusion -->
+        <section>
+          <h2>Conclusion</h2>
+          <p>
+            This project successfully compares search-based and sampling-based motion planning in continuous 3D space.
+            By applying A* and RRT* to complex environments with obstacles, we provide insights into the trade-offs between path
+            optimality and computational efficiency. The results lay the groundwork for more robust autonomous navigation systems.
+          </p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Your Name. All rights reserved.</p>
+  </footer>
+</body>
+</html>

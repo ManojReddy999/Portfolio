@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Details | Infinite-Horizon Stochastic Optimal Control</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <!-- Optional: Include MathJax if you want to render equations nicely -->
+  <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
+</head>
+<body>
+  <!-- Header / Navigation (if using a common header) -->
+  <header>
+    <nav class="navbar">
+      <div class="nav-logo">Your Name</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- Main Content -->
+  <main class="container project-details-page">
+    <div class="floating-card project-details-card">
+      <!-- Heading Row: Title and optional action buttons -->
+      <div class="heading-buttons">
+        <h1>Infinite-Horizon Stochastic Optimal Control for Trajectory Tracking</h1>
+        <div class="button-group">
+          <!-- Optional buttons -->
+          <!-- <a href="#" class="button">Live Demo</a>
+          <a href="#" class="button">View on GitHub</a> -->
+        </div>
+      </div>
+      
+      <!-- Detailed Blog Post -->
+      <article>
+        <p><em>By Your Name | ECE276B: Planning & Learning in Robotics</em></p>
+        
+        <!-- Introduction Section -->
+        <section>
+          <h2>Introduction</h2>
+          <p>
+            Trajectory tracking is essential for autonomous robotic systems, especially when navigating through environments with obstacles. In this project, we address this challenge by designing a control policy for a differential-drive robot using an infinite-horizon stochastic optimal control framework. The control policy must ensure accurate tracking of a reference trajectory while compensating for motion noise and disturbances.
+          </p>
+          <!-- Suggested Image: A high-level schematic of a differential-drive robot tracking a trajectory -->
+          <img src="assets/images/trajectory_tracking_overview.jpg" alt="Trajectory Tracking Overview" />
+        </section>
+        
+        <!-- Problem Statement Section -->
+        <section>
+          <h2>Problem Statement</h2>
+          <p>
+            The goal is to minimize the cumulative discounted cost over an infinite horizon, balancing trajectory tracking error and control effort. The robot's state is defined by its position and orientation, and its motion follows a discrete-time stochastic model:
+          </p>
+          <pre>
+xₜ₊₁ = xₜ + G(xₜ) uₜ + wₜ,
+          </pre>
+          <p>
+            where wₜ ∼ N(0, diag(σ)²) represents Gaussian motion noise, and uₜ comprises the linear and angular velocities. The control input is limited to U = [0, 1] × [–1, 1]. The error state, defined as the deviation between the actual state and the reference trajectory, is used to construct the cost function.
+          </p>
+          <!-- Suggested Image: Diagram of state and error formulation -->
+          <img src="assets/images/state_error_diagram.jpg" alt="State and Error Diagram" />
+        </section>
+        
+        <!-- Technical Approach: CEC and GPI -->
+        <section>
+          <h2>Technical Approach</h2>
+          <h3>Receding-Horizon Certainty Equivalent Control (CEC)</h3>
+          <p>
+            In the CEC approach, we assume the motion noise is zero and solve a deterministic optimal control problem over a finite horizon T. This receding-horizon framework (similar to Model Predictive Control) allows us to re-plan at each time step. The optimization problem minimizes the cumulative cost:
+          </p>
+          <pre>
+J = ∑ (γ^(t-τ)) [ eₜᵀ Q eₜ + q(1 – cos(θₜ – αₜ))² + uₜᵀ R uₜ ]
+          </pre>
+          <p>
+            Here, Q, q, and R weight the positional error, orientation error, and control effort, respectively. The first control input from the optimized sequence is applied, and the process repeats online to accommodate changes in the system state.
+          </p>
+          <!-- Suggested Image: Flowchart of the CEC approach -->
+          <img src="assets/images/cec_flowchart.jpg" alt="CEC Flowchart" />
+          
+          <h3>Generalized Policy Iteration (GPI)</h3>
+          <p>
+            The GPI method directly addresses the stochastic nature of the problem by discretizing the state and control spaces. Through iterative policy evaluation and policy improvement, GPI seeks to converge on an optimal control policy. Key steps include:
+          </p>
+          <ol>
+            <li>Discretizing the state (position, orientation error) and control input spaces.</li>
+            <li>Pre-computing transition probabilities and stage costs for the discretized MDP.</li>
+            <li>Iteratively updating the value function and policy using a Bellman backup operation.</li>
+          </ol>
+          <p>
+            Although GPI yields smoother trajectories, it is computationally more intensive due to the large state-action space.
+          </p>
+          <!-- Suggested Image: Diagram illustrating policy iteration in a discretized state space -->
+          <img src="assets/images/gpi_diagram.jpg" alt="GPI Diagram" />
+        </section>
+        
+        <!-- Implementation Details Section -->
+        <section>
+          <h2>Implementation Details</h2>
+          <p>
+            The system dynamics are implemented in Python, where the differential-drive robot’s kinematics are discretized using Euler integration. For the CEC method, we utilize the CasADi library to solve the resulting nonlinear program efficiently. In contrast, GPI is implemented by discretizing the error state and control space and leveraging parallel computing (using the Ray library) to handle large matrices for transition probabilities and stage costs.
+          </p>
+          <!-- Suggested Image: Screenshot of code or simulation output -->
+          <img src="assets/images/implementation_screenshot.jpg" alt="Implementation Screenshot" />
+        </section>
+        
+        <!-- Results Section -->
+        <section>
+          <h2>Results</h2>
+          <p>
+            Experimental results demonstrate that the CEC approach achieves real-time performance, with control inputs computed in 10–15 seconds. However, CEC requires careful tuning of multiple parameters to balance tracking accuracy and obstacle avoidance. In contrast, while the GPI approach yields smoother trajectories due to its discretized nature, it incurs significantly higher computation times and memory usage.
+          </p>
+          <p>
+            Visualizations of the robot’s trajectory tracking under different tuning scenarios highlight these trade-offs. The results indicate that while GPI provides theoretical advantages in trajectory smoothness, CEC is more practical for real-time applications in dynamic environments.
+          </p>
+          <!-- Suggested Image: Trajectory plots from simulation -->
+          <img src="assets/images/trajectory_results.jpg" alt="Trajectory Results" />
+          <!-- Optionally include a demo video -->
+          <video width="320" height="240" controls>
+            <source src="assets/videos/trajectory_demo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </section>
+        
+        <!-- Discussion and Future Work Section -->
+        <section>
+          <h2>Discussion and Future Work</h2>
+          <p>
+            Our findings highlight the inherent trade-offs between computational efficiency and trajectory smoothness. While the receding-horizon CEC method offers fast online re-planning, it is sensitive to parameter tuning. GPI, although conceptually robust and smoother, faces scalability issues in high-dimensional spaces.
+          </p>
+          <p>
+            Future work will focus on integrating advanced optimization techniques and feature-based value function approximations to reduce the computational load of GPI, as well as exploring hybrid methods that combine the strengths of both approaches.
+          </p>
+        </section>
+        
+        <!-- Conclusion Section -->
+        <section>
+          <h2>Conclusion</h2>
+          <p>
+            This project demonstrates a comprehensive approach to trajectory tracking under uncertainty using infinite-horizon stochastic optimal control. By comparing the receding-horizon Certainty Equivalent Control and the Generalized Policy Iteration methods, we provide valuable insights into their performance trade-offs. The work contributes to the development of robust autonomous navigation systems capable of operating effectively in dynamic and uncertain environments.
+          </p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Your Name. All rights reserved.</p>
+  </footer>
+</body>
+</html>
