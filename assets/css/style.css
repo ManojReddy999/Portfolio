@@ -1,8 +1,15 @@
-/* 
-  Minimal, Professional Pastel Site 
-  No Gradients - Consistent Color Scheme
-  Glassy Floating Navbar
-*/
+:root {
+  /* Professional flat palette */
+  --background: #FAFAFA;              /* Off-white background */
+  --text: #333333;                    /* Dark gray text */
+  --accent: #005792;                  /* Deep blue accent */
+  --border: #C0C0C0;                  /* Light gray border */
+  --card-bg: rgba(255, 255, 255, 0.85); /* Semi-transparent white for cards */
+  --navbar-bg: rgba(255, 255, 255, 0.8);/* Semi-transparent white for navbar */
+  --button-bg: #005792;               /* Button background: deep blue */
+  --button-hover-bg: #003F68;         /* Darker blue on hover for buttons */
+  --link: #005792;                    /* Link color same as accent */
+}
 
 /* Reset & Basic Setup */
 * {
@@ -15,36 +22,29 @@ html {
   scroll-behavior: smooth;
 }
 
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;600&display=swap');
 
-/* 
-  BODY
-  - Using a soft pastel blue (#F0F4F8) for background
-*/
+/* BODY */
 body {
   font-family: 'Roboto', Arial, sans-serif;
-  background: #f5e4d7;
-  color: #333;
+  background: var(--background);
+  color: var(--text);
   line-height: 1.6;
-  /* Padding top for the fixed, floating navbar */
-  padding-top: 100px;
+  padding-top: 100px; /* For fixed navbar */
 }
 
-/* Style all links with a specific color */
+/* LINKS */
 a {
-  color: #3498db; /* A nice blue color */
-  text-decoration: none; /* Remove underline if desired */
+  color: var(--link);
+  text-decoration: none;
   transition: color 0.3s;
 }
-
-/* Change color on hover */
 a:hover {
-  color: #2980b9; /* A darker blue */
+  color: var(--accent);
 }
 
-
+/* Paragraph spacing */
 p {
   margin-block-start: 1rem;
   margin-block-end: 1rem;
@@ -55,39 +55,31 @@ p {
   margin-bottom: 0.5rem;
 }
 
-/* 
-  NAVBAR
-  - Floating glass effect
-  - Consistent tinted background with no gradient
-*/
+/* NAVBAR */
 .navbar {
   position: fixed;
-  top: 20px;            
-  left: 50%;            
+  top: 20px;
+  left: 50%;
   transform: translateX(-50%);
-  width: 90%;           
-  z-index: 999;         
-  
+  width: 90%;
+  z-index: 999;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  /* Subtle tinted glass effect in a pastel direction */
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--navbar-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid var(--border);
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   padding: 1rem 2rem;
 }
 
 .nav-logo {
+  font-family: 'Poppins', sans-serif;
   font-weight: 600;
-  font-size: 1.2rem;
-  color: #333;
+  font-size: 1.4rem;
+  color: var(--background);
 }
 
 .nav-links {
@@ -98,15 +90,16 @@ p {
 
 .nav-links li a {
   padding: 0.5rem 1rem;
-  border-radius: 12px;
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--text);
   transition: background 0.3s;
 }
 
 .nav-links li a:hover,
 .nav-links li a.active {
-  background: #d8ebff;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: var(--accent);
+  color: var(--background);
 }
 
 /* MAIN CONTAINER */
@@ -116,33 +109,25 @@ p {
   padding: 0 1rem;
 }
 
-
-/* 
-  FLOATING CARD for large sections 
-  - Pastel tinted glass background
-*/
+/* FLOATING CARDS */
 .floating-card {
-  background: rgba(255, 255, 255, 0.35);
+  background: var(--card-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid var(--border);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   padding: 2rem;
   margin-bottom: 2rem;
 }
 
 .project-details-card {
-  background: rgba(255, 255, 255, 0.35);
+  background: var(--card-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid var(--border);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   padding: 5rem;
   margin-bottom: 2rem;
 }
@@ -152,20 +137,26 @@ p {
 }
 
 .project-details-card h1 {
-  font-size: 2.2rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.4rem;
+  color: var(--text);
 }
 
 .project-details-card h2 {
-  font-size: 1.95rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 2rem;
+  color: var(--text);
 }
 
 .project-details-card h3 {
+  font-family: 'Poppins', sans-serif;
   font-size: 1.75rem;
   text-decoration: underline;
+  color: var(--accent);
 }
 
 .project-details-card h4 {
-  font-size: 1.rem;
+  font-size: 1rem;
   text-align: center;
   margin-bottom: 1rem;
 }
@@ -175,10 +166,7 @@ p {
   border-radius: 16px;
 }
 
-/* 
-  CARDS GRID (for blog listing, etc.)
-  No gradient, consistent tinted background
-*/
+/* CARDS GRID */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -186,20 +174,18 @@ p {
   margin-top: 1.5rem;
 }
 
-/* Basic Card style */
+/* Basic Card Style */
 .card {
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--card-bg);
+  opacity: 0.9;
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 1.5rem;
   transition: box-shadow 0.3s, transform 0.3s;
   cursor: default;
 }
 
-/* CLICKABLE CARD (Both Projects & Blog) - same hover effect */
+/* CLICKABLE CARD */
 .clickable-card {
   cursor: pointer !important;
 }
@@ -209,31 +195,27 @@ p {
   transform: translateY(-4px);
 }
 
-/* 
-  TITLE COLOR
-  - Use a gentle brand-like pastel color, 
-  - Darken slightly on hover
-*/
+/* TITLE COLOR */
 .card h3,
 .project-text h2,
 .project-text h3 {
-  color: #3D85C6; /* Pastel-ish blue for the card title */
+  font-family: 'Poppins', sans-serif;
+  color: var(--text);
   transition: color 0.3s;
 }
 
 .clickable-card:hover h3,
 .clickable-card:hover .project-text h2,
 .clickable-card:hover .project-text h3 {
-  color: #2d6393; /* Slightly darker on hover */
+  color: var(--accent);
 }
 
-/* PROJECT CARD layout - full width, text left, thumbnail right */
+/* PROJECT CARD layout */
 .project-card {
   width: 100%;
   margin-bottom: 1.5rem;
   padding: 0;
 }
-
 
 .project-card-content {
   display: flex;
@@ -256,37 +238,36 @@ p {
 
 .project-thumbnail img {
   max-width: 400px;
-  /* border-radius: 16px; */
 }
 
-/* OPTIONAL BUTTON (if needed) */
+/* OPTIONAL BUTTON */
 .button {
   display: inline-block;
   margin-top: 1rem;
   padding: 0.65rem 1.4rem;
-  background: #C8E6FF; /* Soft pastel blue for button background */
-  color: #333;
+  background: var(--button-bg);
+  color: var(--background);
   font-weight: 500;
   border-radius: 24px;
   transition: background 0.3s, box-shadow 0.3s;
 }
 
 .button:hover {
-  background: #B0D8FF;
+  background: var(--button-hover-bg);
+  color: var(--background);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .heading-buttons {
   display: flex;
-  align-items: center;           /* vertically center heading & buttons */
-  justify-content: space-between; /* push heading left, buttons right */
-  margin-bottom: 1rem;           /* some spacing below this row */
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 .button-group a.button {
-  margin-left: 0.5rem; /* if you have multiple buttons, adds spacing between them */
+  margin-left: 0.5rem;
 }
-
 
 /* INTRO SECTION on Home Page */
 .intro-section {
@@ -304,26 +285,22 @@ p {
 /* HEADINGS */
 h1, h2 {
   margin-bottom: 1rem;
-  color: #333;
+  color: var(--text);
 }
 
-/* FOOTER 
-   - Same tinted glass effect for consistency
-*/
+/* FOOTER */
 footer {
   text-align: center;
   padding: 1rem;
-  color: #666;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--border);
+  background: var(--raisin-black);
+  border-top: 1px solid var(--border);
   border-radius: 16px 16px 0 0;
   margin-top: 2rem;
   width: 90%;
   left: 50%;
   transform: translateX(-50%);
-  position: relative; 
+  position: relative;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
 }
 
@@ -331,7 +308,7 @@ footer {
 .resume-viewer {
   margin: 2rem 0;
   text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -348,8 +325,8 @@ footer {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 0.5rem 1rem;
   transition: box-shadow 0.3s, transform 0.3s;
@@ -360,31 +337,30 @@ footer {
   transform: translateY(-4px);
 }
 
-/* BLOG POST DATE (optional) */
+/* BLOG POST DATE */
 .post-date {
-  color: #666;
+  color: var(--border);
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
 
+/* MEDIA ROW */
 .media-row {
   display: flex;
-  gap: 1rem; /* space between elements */
-  align-items: center; /* vertically center the media */
+  gap: 1rem;
+  align-items: center;
   justify-content: center;
-  /* size: 50%; */
 }
 
 .media-row img,
 .media-row video {
-  /* flex: 1;        each element takes equal space */
-  max-width: 100%; /* responsive sizing */
-  height: auto;   /* maintain aspect ratio */
+  max-width: 100%;
+  height: auto;
 }
 
 img {
   max-width: 100%;
-  padding-top: 1rem;;
+  padding-top: 1rem;
   padding-bottom: 1rem;
   height: auto;
   display: block;
@@ -412,10 +388,9 @@ img {
   object-fit: cover;
 }
 
-
 @media (max-width: 768px) {
   .about-section {
-    flex-direction: column; /* stack vertically on smaller screens */
+    flex-direction: column;
     align-items: center;
   }
   .about-gif {
