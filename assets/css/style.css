@@ -67,11 +67,11 @@ p {
   align-items: center;
   justify-content: space-between;
   background: var(--navbar-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--border);
+  /* backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); */
+  /* border: 1px solid var(--border); */
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 1rem 2rem;
 }
 
@@ -112,9 +112,9 @@ p {
 /* FLOATING CARDS */
 .floating-card {
   background: var(--card-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--border);
+  /* backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); */
+  /* border: 1px solid var(--border); */
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   padding: 2rem;
@@ -123,9 +123,9 @@ p {
 
 .project-details-card {
   background: var(--card-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--border);
+  /* backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); */
+  /* border: 1px solid var(--border); */
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   padding: 5rem;
@@ -243,13 +243,13 @@ p {
 
 /* OPTIONAL BUTTON */
 .button {
-  display: inline-block;
+  /* display: inline-block; */
   margin-top: 1rem;
-  padding: 0.65rem 1.4rem;
+  padding: 0.5rem 1rem;
   background: var(--button-bg);
   color: var(--background);
   font-weight: 500;
-  border-radius: 24px;
+  border-radius: 8px;
   transition: background 0.3s, box-shadow 0.3s;
 }
 
