@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Projects | Your Name</title>
+  <meta name="description" content="Explore projects by Manoj Manchala in Robotics, SLAM, Motion Planning, and other technical areas.">
+  <title>Projects | Manoj Manchala</title>
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
-  <!-- Header / Navigation -->
   <header>
     <nav class="navbar">
       <div class="nav-logo"><a href="index.html">Manoj Manchala</a></div>
@@ -21,286 +21,206 @@
     </nav>
   </header>
 
-  <!-- Main Content -->
   <main class="container projects-page">
-    <div class="floating-card">
-      <h1>Projects</h1>
-      <!-- Research Section -->
-      <section class="research-section">
-        <h2>Research</h2>
-        <!-- Instead of a grid, we’ll display each project card in a block 
-             with image on the right, consistent with your request. -->
-        
-        <!-- Research Card 1 -->
-        <div 
-          class="card project-card clickable-card" 
-          onclick="window.location='project-details.html'"
-        >
-          <div class="project-card-content">
-            <div class="project-text">
-              <h3>Research Project 1</h3>
-              <p>Short summary or highlight of the research.</p>
-            </div>
-            <div class="project-thumbnail">
-              <img src="assets/images/placeholder.jpg" alt="Research 1" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Research Card 2 -->
-        <div 
-          class="card project-card clickable-card" 
-          onclick="window.location='project-details.html'"
-        >
-          <div class="project-card-content">
-            <div class="project-text">
-              <h3>Research Project 2</h3>
-              <p>Short summary or highlight of the research.</p>
-            </div>
-            <div class="project-thumbnail">
-              <img src="assets/images/placeholder.jpg" alt="Research 2" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-      <section class="research-section">
-        <h2>SLAM Projects</h2>
-        <!-- Instead of a grid, we’ll display each project card in a block 
-             with image on the right, consistent with your request. -->
-        
-        <!-- Research Card 1 -->
-        <div 
-        class="card project-card" 
-      >
-        <div class="project-card-content">
-          <div class="project-thumbnail">
-            <img src="assets/images/VI-SLAM/Pasted image.png" alt="Research 2" />
-          </div>
-          <div class="project-text">
-            <div class="heading-buttons">
-              <h3>Visual-Inertial SLAM</h3>
-              <div class="button-group">
-                <a href="ECE276A_PR3_Report.pdf" target="_blank" class="button">Report</a>
-                <a href="#" class="button">GitHub</a>
-              </div>
-            </div>
-            <p>
-              This project implements a robust Visual-Inertial SLAM system that fuses data from an Inertial Measurement Unit (IMU) and a stereo camera using an Extended Kalman Filter (EKF). The system estimates the robot's pose in SE(3) while simultaneously mapping the environment through landmark extraction and sensor fusion.
-            </p>
-            <p>
-              By leveraging IMU-based EKF prediction and a visual update step that incorporates stereo camera feature observations, the framework addresses challenges such as sensor noise, synchronization issues, and calibration errors. The resulting approach achieves accurate trajectory estimation and reliable landmark mapping, demonstrating strong potential for autonomous navigation in complex environments.
-            </p>
-          </div>
-
-        </div>
-      </div>
-      <!-- Research Card 2 -->
-        <div 
-          class="card project-card" 
-        >
-          <div class="project-card-content">
-            <div class="project-thumbnail">
-              <img src="assets/images/LiDAR-SLAM/occupancy_map.png" alt="Research 2" />
-            </div>
-            <div class="project-text">
-              <div class="heading-buttons">
-                <h3>LiDAR-Based SLAM for Differential-Drive Robots</h3>
-                <div class="button-group">
-                  <a href="ECE276A_PR2_Report.pdf" target="_blank" class="button">Report</a>
-                  <a href="#" class="button">GitHub</a>
-                </div>
-              </div>
-              <p>
-                In this project, a comprehensive LiDAR-based Simultaneous Localization and Mapping (SLAM) system was developed for a differential-drive robot. The system integrates multi-sensor odometry from encoders and an IMU with 2-D LiDAR scans and RGBD camera data.
-              </p>
-              <p>
-                Initial motion estimates are obtained via a differential-drive motion model and further refined through ICP-based scan matching. These refined poses are then used to construct detailed occupancy grid maps and floor texture maps. Finally, pose graph optimization with loop-closure constraints is employed using the GTSAM library to reduce drift and enhance mapping accuracy.
-              </p>
-              <p>
-                This multi-sensor fusion approach enables robust and accurate localization in complex, unstructured environments, laying a strong foundation for autonomous navigation applications.
-              </p>
-            </div>
-
-          </div>
-        </div>
-
-      </section>
-
-      <section class="research-section">
-        <h2>Motion Planning</h2>
-        <!-- Instead of a grid, we’ll display each project card in a block 
-             with image on the right, consistent with your request. -->
-        
-        <!-- Research Card 1 -->
-        <div 
-        class="card project-card" 
-      >
-        <div class="project-card-content">
-          <div class="project-thumbnail">
-            <img src="assets/images/GPI/Figure_6.png" alt="Research 2" />
-          </div>
-          <div class="project-text">
-            <div class="heading-buttons">
-              <h3>Infinite-Horizon Stochastic Optimal Control for Trajectory Tracking</h3>
-              <div class="button-group">
-                <a href="ECE276B_PR3_Report.pdf" target="_blank" class="button">Report</a>
-                <a href="#" class="button">GitHub</a>
-              </div>
-            </div>
-            <p>
-              This project develops a robust control policy for a differential-drive robot tasked with accurately tracking a reference trajectory while avoiding obstacles. By formulating the problem as an infinite-horizon stochastic optimal control problem, the approach accounts for motion noise and uncertainties through a discounted cost function that penalizes tracking errors and control efforts.
-            </p>
-            <p>
-              Two strategies are explored: a receding-horizon Certainty Equivalent Control (CEC) method and a Generalized Policy Iteration (GPI) algorithm. While CEC quickly re-plans by simplifying the stochastic problem into a deterministic one, GPI offers smoother trajectories through iterative policy evaluation—albeit at higher computational costs. This work lays the groundwork for improved autonomous navigation in dynamic and uncertain environments.
-            </p>
-          </div>
-
-        </div>
-      </div>
-      <!-- Research Card 2 -->
-        <div 
-          class="card project-card" 
-        >
-          <div class="project-card-content">
-            <div class="project-thumbnail">
-              <img src="assets/images/A*-RRT/Screenshot from 2024-05-24 20-41-04.png" alt="Research 2" />
-            </div>
-            <div class="project-text">
-              <div class="heading-buttons">
-                <h3>Motion Planning in 3D: A* & RRT Approaches</h3>
-                <div class="button-group">
-                  <a href="ECE276B_PR2_Report.pdf" target="_blank" class="button">Report</a>
-                  <a href="#" class="button">GitHub</a>
-                </div>
-              </div>
-              
-              <p> This project develops and compares two sophisticated motion planning algorithms for navigating continuous 3D environments. Using a search-based A* planner on a discretized grid and a sampling-based RRT* approach, the work addresses collision-free path planning through complex obstacle fields.</p>
-              <p>
-                The problem is formulated as a deterministic shortest path problem in 3D, with obstacles modeled as axis-aligned bounding boxes. The project implements robust collision checking and employs an Euclidean distance heuristic for A*, while RRT* offers scalable performance in high-dimensional spaces. Comprehensive evaluations across various environments highlight trade-offs between path optimality and computational efficiency—laying a strong foundation for autonomous navigation in robotics.
-              </p>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Research Card 2 -->
-        <div 
-          class="card project-card" 
-        >
-          <div class="project-card-content">
-            <div class="project-thumbnail">
-              <img src="assets/images/Door-Key/-8x8-28.gif" alt="Research 2" />
-            </div>
-            <div class="project-text">
-              <div class="heading-buttons">
-                <h3>Dynamic Programming for Door & Key Navigation</h3>
-                <div class="button-group">
-                  <a href="ECE276B_PR1_Report.pdf" target="_blank" class="button">Report</a>
-                  <a href="#" class="button">GitHub</a>
-                </div>
-              </div>
-              <p>
-                In this project, we developed a robust dynamic programming algorithm to enable an autonomous agent to navigate a Door & Key environment. The agent must pick up a key, unlock a door, and then reach a designated goal, all while minimizing energy costs.
-              </p>
-              <p>
-                The problem is modeled as a Markov Decision Process where the state space includes the agent’s grid position, orientation, key possession, and door status (with an extended formulation for random maps that also incorporates key and goal indices). Using backward induction over a finite planning horizon, our algorithm computes an optimal control policy that guides the agent through both fixed (known map) and variable (random map) environments.
-              </p>
-              <!-- <p>
-                Evaluations across multiple map configurations demonstrate that our approach yields collision-free and cost-optimal paths, laying a solid foundation for advanced autonomous navigation in complex, uncertain environments.
-              </p> -->
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- Projects Section -->
-      <section class="projects-section">
-        <h2>Technical Projects</h2>
-        <!-- Same style as Research projects -->
-        <div 
+    <h1>Projects</h1> <section class="research-section project-category-section">
+      <h2>Research</h2>
+      <div 
         class="card project-card clickable-card" 
-        onclick="window.location='Calibration-challenge.html'"
-      >
+        onclick="window.location='project-details.html'" >
         <div class="project-card-content">
           <div class="project-text">
-            <h3>Comma.ai Calibration challenge</h3>
-            <p>Developed an advanced deep learning solution to calibrate an onboard camera for autonomous vehicles by accurately predicting vehicle pitch and yaw. Our approach integrates optical flow and vanishing point techniques with a hybrid Conv-LSTM network to overcome data limitations and environmental challenges. This system refines camera alignment to improve vehicle control, and the complete code is available on GitHub.</p>
+            <h2>GNN-Driven Obstacle Avoidance with Multi-Surface Perception</h2>
+            <p>Developing a navigation framework using Graph Neural Networks (GNNs) and point cloud data for robust path planning in complex environments, with future integration of RGB data for semantic surface classification.</p>
           </div>
           <div class="project-thumbnail">
-            <img src="assets/images/placeholder.jpg" alt="Project 1" />
-          </div>
+            <img src="assets/images/sample-research.png" alt="GNN Research Thumbnail" /> </div>
         </div>
       </div>
 
-        <div 
-          class="card project-card clickable-card" 
-          onclick="window.location='Calibration-challenge.html'"
-        >
-          <div class="project-card-content">
-            <div class="project-text">
-              <h3>Comma.ai Calibration challenge</h3>
-              <p>Developed an advanced deep learning solution to calibrate an onboard camera for autonomous vehicles by accurately predicting vehicle pitch and yaw. Our approach integrates optical flow and vanishing point techniques with a hybrid Conv-LSTM network to overcome data limitations and environmental challenges. This system refines camera alignment to improve vehicle control, and the complete code is available on GitHub.</p>
-            </div>
-            <div class="project-thumbnail">
-              <img src="assets/images/placeholder.jpg" alt="Project 1" />
-            </div>
+      <!-- 
+      <div 
+        class="card project-card clickable-card" 
+        onclick="window.location='project-details.html'"
+      >
+        <div class="project-card-content">
+          <div class="project-text">
+            <h3>Research Project 2</h3>
+            <p>Short summary or highlight of the research.</p>
+          </div>
+          <div class="project-thumbnail">
+            <img src="assets/images/placeholder.jpg" alt="Research 2" />
           </div>
         </div>
+      </div>
+      -->
+    </section>
 
-        <div 
-          class="card project-card clickable-card" 
-          onclick="window.location='Mobile-Manipulator.html'"
-        >
-          <div class="project-card-content">
-            <div class="project-thumbnail">
-              <img src="assets/images/Mobile Manipulator/Best_Case.gif" alt="Project 2" />
+    <section class="slam-projects-section project-category-section"> <h2>SLAM Projects</h2>
+      <div class="card project-card">
+        <div class="project-card-content">
+          <div class="project-thumbnail">
+            <img src="assets/images/VI-SLAM/Pasted image.png" alt="Visual-Inertial SLAM" />
+          </div>
+          <div class="project-text">
+            <div class="heading-buttons">
+              <h2>Visual-Inertial SLAM</h2> <div class="button-group">
+                <a href="ECE276A_PR3_Report.pdf" target="_blank" rel="noopener noreferrer" class="button">Report</a>
+                <a href="https://github.com/ManojReddy999/Visual-Inertial-SLAM" target="_blank" class="button">GitHub</a> </div>
             </div>
-            <div class="project-text">
-              <h3>Motion Control of a Mobile Manipulator Robot (YouBot)</h3>
-              <p>Developed an adaptive control system for a YouBot to autonomously perform pick-and-place operations. The project features a MATLAB simulation that models the robot's kinematics, generates precise reference trajectories, and implements a robust feedforward-plus-PI feedback controller to minimize errors. Integration with CoppeliaSim enables realistic visualization and testing, ensuring smooth and accurate task execution under varying conditions.</p>
-            </div>
-
+            <p>
+              Implemented a robust Visual-Inertial SLAM system fusing IMU and stereo camera data via an Extended Kalman Filter (EKF) for pose estimation and landmark mapping.
+            </p>
+            <p>
+              The system addresses sensor noise and synchronization, achieving accurate trajectory estimation for autonomous navigation.
+            </p>
           </div>
         </div>
-
-          <!-- Research Card 2 -->
-          <div 
-          class="card project-card" 
-        >
-          <div class="project-card-content">
-            <div class="project-thumbnail">
-              <img src="assets/images/Orientation-Tracking/IMUandCamSensors.jpg" alt="Research 2" />
+      </div>
+      <div class="card project-card">
+        <div class="project-card-content">
+          <div class="project-thumbnail">
+            <img src="assets/images/LiDAR-SLAM/occupancy_map.png" alt="LiDAR-Based SLAM" />
+          </div>
+          <div class="project-text">
+            <div class="heading-buttons">
+              <h2>LiDAR-Based SLAM for Differential-Drive Robots</h2>
+              <div class="button-group">
+                <a href="ECE276A_PR2_Report.pdf" target="_blank" rel="noopener noreferrer" class="button">Report</a>
+                <a href="https://github.com/ManojReddy999/LiDAR-SLAM" target="_blank" class="button">GitHub</a> </div>
             </div>
-            <div class="project-text">
-              <div class="heading-buttons">
-                <h3>Orientation Tracking & Panorama Construction</h3>
-                <div class="button-group">
-                  <a href="ECE276A_PR1_Report.pdf" target="_blank" class="button">Report</a>
-                  <a href="#" class="button">GitHub</a>
-                </div>
+            <p>
+              Developed a comprehensive LiDAR-based SLAM system integrating multi-sensor odometry, 2D LiDAR scans, and RGBD data for a differential-drive robot.
+            </p>
+            <p>
+              Refined motion estimates via ICP scan matching, constructed occupancy grid maps, and employed pose graph optimization with loop closure using GTSAM for enhanced accuracy.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="motion-planning-section project-category-section"> <h2>Motion Planning</h2>
+      <div class="card project-card">
+        <div class="project-card-content">
+          <div class="project-thumbnail">
+            <img src="assets/images/GPI/Figure_6.png" alt="Stochastic Optimal Control" />
+          </div>
+          <div class="project-text">
+            <div class="heading-buttons">
+              <h2>Infinite-Horizon Stochastic Optimal Control</h2>
+              <div class="button-group">
+                <a href="ECE276B_PR3_Report.pdf" target="_blank" rel="noopener noreferrer" class="button">Report</a>
+                <a href="https://github.com/ManojReddy999/Infinite-Horizon-Stochastic-Optimal-Control" target="_blank" class="button">GitHub</a> </div>
+            </div>
+            <p>
+              Developed a control policy for a differential-drive robot for trajectory tracking and obstacle avoidance, formulated as an infinite-horizon stochastic optimal control problem.
+            </p>
+            <p>
+              Explored Certainty Equivalent Control (CEC) and Generalized Policy Iteration (GPI) to handle motion noise and uncertainties.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="card project-card clickable-card" onclick="window.location='A*-RRT.html'"> -->
+      <div class="card project-card">
+        <div class="project-card-content">
+          <div class="project-thumbnail">
+            <img src="assets/images/A*-RRT/Screenshot from 2024-05-24 20-41-04.png" alt="3D Motion Planning A* RRT" />
+          </div>
+          <div class="project-text">
+            <div class="heading-buttons">
+              <h2>Motion Planning in 3D: A* & RRT Approaches</h2>
+              <div class="button-group">
+                <a href="ECE276B_PR2_Report.pdf" target="_blank" rel="noopener noreferrer" class="button">Report</a>
+                <a href="https://github.com/ManojReddy999/Motion-Planning" target="_blank" class="button">GitHub</a>
               </div>
-              <p>
-                This project focuses on robust orientation tracking of a rotating body using IMU data, and on constructing panoramic images from sequential camera captures. A projected gradient descent algorithm is employed to estimate the 3-D orientation (roll, pitch, and yaw) by calibrating the IMU measurements against VICON ground truth. The estimated orientations are then used to stitch together camera images into a panorama, demonstrating the potential for applications in SLAM, localization, and environmental mapping.
-              </p>
-              <p>
-                The work includes calibrating sensor biases, integrating angular velocities with quaternion kinematics, and solving a constrained optimization problem to maintain unit-norm quaternions. The resulting orientation trajectory not only closely matches the ground truth but also facilitates the creation of panoramic images that capture the environment as seen by the rotating body.
-              </p>
-              <!-- <p>
-                Evaluations across multiple map configurations demonstrate that our approach yields collision-free and cost-optimal paths, laying a solid foundation for advanced autonomous navigation in complex, uncertain environments.
-              </p> -->
             </div>
-
+            <p> Developed and compared search-based A* and sampling-based RRT* algorithms for collision-free path planning in continuous 3D environments with obstacles.</p>
+            <p>
+              Implemented robust collision checking and evaluated trade-offs between path optimality and computational efficiency.
+            </p>
           </div>
         </div>
+      </div>
+      <div class="card project-card">
+        <div class="project-card-content">
+          <div class="project-thumbnail">
+            <img src="assets/images/Door-Key/-8x8-28.gif" alt="Door & Key Navigation DP" />
+          </div>
+          <div class="project-text">
+            <div class="heading-buttons">
+              <h2>Dynamic Programming for Door & Key Navigation</h2>
+              <div class="button-group">
+                <a href="ECE276B_PR1_Report.pdf" target="_blank" rel="noopener noreferrer" class="button">Report</a>
+                <a href="https://github.com/ManojReddy999/Door-Key-Navigation-Task" target="_blank" class="button">GitHub</a> </div>
+            </div>
+            <p>
+              Developed a dynamic programming algorithm for an agent to navigate a Door & Key environment, minimizing energy costs while handling tasks like key pickup and door unlocking.
+            </p>
+            <p>
+              Modeled as an MDP, the algorithm computes optimal control policies for both fixed and random map configurations.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      </section>
-    </div>
+    <section class="technical-projects-section project-category-section"> <h2>Technical Projects</h2>
+      <div class="card project-card clickable-card" onclick="window.location='Calibration-challenge.html'">
+        <div class="project-card-content">
+          <div class="project-text">
+            <div class="heading-buttons">
+                <h2>Comma.ai Calibration Challenge</h2>
+                 <div class="button-group">
+                    <a href="Calibration-challenge.html" class="button">Details</a>
+                </div>
+            </div>
+            <p>Developed an advanced deep learning solution (Conv-LSTM) integrating optical flow and vanishing point techniques to calibrate vehicle onboard cameras by predicting pitch and yaw.</p>
+          </div>
+          <div class="project-thumbnail">
+            <img src="assets/images/Calibration challenge/pitch_yaw_prediction.png" alt="Comma.ai Calibration Challenge Thumbnail" /> </div>
+        </div>
+      </div>
+      <div class="card project-card clickable-card" onclick="window.location='Mobile-Manipulator.html'">
+        <div class="project-card-content">
+          <div class="project-thumbnail">
+            <img src="assets/images/Mobile Manipulator/Best_Case.gif" alt="YouBot Motion Control" />
+          </div>
+          <div class="project-text">
+            <div class="heading-buttons">
+                <h2>Motion Control of a Mobile Manipulator (YouBot)</h2>
+                <div class="button-group">
+                    <a href="Mobile-Manipulator.html" class="button">Details</a>
+                </div>
+            </div>
+            <p>Designed an adaptive control system for a YouBot for autonomous pick-and-place, featuring MATLAB simulation, trajectory generation, and feedforward-plus-PI feedback control, visualized in CoppeliaSim.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card project-card">
+        <div class="project-card-content">
+          <div class="project-thumbnail">
+            <img src="assets/images/Orientation-Tracking/IMUandCamSensors.jpg" alt="Orientation Tracking & Panorama" />
+          </div>
+          <div class="project-text">
+            <div class="heading-buttons">
+              <h2>Orientation Tracking & Panorama Construction</h2>
+              <div class="button-group">
+                <a href="ECE276A_PR1_Report.pdf" target="_blank" rel="noopener noreferrer" class="button">Report</a>
+                <a href="#" class="button">GitHub</a> </div>
+            </div>
+            <p>
+              Focused on robust orientation tracking using IMU data and constructing panoramic images. Employed projected gradient descent for 3D orientation estimation and image stitching.
+            </p>
+            <p>
+              Included sensor bias calibration and quaternion kinematics, facilitating accurate orientation trajectories for environmental mapping.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Footer -->
   <footer>
     <p>&copy; 2025 Manoj Manchala. All rights reserved.</p>
   </footer>
