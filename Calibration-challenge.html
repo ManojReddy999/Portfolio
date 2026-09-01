@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="A team project exploring monocular camera calibration with optical flow, vanishing-point geometry, and a Conv-LSTM model for pitch and yaw estimation." />
+  <meta name="description" content="An ECE 228 team project for the Comma.ai Calibration Challenge, exploring monocular camera calibration with optical flow, vanishing-point geometry, and a Conv-LSTM model for pitch and yaw estimation." />
   <meta name="theme-color" content="#050b11" />
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Comma.ai Calibration Challenge | Manoj Reddy Manchala" />
-  <meta property="og:description" content="Camera-motion estimation from monocular video using RGB frames, optical flow, and temporal deep learning." />
+  <meta property="og:description" content="ECE 228 team project for the Comma.ai Calibration Challenge: camera-motion estimation from monocular video using RGB frames, optical flow, and temporal deep learning." />
   <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/Calibration-challenge.html" />
   <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/Calibration-challenge.html" />
   <link rel="icon" type="image/png" href="assets/images/car-unique.png" />
@@ -40,7 +40,7 @@
     <div class="project-details-card">
       <div class="heading-buttons" data-reveal>
         <div>
-          <span class="project-type">Computer vision · temporal learning</span>
+          <span class="project-type">ECE 228 team project · Computer vision / Temporal learning</span>
           <h1>Comma.ai Calibration Challenge</h1>
         </div>
         <div class="button-group" aria-label="Project resources">
@@ -70,7 +70,7 @@
             The team investigated whether monocular video could be used to estimate the direction of motion—represented by pitch and yaw—and provide a signal for camera calibration.
           </p>
           <p>
-            The study combined geometric cues with learned temporal features: dense optical flow described motion between frames,
+            The project combined geometric cues with learned temporal features: dense optical flow described motion between frames,
             vanishing-point geometry provided an interpretable reference, and a Conv-LSTM model mapped short image sequences to pitch and yaw estimates.
           </p>
         </section>
@@ -134,7 +134,7 @@
           <h2>Experiment comparison</h2>
           <p>
             Three input configurations were compared: RGB frames alone, optical flow alone, and a fused RGB-plus-flow input.
-            The loss curves below show how each setup trained; they are best read as comparative project evidence rather than a production benchmark.
+            The loss curves below compare the three training configurations; they are not production benchmarks.
           </p>
           <div class="media-row" aria-label="Training loss comparisons">
             <img src="assets/images/Calibration challenge/without_optical_flow_loss.png" alt="Training and validation loss for the RGB-only model" loading="lazy" />

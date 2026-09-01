@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Case study: Manoj Reddy Manchala's reinforcement-learning research for autonomous navigation with an Ackermann-drive vehicle in MuJoCo." />
+  <meta name="description" content="Graduate research at UC San Diego's Existential Robotics Laboratory on reinforcement learning for autonomous navigation with an Ackermann-drive vehicle in MuJoCo." />
   <meta name="theme-color" content="#050b11" />
-  <meta property="og:title" content="RL Autonomous Navigation Case Study | Manoj Reddy Manchala" />
+  <meta property="og:title" content="RL for Autonomous Navigation Research | Manoj Reddy Manchala" />
   <meta property="og:description" content="Environment design, policy learning, collision logic, evaluation strategy, and reproducibility limits for an Ackermann-drive navigation research system." />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/project-details.html" />
   <meta property="og:image" content="https://manojreddy999.github.io/Portfolio/assets/images/sample-research.png" />
   <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/project-details.html" />
   <link rel="icon" type="image/png" href="assets/images/car-unique.png" />
-  <title>RL Autonomous Navigation Case Study | Manoj Reddy Manchala</title>
+  <title>RL for Autonomous Navigation Research | Manoj Reddy Manchala</title>
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" />
   <script src="assets/js/script.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to case study</a>
+  <a class="skip-link" href="#main-content">Skip to research</a>
 
   <header class="site-header">
     <nav class="navbar" aria-label="Primary navigation">
@@ -38,8 +38,8 @@
   <main id="main-content" class="case-study-page container">
     <section class="case-hero" data-reveal>
       <div>
-        <span class="eyebrow">Reinforcement learning / Safe autonomy</span>
-        <h1>Learning to navigate with Ackermann dynamics.</h1>
+        <span class="eyebrow">UC San Diego graduate research · Existential Robotics Laboratory</span>
+        <h1>Reinforcement learning for autonomous navigation.</h1>
         <p>
           A research environment for examining how learned policies steer an Ackermann-drive vehicle through uncertain obstacle layouts—and how reward, observation, and collision definitions change the behavior that emerges.
         </p>
@@ -52,35 +52,35 @@
         <div class="case-hero-media plot-on-dark">
           <img src="assets/images/sample-research.png" alt="Red and blue graph representation from an autonomous-navigation representation experiment" />
         </div>
-        <p class="status-line">Representation-work artifact · not simulator footage</p>
+        <p class="status-line">Visualization from a representation-learning experiment (not simulator footage).</p>
       </div>
     </section>
 
     <dl class="case-meta" data-reveal>
       <div>
         <dt class="meta-label">Role</dt>
-        <dd>Researcher / Primary implementation</dd>
+        <dd>Graduate Student Researcher / Primary implementation</dd>
       </div>
       <div>
         <dt class="meta-label">Core stack</dt>
         <dd>MuJoCo · dm_control · SB3 · PyTorch</dd>
       </div>
       <div>
-        <dt class="meta-label">Current status</dt>
-        <dd>Results / Reproducibility refresh</dd>
+        <dt class="meta-label">Research status</dt>
+        <dd>Reproducing prior results</dd>
       </div>
     </dl>
 
     <div class="case-layout">
-      <aside class="case-aside" aria-label="Case study sections" data-reveal>
-        <span class="section-kicker">System log</span>
+      <aside class="case-aside" aria-label="Research sections" data-reveal>
+        <span class="section-kicker">Contents</span>
         <ul>
           <li><a href="#overview">Overview</a></li>
           <li><a href="#role">My role</a></li>
           <li><a href="#system-design">System design</a></li>
           <li><a href="#implementation">What I built</a></li>
           <li><a href="#evaluation">Evaluation approach</a></li>
-          <li><a href="#failure-log">Failure log</a></li>
+          <li><a href="#failure-log">Observed failure modes</a></li>
           <li><a href="#limitations">Limitations</a></li>
           <li><a href="#next-experiment">Next experiment</a></li>
         </ul>
@@ -91,14 +91,14 @@
           <span class="section-kicker">01 / Overview</span>
           <h2>Behavior starts with the environment contract</h2>
           <p>
-            The project explored reinforcement learning for autonomous navigation without treating the simulator as a neutral backdrop. Vehicle dynamics, obstacle placement, observations, reward terms, contacts, and termination rules jointly define what a policy can learn. I built a custom Ackermann-drive environment in MuJoCo through dm_control, then used it to train and inspect PPO and SAC agents with Stable-Baselines3.
+            My graduate research explored reinforcement learning for autonomous navigation without treating the simulator as a neutral backdrop. Vehicle dynamics, obstacle placement, observations, reward terms, contacts, and termination rules jointly define what a policy can learn. I built a custom Ackermann-drive environment in MuJoCo through dm_control, then used it to train and inspect PPO and SAC agents with Stable-Baselines3.
           </p>
           <p>
-            The research question was broader than “can the return go up?” The goal was to understand whether the resulting motion was safe, stable, and robust to layouts outside a single training episode—and to make the system inspectable when it was not.
+            The goal was to evaluate safety, stability, and generalization across obstacle layouts rather than only maximize episodic return.
           </p>
           <div class="case-note">
-            <strong>RESULTS / REPRODUCIBILITY REFRESH</strong><br />
-            This archive does not publish a success-rate headline yet. The environment and evaluation artifacts are being brought back to a repeatable state after a gap, so final numbers will only be added with the exact configuration, seed set, and evaluation protocol that produced them.
+            <strong>Results status</strong><br />
+            I am rerunning these experiments with documented configurations and seed sets. Final performance numbers will be added after the results are reproducible.
           </div>
         </section>
 
@@ -162,12 +162,12 @@ contacts, trajectory, clearance, return</code></pre>
 
           <h3>Representation experiments</h3>
           <p>
-            The image shown in this case study is a representation-work artifact from experiments with structured spatial input; it is not a screenshot of the MuJoCo vehicle. CNN-based visual features and graph-oriented alternatives were explored to test how the policy could consume richer environmental structure beyond low-dimensional state alone.
+            The image shown on this research page is a representation-work artifact from experiments with structured spatial input; it is not a screenshot of the MuJoCo vehicle. CNN-based visual features and graph-oriented alternatives were explored to test how the policy could consume richer environmental structure beyond low-dimensional state alone.
           </p>
         </section>
 
         <section id="evaluation" data-reveal>
-          <span class="section-kicker">05 / Evidence</span>
+          <span class="section-kicker">05 / Evaluation</span>
           <h2>Evaluation approach</h2>
           <p>
             The intended evaluation separates learning progress from navigation quality. PPO and SAC should be compared only when the dynamics, observation contract, reward, training budget, and held-out layouts are controlled.
@@ -187,26 +187,26 @@ contacts, trajectory, clearance, return</code></pre>
 
         <section id="failure-log" data-reveal>
           <span class="section-kicker">06 / Debugging</span>
-          <h2>Failure log</h2>
-          <p>The implementation explicitly treated the following as failure conditions to investigate; this list is a debugging record, not a benchmark table.</p>
+          <h2>Observed failure modes</h2>
+          <p>The implementation was checked for the following failure modes:</p>
           <ul>
             <li><strong>Reward sensitivity:</strong> progress incentives can dominate collision costs, so the visible path must be checked whenever reward weights change.</li>
             <li><strong>Contact ambiguity:</strong> incorrect geometry names or contact-pair handling can let real collisions pass uncounted—or terminate on harmless contacts.</li>
             <li><strong>Layout memorization:</strong> a narrow obstacle generator can produce a convincing policy that only understands a recurring scene pattern.</li>
             <li><strong>Representation instability:</strong> a more complex encoder can improve the training curve without yielding consistently safer motion on held-out layouts.</li>
-            <li><strong>Seed dependence:</strong> a single successful rollout is not evidence; evaluation must cover a fixed, disclosed set of seeds and adverse cases.</li>
+            <li><strong>Seed dependence:</strong> evaluation should cover a fixed set of seeds and adverse cases rather than a single successful rollout.</li>
           </ul>
         </section>
 
         <section id="limitations" data-reveal>
-          <span class="section-kicker">07 / Boundaries</span>
+          <span class="section-kicker">07 / Limitations</span>
           <h2>Current limitations</h2>
           <ul>
-            <li>The work remains simulation research; it is not evidence of deployment on a physical vehicle.</li>
+            <li>The work remains simulation research and has not been deployed on a physical vehicle.</li>
             <li>A final, versioned benchmark table is not yet available after the interruption in active development.</li>
-            <li>The current portfolio artifact does not expose a one-command training package or downloadable checkpoint.</li>
+            <li>A one-command training package and downloadable checkpoint are not currently available.</li>
             <li>Generalization across broader sensing conditions and dynamics variation still needs controlled testing.</li>
-            <li>ONNX and TensorRT paths were explored, but no production deployment claim is being made.</li>
+            <li>ONNX and TensorRT conversion paths were explored; the models were not deployed in production.</li>
           </ul>
         </section>
 
@@ -219,12 +219,12 @@ contacts, trajectory, clearance, return</code></pre>
             <li>Rerun PPO and SAC under matched budgets; report central tendency and spread, not a best seed.</li>
             <li>Release representative, median, and failure rollouts with collision and clearance summaries.</li>
             <li>Reintroduce richer learned representations only after the baseline can be reproduced.</li>
-            <li>Add dynamics and observation randomization before making any claim about transfer beyond simulation.</li>
+            <li>Add dynamics and observation randomization before evaluating transfer beyond simulation.</li>
           </ol>
           <div class="case-note">
-            <strong>Why this order matters:</strong> a smaller reproducible baseline is the control experiment. It makes later CNN, graph, or transformer representation gains attributable instead of anecdotal.
+            <strong>Sequence:</strong> establish a reproducible baseline before comparing CNN, graph, or transformer representations.
           </div>
-          <a class="button" href="contact.html">Discuss the system <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+          <a class="button" href="contact.html">Contact me <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
         </section>
       </article>
     </div>

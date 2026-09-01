@@ -59,8 +59,7 @@
         <p class="status-line">MAE 204 final project · MATLAB · Modern Robotics Toolbox · CoppeliaSim</p>
 
         <aside class="case-note">
-          <strong>Evidence boundary:</strong> This page reports simulation experiments.
-          It does not claim hardware validation, real-time sensing, or deployment outside CoppeliaSim.
+          <strong>Scope:</strong> All experiments were performed in CoppeliaSim; hardware validation and real-time sensing were outside the project scope.
         </aside>
 
         <section id="overview">
@@ -102,7 +101,7 @@
           </p>
           <p>
             A numerical pseudoinverse with a tolerance was used around poorly conditioned Jacobian configurations.
-            The proportional and integral gains were then varied to study convergence, overshoot, and oscillation rather than to claim one universally optimal tuning.
+            The proportional and integral gains were varied to study convergence, overshoot, and oscillation across the tested scenarios.
           </p>
         </section>
 
@@ -133,7 +132,7 @@
           <h3>Changed task configuration</h3>
           <p>
             The same pipeline was also run with a changed cube goal that included a 90-degree orientation shift.
-            This is a useful scenario check, but one additional configuration is not evidence of general-purpose adaptability.
+            This additional configuration is a limited scenario check and does not establish general-purpose adaptability.
           </p>
           <div class="media-row" aria-label="Changed pick-and-place task">
             <img src="assets/images/Mobile Manipulator/New_Task.png" alt="Error curves for the changed pick-and-place target configuration" loading="lazy" />

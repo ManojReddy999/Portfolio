@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A robotics motion-planning case study comparing grid-based A* with a library-backed RRT* planner in 3D obstacle environments.">
+  <meta name="description" content="A robotics motion-planning project comparing grid-based A* with a library-backed RRT* planner in 3D obstacle environments.">
   <meta name="theme-color" content="#050b11">
   <title>3D Motion Planning | Manoj Reddy Manchala</title>
   <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/astar-rrt.html">
@@ -50,8 +50,8 @@
     </dl>
 
     <div class="case-layout">
-      <aside class="case-aside" aria-label="Case study sections">
-        <p class="section-kicker">System index</p>
+      <aside class="case-aside" aria-label="Project sections">
+        <p class="section-kicker">Contents</p>
         <ul>
           <li><a href="#problem">Problem</a></li>
           <li><a href="#build">What I built</a></li>
@@ -76,10 +76,10 @@
           <p>Line segments were tested against axis-aligned bounding boxes so candidate edges could be rejected before entering a returned path.</p>
         </section>
         <section id="evaluation" data-reveal>
-          <p class="section-kicker">03 / Evidence</p>
+          <p class="section-kicker">03 / Results</p>
           <h2>Compared behavior across several obstacle layouts.</h2>
-          <p>The course experiments covered simple environments and more cluttered mazes, rooms, and tower-like layouts. The report and repository contain the exact configurations and outputs; this page intentionally avoids quoting path-length or timing numbers without reproducing the full metric definitions.</p>
-          <div class="case-note"><strong>Failure log:</strong> A grid that is too coarse can erase narrow passages, while a fine grid increases search cost. Sampling-based results vary with random samples and planner settings, so feasibility from one run is not a guarantee.</div>
+          <p>The course experiments covered simple environments and more cluttered mazes, rooms, and tower-like layouts. The report and repository contain the configurations and outputs. Quantitative comparisons are omitted because the original metric definitions were not documented consistently.</p>
+          <div class="case-note"><strong>Limitations:</strong> A coarse grid can erase narrow passages, while a fine grid increases search cost. Sampling-based results vary with random samples and planner settings.</div>
         </section>
         <section id="limits" data-reveal>
           <p class="section-kicker">04 / Limits + next experiment</p>
