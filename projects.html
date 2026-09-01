@@ -2,227 +2,265 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Explore projects by Manoj Manchala in Robotics, SLAM, Motion Planning, and other technical areas.">
-  <title>Projects | Manoj Manchala</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Selected robotics and applied machine-learning work by Manoj Reddy Manchala, spanning reinforcement learning, SLAM, perception, motion planning, and robot control." />
+  <meta name="theme-color" content="#050b11" />
+  <meta property="og:title" content="Selected Work | Manoj Reddy Manchala" />
+  <meta property="og:description" content="Evidence-led robotics work across learning-based navigation, state estimation, perception, and control." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/projects.html" />
+  <meta property="og:image" content="https://manojreddy999.github.io/Portfolio/assets/images/sample-research.png" />
+  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/projects.html" />
+  <link rel="icon" type="image/png" href="assets/images/car-unique.png" />
+  <title>Selected Work | Manoj Reddy Manchala</title>
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" />
+  <script src="assets/js/script.js" defer></script>
 </head>
 <body>
-  <header>
-    <nav class="navbar">
-      <div class="nav-logo"><a href="index.html">Manoj Manchala</a></div>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="projects.html" class="active">Projects</a></li>
-        <li><a href="blog.html">Blog</a></li>
+  <a class="skip-link" href="#main-content">Skip to selected work</a>
+
+  <header class="site-header">
+    <nav class="navbar" aria-label="Primary navigation">
+      <div class="nav-logo"><a href="index.html" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
+        <i class="ph ph-list" aria-hidden="true"></i>
+      </button>
+      <ul class="nav-links" id="primary-navigation">
+        <li><a href="projects.html" aria-current="page">Selected Work</a></li>
+        <li><a href="index.html#profile">Profile</a></li>
         <li><a href="resume.html">Resume</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </nav>
   </header>
 
-  <main class="container projects-page">
-    <h1>Projects</h1> <section class="research-section project-category-section">
-      <h2>Research</h2>
-      <div 
-        class="card project-card clickable-card" 
-        onclick="window.location='project-details.html'" >
-        <div class="project-card-content">
-          <div class="project-text">
-            <h2>GNN-Driven Obstacle Avoidance with Multi-Surface Perception</h2>
-            <p>Developing a navigation framework using Graph Neural Networks (GNNs) and point cloud data for robust path planning in complex environments, with future integration of RGB data for semantic surface classification.</p>
-          </div>
-          <div class="project-thumbnail">
-            <img src="assets/images/sample-research.png" alt="GNN Research Thumbnail" /> </div>
-        </div>
-      </div>
-
-      <!-- 
-      <div 
-        class="card project-card clickable-card" 
-        onclick="window.location='project-details.html'"
-      >
-        <div class="project-card-content">
-          <div class="project-text">
-            <h3>Research Project 2</h3>
-            <p>Short summary or highlight of the research.</p>
-          </div>
-          <div class="project-thumbnail">
-            <img src="assets/images/placeholder.jpg" alt="Research 2" />
-          </div>
-        </div>
-      </div>
-      -->
+  <main id="main-content">
+    <section class="page-hero container" data-reveal>
+      <span class="eyebrow">Robotics / Applied ML / Evidence</span>
+      <h1>Selected work.</h1>
+      <p>
+        A focused record of systems I built to understand how robots perceive, estimate, decide, and move. The first three projects carry the clearest technical story; the archive keeps the supporting work inspectable.
+      </p>
     </section>
 
-    <section class="slam-projects-section project-category-section"> <h2>SLAM Projects</h2>
-      <div class="card project-card">
-        <div class="project-card-content">
-          <div class="project-thumbnail">
-            <img src="assets/images/VI-SLAM/Pasted image.png" alt="Visual-Inertial SLAM" />
-          </div>
-          <div class="project-text">
-            <div class="heading-buttons">
-              <h2>Visual-Inertial SLAM</h2> <div class="button-group">
-                <a href="ECE276A_PR3_Report.pdf" target="_blank" rel="noopener noreferrer" class="button">Report</a>
-                <a href="https://github.com/ManojReddy999/Visual-Inertial-SLAM" target="_blank" class="button">GitHub</a> </div>
-            </div>
-            <p>
-              Implemented a robust Visual-Inertial SLAM system fusing IMU and stereo camera data via an Extended Kalman Filter (EKF) for pose estimation and landmark mapping.
-            </p>
-            <p>
-              The system addresses sensor noise and synchronization, achieving accurate trajectory estimation for autonomous navigation.
-            </p>
-          </div>
+    <section class="project-category-section container" aria-labelledby="featured-work-heading">
+      <div class="project-category-title" data-reveal>
+        <div>
+          <span class="section-kicker">01 / Featured systems</span>
+          <h2 id="featured-work-heading">Proof over claims</h2>
         </div>
+        <p>
+          Each entry exposes the implementation choices, artifacts, and current limits behind the headline. Where a benchmark is still being reproduced, I say so directly.
+        </p>
       </div>
-      <div class="card project-card">
-        <div class="project-card-content">
-          <div class="project-thumbnail">
-            <img src="assets/images/LiDAR-SLAM/occupancy_map.png" alt="LiDAR-Based SLAM" />
-          </div>
-          <div class="project-text">
-            <div class="heading-buttons">
-              <h2>LiDAR-Based SLAM for Differential-Drive Robots</h2>
-              <div class="button-group">
-                <a href="ECE276A_PR2_Report.pdf" target="_blank" rel="noopener noreferrer" class="button">Report</a>
-                <a href="https://github.com/ManojReddy999/LiDAR-SLAM" target="_blank" class="button">GitHub</a> </div>
-            </div>
-            <p>
-              Developed a comprehensive LiDAR-based SLAM system integrating multi-sensor odometry, 2D LiDAR scans, and RGBD data for a differential-drive robot.
-            </p>
-            <p>
-              Refined motion estimates via ICP scan matching, constructed occupancy grid maps, and employed pose graph optimization with loop closure using GTSAM for enhanced accuracy.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="motion-planning-section project-category-section"> <h2>Motion Planning</h2>
-      <div class="card project-card">
-        <div class="project-card-content">
-          <div class="project-thumbnail">
-            <img src="assets/images/GPI/Figure_6.png" alt="Stochastic Optimal Control" />
+      <div class="project-index-list">
+        <article class="project-index-row" data-reveal>
+          <span class="project-number" aria-hidden="true">01.1</span>
+          <div class="project-index-media plot-on-dark">
+            <img src="assets/images/sample-research.png" alt="Red and blue graph representation used in an autonomous-navigation representation experiment" />
           </div>
-          <div class="project-text">
-            <div class="heading-buttons">
-              <h2>Infinite-Horizon Stochastic Optimal Control</h2>
-              <div class="button-group">
-                <a href="ECE276B_PR3_Report.pdf" target="_blank" rel="noopener noreferrer" class="button">Report</a>
-                <a href="https://github.com/ManojReddy999/Infinite-Horizon-Stochastic-Optimal-Control" target="_blank" class="button">GitHub</a> </div>
-            </div>
+          <div class="project-index-content">
+            <span class="project-type">Reinforcement learning / Safe navigation</span>
+            <h2>RL Autonomous Navigation</h2>
             <p>
-              Developed a control policy for a differential-drive robot for trajectory tracking and obstacle avoidance, formulated as an infinite-horizon stochastic optimal control problem.
+              A custom MuJoCo and dm_control environment for an Ackermann-drive vehicle, used to study PPO and SAC policies, obstacle generation, collision handling, reward behavior, and learned visual representations.
             </p>
+            <ul class="tech-list" aria-label="Key technologies">
+              <li>MuJoCo</li>
+              <li>dm_control</li>
+              <li>Stable-Baselines3</li>
+              <li>PyTorch</li>
+            </ul>
+            <p class="status-line">Research archive · representation-work visual, not simulator footage</p>
+          </div>
+          <div class="project-index-actions">
+            <a class="button compact" href="project-details.html">Read case study <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </article>
+
+        <article class="project-index-row" data-reveal>
+          <span class="project-number" aria-hidden="true">01.2</span>
+          <div class="project-index-media plot-on-dark">
+            <img src="assets/images/VI-SLAM/Pasted image.png" alt="Visual-inertial SLAM landmark map with an estimated vehicle trajectory" />
+          </div>
+          <div class="project-index-content">
+            <span class="project-type">State estimation / Sensor fusion</span>
+            <h2>Visual-Inertial SLAM</h2>
             <p>
-              Explored Certainty Equivalent Control (CEC) and Generalized Policy Iteration (GPI) to handle motion noise and uncertainties.
+              An EKF-based pipeline that fused IMU measurements and stereo observations for vehicle pose estimation and landmark mapping, with the mathematical derivation and implementation documented in the project report and repository.
             </p>
+            <ul class="tech-list" aria-label="Key technologies">
+              <li>Python</li>
+              <li>EKF</li>
+              <li>Stereo vision</li>
+              <li>IMU</li>
+            </ul>
           </div>
-        </div>
-      </div>
-      <!-- <div class="card project-card clickable-card" onclick="window.location='A*-RRT.html'"> -->
-      <div class="card project-card">
-        <div class="project-card-content">
-          <div class="project-thumbnail">
-            <img src="assets/images/A*-RRT/Screenshot from 2024-05-24 20-41-04.png" alt="3D Motion Planning A* RRT" />
+          <div class="project-index-actions">
+            <a class="button compact" href="ECE276A_PR3_Report.pdf" target="_blank" rel="noopener noreferrer">Report <i class="ph ph-file-pdf" aria-hidden="true"></i></a>
+            <a class="button compact secondary" href="https://github.com/ManojReddy999/Visual-Inertial-SLAM" target="_blank" rel="noopener noreferrer">Code <i class="ph ph-github-logo" aria-hidden="true"></i></a>
           </div>
-          <div class="project-text">
-            <div class="heading-buttons">
-              <h2>Motion Planning in 3D: A* & RRT Approaches</h2>
-              <div class="button-group">
-                <a href="ECE276B_PR2_Report.pdf" target="_blank" rel="noopener noreferrer" class="button">Report</a>
-                <a href="https://github.com/ManojReddy999/Motion-Planning" target="_blank" class="button">GitHub</a>
-              </div>
-            </div>
-            <p> Developed and compared search-based A* and sampling-based RRT* algorithms for collision-free path planning in continuous 3D environments with obstacles.</p>
+        </article>
+
+        <article class="project-index-row" data-reveal>
+          <span class="project-number" aria-hidden="true">01.3</span>
+          <div class="project-index-media">
+            <img src="assets/images/Calibration challenge/pitch_yaw_prediction.png" alt="Plots comparing ground-truth and predicted pitch and yaw for the camera-calibration project" />
+          </div>
+          <div class="project-index-content">
+            <span class="project-type">Computer vision / Sequence learning</span>
+            <h2>Camera Calibration from Motion</h2>
             <p>
-              Implemented robust collision checking and evaluated trade-offs between path optimality and computational efficiency.
+              A Comma.ai calibration challenge solution combining optical flow, vanishing-point cues, convolutional features, and an LSTM to estimate camera pitch and yaw from driving video.
             </p>
+            <ul class="tech-list" aria-label="Key technologies">
+              <li>PyTorch</li>
+              <li>Conv-LSTM</li>
+              <li>Optical flow</li>
+              <li>OpenCV</li>
+            </ul>
           </div>
-        </div>
-      </div>
-      <div class="card project-card">
-        <div class="project-card-content">
-          <div class="project-thumbnail">
-            <img src="assets/images/Door-Key/-8x8-28.gif" alt="Door & Key Navigation DP" />
+          <div class="project-index-actions">
+            <a class="button compact" href="Calibration-challenge.html">Case study <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+            <a class="button compact secondary" href="ECE228_project_report_12.pdf" target="_blank" rel="noopener noreferrer">Report <i class="ph ph-file-pdf" aria-hidden="true"></i></a>
+            <a class="button compact secondary" href="https://github.com/ManojReddy999/Calibration_Challenge" target="_blank" rel="noopener noreferrer">Code <i class="ph ph-github-logo" aria-hidden="true"></i></a>
           </div>
-          <div class="project-text">
-            <div class="heading-buttons">
-              <h2>Dynamic Programming for Door & Key Navigation</h2>
-              <div class="button-group">
-                <a href="ECE276B_PR1_Report.pdf" target="_blank" rel="noopener noreferrer" class="button">Report</a>
-                <a href="https://github.com/ManojReddy999/Door-Key-Navigation-Task" target="_blank" class="button">GitHub</a> </div>
-            </div>
-            <p>
-              Developed a dynamic programming algorithm for an agent to navigate a Door & Key environment, minimizing energy costs while handling tasks like key pickup and door unlocking.
-            </p>
-            <p>
-              Modeled as an MDP, the algorithm computes optimal control policies for both fixed and random map configurations.
-            </p>
-          </div>
-        </div>
+        </article>
       </div>
     </section>
 
-    <section class="technical-projects-section project-category-section"> <h2>Technical Projects</h2>
-      <div class="card project-card clickable-card" onclick="window.location='Calibration-challenge.html'">
-        <div class="project-card-content">
-          <div class="project-text">
-            <div class="heading-buttons">
-                <h2>Comma.ai Calibration Challenge</h2>
-                 <div class="button-group">
-                    <a href="Calibration-challenge.html" class="button">Details</a>
-                </div>
-            </div>
-            <p>Developed an advanced deep learning solution (Conv-LSTM) integrating optical flow and vanishing point techniques to calibrate vehicle onboard cameras by predicting pitch and yaw.</p>
-          </div>
-          <div class="project-thumbnail">
-            <img src="assets/images/Calibration challenge/pitch_yaw_prediction.png" alt="Comma.ai Calibration Challenge Thumbnail" /> </div>
+    <section class="project-category-section container" aria-labelledby="archive-heading">
+      <div class="project-category-title" data-reveal>
+        <div>
+          <span class="section-kicker">02 / Technical archive</span>
+          <h2 id="archive-heading">Supporting work</h2>
         </div>
+        <p>
+          Coursework and systems projects across mapping, planning, optimal control, and manipulation. Links point only to artifacts that are currently available.
+        </p>
       </div>
-      <div class="card project-card clickable-card" onclick="window.location='Mobile-Manipulator.html'">
-        <div class="project-card-content">
-          <div class="project-thumbnail">
-            <img src="assets/images/Mobile Manipulator/Best_Case.gif" alt="YouBot Motion Control" />
+
+      <div class="project-index-list">
+        <article class="project-index-row" data-reveal>
+          <span class="project-number" aria-hidden="true">02.1</span>
+          <div class="project-index-media plot-on-dark">
+            <img src="assets/images/LiDAR-SLAM/occupancy_map.png" alt="Occupancy-grid map produced by the LiDAR SLAM pipeline" />
           </div>
-          <div class="project-text">
-            <div class="heading-buttons">
-                <h2>Motion Control of a Mobile Manipulator (YouBot)</h2>
-                <div class="button-group">
-                    <a href="Mobile-Manipulator.html" class="button">Details</a>
-                </div>
-            </div>
-            <p>Designed an adaptive control system for a YouBot for autonomous pick-and-place, featuring MATLAB simulation, trajectory generation, and feedforward-plus-PI feedback control, visualized in CoppeliaSim.</p>
+          <div class="project-index-content">
+            <span class="project-type">Mapping / Localization</span>
+            <h3>LiDAR SLAM</h3>
+            <p>Multi-sensor odometry, ICP scan matching, occupancy-grid mapping, and pose-graph optimization for a differential-drive robot.</p>
           </div>
-        </div>
+          <div class="project-index-actions">
+            <a class="text-link" href="ECE276A_PR2_Report.pdf" target="_blank" rel="noopener noreferrer">Report <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            <a class="text-link" href="https://github.com/ManojReddy999/LiDAR-SLAM" target="_blank" rel="noopener noreferrer">Code <i class="ph ph-github-logo" aria-hidden="true"></i></a>
+          </div>
+        </article>
+
+        <article class="project-index-row" data-reveal>
+          <span class="project-number" aria-hidden="true">02.2</span>
+          <div class="project-index-media">
+            <img src="assets/images/GPI/Figure_6.png" alt="Trajectory-tracking result from the stochastic optimal-control project" />
+          </div>
+          <div class="project-index-content">
+            <span class="project-type">Optimal control / Uncertainty</span>
+            <h3>Infinite-Horizon Stochastic Control</h3>
+            <p>Certainty-equivalent control and generalized policy iteration for noisy trajectory tracking and obstacle avoidance.</p>
+          </div>
+          <div class="project-index-actions">
+            <a class="text-link" href="GPI.html">Details <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+            <a class="text-link" href="ECE276B_PR3_Report.pdf" target="_blank" rel="noopener noreferrer">Report <i class="ph ph-file-pdf" aria-hidden="true"></i></a>
+            <a class="text-link" href="https://github.com/ManojReddy999/Infinite-Horizon-Stochastic-Optimal-Control" target="_blank" rel="noopener noreferrer">Code <i class="ph ph-github-logo" aria-hidden="true"></i></a>
+          </div>
+        </article>
+
+        <article class="project-index-row" data-reveal>
+          <span class="project-number" aria-hidden="true">02.3</span>
+          <div class="project-index-media">
+            <img src="assets/images/astar-rrt/Screenshot from 2024-05-24 20-41-04.png" alt="Three-dimensional obstacle environment used to compare A-star and RRT planning" />
+          </div>
+          <div class="project-index-content">
+            <span class="project-type">Motion planning / Collision checking</span>
+            <h3>A* and RRT in 3D</h3>
+            <p>A comparison of search-based and sampling-based collision-free path planning in continuous three-dimensional environments.</p>
+          </div>
+          <div class="project-index-actions">
+            <a class="text-link" href="astar-rrt.html">Details <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+            <a class="text-link" href="ECE276B_PR2_Report.pdf" target="_blank" rel="noopener noreferrer">Report <i class="ph ph-file-pdf" aria-hidden="true"></i></a>
+            <a class="text-link" href="https://github.com/ManojReddy999/Motion-Planning" target="_blank" rel="noopener noreferrer">Code <i class="ph ph-github-logo" aria-hidden="true"></i></a>
+          </div>
+        </article>
+
+        <article class="project-index-row" data-reveal>
+          <span class="project-number" aria-hidden="true">02.4</span>
+          <div class="project-index-media">
+            <img src="assets/images/Door-Key/-8x8-28.gif" alt="Animated Door and Key grid-world policy execution" />
+          </div>
+          <div class="project-index-content">
+            <span class="project-type">Dynamic programming / MDP</span>
+            <h3>Door &amp; Key Navigation</h3>
+            <p>A dynamic-programming policy for key pickup, door unlocking, and minimum-cost navigation across fixed and random grid maps.</p>
+          </div>
+          <div class="project-index-actions">
+            <a class="text-link" href="Door-key.html">Details <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+            <a class="text-link" href="ECE276B_PR1_Report.pdf" target="_blank" rel="noopener noreferrer">Report <i class="ph ph-file-pdf" aria-hidden="true"></i></a>
+            <a class="text-link" href="https://github.com/ManojReddy999/Door-Key-Navigation-Task" target="_blank" rel="noopener noreferrer">Code <i class="ph ph-github-logo" aria-hidden="true"></i></a>
+          </div>
+        </article>
+
+        <article class="project-index-row" data-reveal>
+          <span class="project-number" aria-hidden="true">02.5</span>
+          <div class="project-index-media">
+            <img src="assets/images/Mobile Manipulator/Best_Case.gif" alt="CoppeliaSim animation of a YouBot mobile manipulator completing a pick-and-place task" />
+          </div>
+          <div class="project-index-content">
+            <span class="project-type">Robot control / Manipulation</span>
+            <h3>YouBot Mobile Manipulation</h3>
+            <p>Kinematics, reference-trajectory generation, and feedforward-plus-PI feedback control for a simulated pick-and-place task.</p>
+          </div>
+          <div class="project-index-actions">
+            <a class="text-link" href="Mobile-Manipulator.html">Details <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+            <a class="text-link" href="https://github.com/ManojReddy999/Motion-Control-of-Mobile-Manipulator-Robot" target="_blank" rel="noopener noreferrer">Code <i class="ph ph-github-logo" aria-hidden="true"></i></a>
+          </div>
+        </article>
+
+        <article class="project-index-row" data-reveal>
+          <span class="project-number" aria-hidden="true">02.6</span>
+          <div class="project-index-media">
+            <img src="assets/images/Orientation-Tracking/IMUandCamSensors.jpg" alt="IMU and camera sensors used for orientation tracking and panorama construction" />
+          </div>
+          <div class="project-index-content">
+            <span class="project-type">Sensor calibration / Geometry</span>
+            <h3>Orientation Tracking &amp; Panorama</h3>
+            <p>IMU bias calibration, quaternion kinematics, projected-gradient optimization, and camera-image stitching.</p>
+          </div>
+          <div class="project-index-actions">
+            <a class="text-link" href="ECE276A_PR1_Report.pdf" target="_blank" rel="noopener noreferrer">Report <i class="ph ph-file-pdf" aria-hidden="true"></i></a>
+          </div>
+        </article>
       </div>
-      <div class="card project-card">
-        <div class="project-card-content">
-          <div class="project-thumbnail">
-            <img src="assets/images/Orientation-Tracking/IMUandCamSensors.jpg" alt="Orientation Tracking & Panorama" />
-          </div>
-          <div class="project-text">
-            <div class="heading-buttons">
-              <h2>Orientation Tracking & Panorama Construction</h2>
-              <div class="button-group">
-                <a href="ECE276A_PR1_Report.pdf" target="_blank" rel="noopener noreferrer" class="button">Report</a>
-                <a href="#" class="button">GitHub</a> </div>
-            </div>
-            <p>
-              Focused on robust orientation tracking using IMU data and constructing panoramic images. Employed projected gradient descent for 3D orientation estimation and image stitching.
-            </p>
-            <p>
-              Included sensor bias calibration and quaternion kinematics, facilitating accurate orientation trajectories for environmental mapping.
-            </p>
-          </div>
-        </div>
+    </section>
+
+    <section class="contact-strip container" aria-labelledby="contact-heading" data-reveal>
+      <div>
+        <span class="section-kicker">Remote startup teams</span>
+        <h2 id="contact-heading">Need someone who can move between robot behavior and implementation detail?</h2>
       </div>
+      <a class="button" href="contact.html">Start a conversation <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
     </section>
   </main>
 
-  <footer>
-    <p>&copy; 2025 Manoj Manchala. All rights reserved.</p>
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <span>&copy; <span data-year>2026</span> Manoj Reddy Manchala</span>
+      <div class="footer-links" aria-label="External profiles">
+        <a href="https://www.linkedin.com/in/manojreddymanchala/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://github.com/ManojReddy999" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="mailto:manojreddymanchalaus@gmail.com">Email</a>
+      </div>
+    </div>
   </footer>
 </body>
 </html>

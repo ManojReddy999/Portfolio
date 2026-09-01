@@ -2,49 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Resume | Your Name</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="View or download Manoj Reddy Manchala's resume for robotics, autonomy, and applied machine learning roles." />
+  <meta name="theme-color" content="#050b11" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Resume | Manoj Reddy Manchala" />
+  <meta property="og:description" content="Robotics and applied machine learning experience spanning autonomous navigation, perception, SLAM, and robot control." />
+  <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/resume.html" />
+  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/resume.html" />
+  <link rel="icon" type="image/png" href="assets/images/car-unique.png" />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" />
+  <script src="assets/js/script.js" defer></script>
+  <title>Resume | Manoj Reddy Manchala</title>
 </head>
 <body>
-  <!-- Header / Navigation -->
-  <header>
-    <nav class="navbar">
-      <div class="nav-logo"><a href="index.html">Manoj Manchala</a></div>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="resume.html" class="active">Resume</a></li>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="navbar" aria-label="Primary navigation">
+      <div class="nav-logo">
+        <a href="index.html" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
+        <i class="ph ph-list" aria-hidden="true"></i>
+      </button>
+      <ul class="nav-links" id="primary-navigation" data-open="false">
+        <li><a href="projects.html">Selected Work</a></li>
+        <li><a href="index.html#profile">Profile</a></li>
+        <li><a href="resume.html" aria-current="page">Resume</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- Main Content -->
-  <main class="container resume-page">
-    <div class="floating-card">
-      <div class="heading-buttons">
-        <h1>My Resume</h1>
-        <div class="button-group">
-          <a href="Resume_Manoj.pdf" target="_blank" download class="button">Download Resume (PDF)</a>
-        </div>
-      </div>
-      
-      <!-- Option 1: View inline with <iframe> or <embed> -->
-      <div class="resume-viewer">
-        <iframe src="Resume_Manoj.pdf" width="75%" height="800px">
-          Your browser does not support iframes. You can 
-          <a href="Resume_Manoj.pdf" download>download the PDF</a>.
-        </iframe>
-      </div>
+  <main class="container resume-page" id="main-content">
+    <section class="resume-hero" aria-labelledby="resume-title" data-reveal>
+      <span class="eyebrow">Career profile · PDF</span>
+      <h1 id="resume-title">Resume</h1>
+      <p>
+        Robotics and applied machine learning experience across autonomous navigation,
+        perception, SLAM, simulation, and robot control.
+      </p>
+    </section>
 
+    <div class="resume-toolbar" data-reveal>
+      <p>
+        The document is embedded below. Open it in a new tab for your browser's full PDF controls,
+        or download a copy for offline review.
+      </p>
+      <div class="button-group" aria-label="Resume actions">
+        <a class="button secondary" href="Resume_Manoj.pdf" target="_blank" rel="noopener noreferrer">
+          <i class="ph ph-arrow-square-out" aria-hidden="true"></i>
+          Open PDF
+        </a>
+        <a class="button" href="Resume_Manoj.pdf" download>
+          <i class="ph ph-download-simple" aria-hidden="true"></i>
+          Download PDF
+        </a>
+      </div>
+    </div>
+
+    <div class="resume-viewer" data-reveal>
+      <iframe src="Resume_Manoj.pdf" title="Manoj Reddy Manchala resume PDF">
+        <p>
+          This browser cannot display the embedded PDF.
+          <a href="Resume_Manoj.pdf" download>Download Manoj Reddy Manchala's resume</a> instead.
+        </p>
+      </iframe>
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 Manoj Manchala. All rights reserved.</p>
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <p>&copy; <span data-year>2026</span> Manoj Reddy Manchala. Robotics &amp; Applied ML.</p>
+      <div class="footer-links" aria-label="External links">
+        <a href="https://github.com/ManojReddy999" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/manojreddymanchala/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="mailto:manojreddymanchalaus@gmail.com">Email</a>
+      </div>
+    </div>
   </footer>
 </body>
 </html>
