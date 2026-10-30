@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Physics parity check</title>
+<style>
+  body { margin: 0; padding: 24px; background: #050b11; color: #c3ced6; font: 14px/1.5 ui-monospace, Consolas, monospace; }
+  h1 { color: #eef3f6; font-size: 18px; margin: 0 0 16px; }
+  .pass { color: #5bd38f; } .fail { color: #ff6b57; }
+  table { border-collapse: collapse; margin-top: 12px; }
+  td, th { padding: 2px 12px; text-align: right; border-bottom: 1px solid #263746; }
+</style>
+</head>
+<body>
+<h1>Browser MuJoCo vs. training MuJoCo — physics parity</h1>
+<div id="out">Loading…</div>
+<script type="module">
+import { loadSim, PHYSICS_STEPS_PER_CONTROL } from './src/sim.js';
+
+const out = document.getElementById('out');
+const log = (html) => { out.innerHTML += html; };
+
+try {
+  const ref = await (await fetch('./assets/parity/reference.json')).json();
+  out.innerHTML = '';
+  const t0 = performance.now();
+  const sim = await loadSim();
+  log(`<p>Loaded scene in ${(performance.now() - t0).toFixed(0)} ms — ` +
+      `${sim.model.ngeom} geoms, ${sim.model.nbody} bodies, timestep ${sim.model.opt.timestep}. ` +
+      `Python reference: MuJoCo ${ref.mujoco_version}.</p>`);
+
+  if (ref.substeps !== PHYSICS_STEPS_PER_CONTROL) throw new Error('substep mismatch');
+  sim.reset();
+  let maxPos = 0, maxQuat = 0;
+  const rows = [];
+  const tStep = performance.now();
+  ref.samples.forEach((s, k) => {
+    sim.step(ref.control[0], ref.control[1]);
+    const p = sim.carPosition(), q = sim.carQuat();
+    const dp = Math.hypot(p[0] - s.xpos[0], p[1] - s.xpos[1], p[2] - s.xpos[2]);
+    // q and -q are the same rotation
+    const dq = Math.min(
+      Math.hypot(...q.map((v, i) => v - s.xquat[i])),
+      Math.hypot(...q.map((v, i) => v + s.xquat[i])));
+    maxPos = Math.max(maxPos, dp); maxQuat = Math.max(maxQuat, dq);
+    if (k % 10 === 9) rows.push(`<tr><td>${s.t.toFixed(2)}</td><td>${p[0].toFixed(5)}</td><td>${p[1].toFixed(5)}</td>` +
+      `<td>${s.xpos[0].toFixed(5)}</td><td>${s.xpos[1].toFixed(5)}</td><td>${dp.toExponential(2)}</td></tr>`);
+  });
+  const stepMs = performance.now() - tStep;
+
+  const ok = maxPos < 1e-6 && maxQuat < 1e-6;
+  log(`<p class="${ok ? 'pass' : 'fail'}">${ok ? 'PASS' : 'DIVERGES'} — max position error ${maxPos.toExponential(3)} m, ` +
+      `max orientation error ${maxQuat.toExponential(3)} over ${ref.samples.length} control steps ` +
+      `(${ref.samples.length * ref.substeps} physics steps).</p>`);
+  log(`<p>Browser physics speed: ${(ref.samples.length * ref.substeps / (stepMs / 1000)).toFixed(0)} physics steps/s ` +
+      `(${(ref.samples.length * 0.05 / (stepMs / 1000)).toFixed(1)}× real time).</p>`);
+  log(`<table><tr><th>t (s)</th><th>browser x</th><th>browser y</th><th>python x</th><th>python y</th><th>|Δ| (m)</th></tr>${rows.join('')}</table>`);
+  log(`<p>Collision now: ${sim.inCollision()}</p>`);
+  window.__parity = { ok, maxPos, maxQuat };
+} catch (e) {
+  out.innerHTML = `<p class="fail">Error: ${e.message}</p><pre>${e.stack}</pre>`;
+  window.__parity = { error: e.message };
+}
+</script>
+</body>
+</html>

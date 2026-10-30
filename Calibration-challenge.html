@@ -11,45 +11,44 @@
   <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/Calibration-challenge.html" />
   <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/Calibration-challenge.html" />
   <link rel="icon" type="image/png" href="assets/images/car-unique.png" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" />
-  <script src="assets/js/script.js" defer></script>
   <title>Comma.ai Calibration Challenge | Manoj Reddy Manchala</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/site.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
   <header class="site-header">
-    <nav class="navbar" aria-label="Primary navigation">
-      <div class="nav-logo">
-        <a href="index.html" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a>
-      </div>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
-        <i class="ph ph-list" aria-hidden="true"></i>
-      </button>
+    <nav class="navbar" aria-label="Primary">
+      <div class="nav-logo"><a href="./" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">☰</button>
       <ul class="nav-links" id="primary-navigation" data-open="false">
-        <li><a href="projects.html" aria-current="page">Selected Work</a></li>
-        <li><a href="index.html#profile">Profile</a></li>
-        <li><a href="resume.html">Resume</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="./#work">Robotics</a></li>
+        <li><a href="./#production">Production</a></li>
+        <li><a href="lab/">Lab</a></li>
+        <li><a href="./#about">About</a></li>
+        <li><a href="./#contact">Contact</a></li>
+        <li><a class="nav-cta" href="Resume_Manoj.pdf">Résumé</a></li>
       </ul>
     </nav>
   </header>
 
   <main class="container project-details-page" id="main-content">
-    <div class="project-details-card">
-      <div class="heading-buttons" data-reveal>
+    <a class="back-link" href="./#work">← All projects</a>
+<div class="project-details-card">
+      <div class="heading-buttons">
         <div>
           <span class="project-type">ECE 228 team project · Computer vision / Temporal learning</span>
           <h1>Comma.ai Calibration Challenge</h1>
         </div>
         <div class="button-group" aria-label="Project resources">
           <a class="button secondary" href="ECE228_project_report_12.pdf" target="_blank" rel="noopener noreferrer">
-            <i class="ph ph-file-pdf" aria-hidden="true"></i>
             Report
           </a>
           <a class="button" href="https://github.com/ManojReddy999/Calibration_Challenge" target="_blank" rel="noopener noreferrer">
-            <i class="ph ph-github-logo" aria-hidden="true"></i>
             GitHub
           </a>
         </div>
@@ -83,9 +82,9 @@
             The horizontal and vertical flow fields were concatenated with RGB channels, producing a five-channel representation for one model configuration.
           </p>
           <div class="media-row" aria-label="Optical flow examples">
-            <img src="assets/images/Calibration challenge/optical_img_2.png" alt="Road frame with optical-flow vectors overlaid" loading="lazy" />
-            <img src="assets/images/Calibration challenge/optical_img_1.png" alt="Optical-flow field extracted from a driving frame" loading="lazy" />
-            <img src="assets/images/Calibration challenge/optical_img_3.png" alt="Additional driving-frame optical-flow example" loading="lazy" />
+            <img src="assets/images/Calibration challenge/optical_img_2.webp" alt="Road frame with optical-flow vectors overlaid" loading="lazy" />
+            <img src="assets/images/Calibration challenge/optical_img_1.webp" alt="Optical-flow field extracted from a driving frame" loading="lazy" />
+            <img src="assets/images/Calibration challenge/optical_img_3.webp" alt="Additional driving-frame optical-flow example" loading="lazy" />
           </div>
 
           <h3>Vanishing-point estimate</h3>
@@ -94,7 +93,7 @@
             The team used this geometric cue to reason about the vehicle's direction of travel and its relationship to camera pitch and yaw.
           </p>
           <figure>
-            <img class="img-medium" src="assets/images/Calibration challenge/vanishing_point.png" alt="Driving scene annotated with the estimated vanishing point" loading="lazy" />
+            <img class="img-medium" src="assets/images/Calibration challenge/vanishing_point.webp" alt="Driving scene annotated with the estimated vanishing point" loading="lazy" />
             <figcaption>Vanishing-point cue used as an interpretable reference for motion direction.</figcaption>
           </figure>
         </section>
@@ -121,7 +120,7 @@
             A final fully connected layer produced pitch and yaw predictions. The combined-input variant accepted RGB plus the two optical-flow components.
           </p>
           <figure>
-            <img class="img-large" src="assets/images/Calibration challenge/architecture.png" alt="Diagram of the convolutional and LSTM calibration architecture" loading="lazy" />
+            <img class="img-large" src="assets/images/Calibration challenge/architecture.webp" alt="Diagram of the convolutional and LSTM calibration architecture" loading="lazy" />
             <figcaption>Spatial feature extraction followed by temporal modeling and two-angle regression.</figcaption>
           </figure>
           <p>
@@ -137,24 +136,24 @@
             The loss curves below compare the three training configurations; they are not production benchmarks.
           </p>
           <div class="media-row" aria-label="Training loss comparisons">
-            <img src="assets/images/Calibration challenge/without_optical_flow_loss.png" alt="Training and validation loss for the RGB-only model" loading="lazy" />
-            <img src="assets/images/Calibration challenge/only_optical_loss.png" alt="Training and validation loss for the optical-flow-only model" loading="lazy" />
-            <img src="assets/images/Calibration challenge/loss_curve.png" alt="Training and validation loss for the fused RGB and optical-flow model" loading="lazy" />
+            <img src="assets/images/Calibration challenge/without_optical_flow_loss.webp" alt="Training and validation loss for the RGB-only model" loading="lazy" />
+            <img src="assets/images/Calibration challenge/only_optical_loss.webp" alt="Training and validation loss for the optical-flow-only model" loading="lazy" />
+            <img src="assets/images/Calibration challenge/loss_curve.webp" alt="Training and validation loss for the fused RGB and optical-flow model" loading="lazy" />
           </div>
 
           <h3>RGB only</h3>
           <figure>
-            <img class="img-large" src="assets/images/Calibration challenge/without_optical_flow_pitch_yaw.png" alt="Ground-truth and predicted pitch and yaw traces for RGB-only input" loading="lazy" />
+            <img class="img-large" src="assets/images/Calibration challenge/without_optical_flow_pitch_yaw.webp" alt="Ground-truth and predicted pitch and yaw traces for RGB-only input" loading="lazy" />
           </figure>
 
           <h3>Optical flow only</h3>
           <figure>
-            <img class="img-large" src="assets/images/Calibration challenge/only_optical_flow_pitch_yaw.png" alt="Ground-truth and predicted pitch and yaw traces for optical-flow-only input" loading="lazy" />
+            <img class="img-large" src="assets/images/Calibration challenge/only_optical_flow_pitch_yaw.webp" alt="Ground-truth and predicted pitch and yaw traces for optical-flow-only input" loading="lazy" />
           </figure>
 
           <h3>RGB and optical flow</h3>
           <figure>
-            <img class="img-large" src="assets/images/Calibration challenge/pitch_yaw_prediction.png" alt="Ground-truth and predicted pitch and yaw traces for fused RGB and optical-flow input" loading="lazy" />
+            <img class="img-large" src="assets/images/Calibration challenge/pitch_yaw_prediction.webp" alt="Ground-truth and predicted pitch and yaw traces for fused RGB and optical-flow input" loading="lazy" />
           </figure>
 
           <p>
@@ -183,12 +182,8 @@
 
   <footer class="site-footer">
     <div class="footer-inner container">
-      <p>&copy; <span data-year>2026</span> Manoj Reddy Manchala. Robotics &amp; Applied ML.</p>
-      <div class="footer-links" aria-label="External links">
-        <a href="https://github.com/ManojReddy999" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://www.linkedin.com/in/manojreddymanchala/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="mailto:manojreddymanchalaus@gmail.com">Email</a>
-      </div>
+      <p>© <span data-year>2026</span> Manoj Reddy Manchala</p>
+      <div class="footer-links"><a href="https://github.com/ManojReddy999">GitHub</a><a href="https://www.linkedin.com/in/manojreddymanchala/">LinkedIn</a><a href="mailto:manojreddymanchalaus@gmail.com">Email</a></div>
     </div>
   </footer>
 </body>

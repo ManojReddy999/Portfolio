@@ -8,42 +8,47 @@
   <title>Door-and-Key Navigation | Manoj Reddy Manchala</title>
   <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/Door-key.html">
   <link rel="icon" href="assets/images/car-unique.png">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
-  <script defer src="assets/js/script.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/site.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
-    <nav class="navbar container" aria-label="Primary navigation">
-      <div class="nav-logo"><a href="index.html" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation"><i class="ph ph-list" aria-hidden="true"></i></button>
-      <ul class="nav-links" id="primary-navigation">
-        <li><a href="projects.html" aria-current="page">Selected Work</a></li>
-        <li><a href="index.html#profile">Profile</a></li>
-        <li><a href="resume.html">Resume</a></li>
-        <li><a href="contact.html">Contact</a></li>
+    <nav class="navbar" aria-label="Primary">
+      <div class="nav-logo"><a href="./" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">☰</button>
+      <ul class="nav-links" id="primary-navigation" data-open="false">
+        <li><a href="./#work">Robotics</a></li>
+        <li><a href="./#production">Production</a></li>
+        <li><a href="lab/">Lab</a></li>
+        <li><a href="./#about">About</a></li>
+        <li><a href="./#contact">Contact</a></li>
+        <li><a class="nav-cta" href="Resume_Manoj.pdf">Résumé</a></li>
       </ul>
     </nav>
   </header>
 
   <main id="main-content" class="container case-study-page">
-    <section class="case-hero" data-reveal>
+    <a class="back-link" href="./#work">← All projects</a>
+<section class="case-hero">
       <div>
         <p class="eyebrow">Decision-making / Dynamic programming</p>
         <h1>Door-and-key navigation</h1>
         <p>Formulated grid navigation as a finite-horizon Markov decision process and computed policies for fixed and randomized layouts.</p>
         <div class="hero-actions">
-          <a class="button" href="ECE276B_PR1_Report.pdf" target="_blank" rel="noopener noreferrer">Open report <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
-          <a class="button secondary" href="https://github.com/ManojReddy999/Door-Key-Navigation-Task" target="_blank" rel="noopener noreferrer">View code <i class="ph ph-github-logo" aria-hidden="true"></i></a>
+          <a class="button" href="ECE276B_PR1_Report.pdf" target="_blank" rel="noopener noreferrer">Open report</a>
+          <a class="button secondary" href="https://github.com/ManojReddy999/Door-Key-Navigation-Task" target="_blank" rel="noopener noreferrer">View code</a>
         </div>
       </div>
       <figure class="case-hero-media">
-        <img src="assets/images/Door-Key/-8x8-28.gif" width="768" height="768" alt="Door-and-key grid world with an agent, key, door, obstacles, and goal">
+        <img loading="lazy" decoding="async" src="assets/images/Door-Key/-8x8-28.gif" width="768" height="768" alt="Door-and-key grid world with an agent, key, door, obstacles, and goal">
       </figure>
     </section>
 
-    <dl class="case-meta" data-reveal>
+    <dl class="case-meta">
       <div><dt class="meta-label">Context</dt><dd>ECE 276B course project</dd></div>
       <div><dt class="meta-label">Methods</dt><dd>Finite-horizon DP / MDP</dd></div>
       <div><dt class="meta-label">Artifacts</dt><dd>Code + report</dd></div>
@@ -60,25 +65,25 @@
         </ul>
       </aside>
       <article class="case-content">
-        <section id="problem" data-reveal>
+        <section id="problem">
           <p class="section-kicker">01 / Problem</p>
           <h2>Sequence actions that change what is reachable.</h2>
           <p>The agent must move through a grid, collect a key, unlock a door, and reach a goal. Position alone is not enough to describe the decision state: orientation, key possession, and door status all affect valid transitions.</p>
         </section>
-        <section id="model" data-reveal>
+        <section id="model">
           <p class="section-kicker">02 / State + actions</p>
           <h2>Represent task progress explicitly.</h2>
           <p>For a fixed map, the state included grid position, orientation, key possession, and door status. Randomized layouts required additional variables for key and goal placement. Actions included moving forward, turning, picking up the key, and unlocking the door, with invalid actions handled by the transition and cost model.</p>
           <pre><code>state = (x, y, orientation, has_key, door_state)
 actions = {forward, left, right, pickup, unlock}</code></pre>
         </section>
-        <section id="policy" data-reveal>
+        <section id="policy">
           <p class="section-kicker">03 / Method and results</p>
           <h2>Use backward induction over a finite horizon.</h2>
           <p>I initialized terminal-state cost, propagated value estimates backward through the deterministic transition model, and stored the lowest-cost action for each reachable state. The implementation generated separate policies for supplied fixed layouts and a state representation intended to cover the randomized 8 by 8 layout family described in the course project.</p>
           <div class="case-note"><strong>Scope:</strong> The policy is optimal only for the finite-horizon, discretized model used in this project. The repository and report contain the environment definitions and rollouts.</div>
         </section>
-        <section id="limits" data-reveal>
+        <section id="limits">
           <p class="section-kicker">04 / Limitations and next steps</p>
           <h2>State-space growth is the central constraint.</h2>
           <ul>
@@ -93,7 +98,10 @@ actions = {forward, left, right, pickup, unlock}</code></pre>
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-inner"><p>&copy; <span data-year>2026</span> Manoj Reddy Manchala</p><div class="footer-links"><a href="projects.html">All work</a><a href="contact.html">Contact</a></div></div>
+    <div class="footer-inner container">
+      <p>© <span data-year>2026</span> Manoj Reddy Manchala</p>
+      <div class="footer-links"><a href="https://github.com/ManojReddy999">GitHub</a><a href="https://www.linkedin.com/in/manojreddymanchala/">LinkedIn</a><a href="mailto:manojreddymanchalaus@gmail.com">Email</a></div>
+    </div>
   </footer>
 </body>
 </html>

@@ -1,230 +1,172 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Graduate research at UC San Diego's Existential Robotics Laboratory on reinforcement learning for autonomous navigation with an Ackermann-drive vehicle in MuJoCo." />
-  <meta name="theme-color" content="#050b11" />
-  <meta property="og:title" content="RL for Autonomous Navigation Research | Manoj Reddy Manchala" />
-  <meta property="og:description" content="Environment design, policy learning, collision logic, evaluation strategy, and reproducibility limits for an Ackermann-drive navigation research system." />
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/project-details.html" />
-  <meta property="og:image" content="https://manojreddy999.github.io/Portfolio/assets/images/sample-research.png" />
-  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/project-details.html" />
-  <link rel="icon" type="image/png" href="assets/images/car-unique.png" />
-  <title>RL for Autonomous Navigation Research | Manoj Reddy Manchala</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" />
-  <script src="assets/js/script.js" defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learning to drive from depth alone · Manoj Reddy Manchala</title>
+  <meta name="description" content="Reinforcement learning for autonomous navigation: PPO policies driving a MuSHR car through clutter from one depth camera. Built at UC San Diego's Existential Robotics Laboratory, re-evaluated in 2026 with held-out scenes, multiple seeds and pre-registered rules.">
+  <meta name="theme-color" content="#050b11">
+  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/project-details.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Learning to drive from depth alone">
+  <meta property="og:description" content="What held up, what didn't, and the simulator bugs I found when I re-ran my navigation research properly.">
+  <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/project-details.html">
+  <meta property="og:image" content="https://manojreddy999.github.io/Portfolio/assets/images/research/policy-depth.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="assets/images/car-unique.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/site.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to research</a>
-
+  <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
-    <nav class="navbar" aria-label="Primary navigation">
-      <div class="nav-logo"><a href="index.html" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
-        <i class="ph ph-list" aria-hidden="true"></i>
-      </button>
-      <ul class="nav-links" id="primary-navigation">
-        <li><a href="projects.html" aria-current="page">Selected Work</a></li>
-        <li><a href="index.html#profile">Profile</a></li>
-        <li><a href="resume.html">Resume</a></li>
-        <li><a href="contact.html">Contact</a></li>
+    <nav class="navbar" aria-label="Primary">
+      <div class="nav-logo"><a href="./" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">☰</button>
+      <ul class="nav-links" id="primary-navigation" data-open="false">
+        <li><a href="./#work">Robotics</a></li>
+        <li><a href="./#production">Production</a></li>
+        <li><a href="lab/">Lab</a></li>
+        <li><a href="./#about">About</a></li>
+        <li><a href="./#contact">Contact</a></li>
+        <li><a class="nav-cta" href="Resume_Manoj.pdf">Résumé</a></li>
       </ul>
     </nav>
   </header>
 
-  <main id="main-content" class="case-study-page container">
-    <section class="case-hero" data-reveal>
+  <main id="main" class="case-study-page container">
+    <section class="case-hero">
       <div>
-        <span class="eyebrow">UC San Diego graduate research · Existential Robotics Laboratory</span>
-        <h1>Reinforcement learning for autonomous navigation.</h1>
-        <p>
-          A research environment for examining how learned policies steer an Ackermann-drive vehicle through uncertain obstacle layouts—and how reward, observation, and collision definitions change the behavior that emerges.
-        </p>
+        <p class="eyebrow">UC San Diego · Existential Robotics Laboratory · 2024–now</p>
+        <h1>Learning to drive from depth alone</h1>
+        <p>Can a car learn to drive through clutter from a single depth camera, with nothing hand-engineered in between? I built the simulator and the training setup as a graduate researcher in Prof. Nikolay Atanasov’s lab at UC San Diego.</p>
+        <p>In 2026 I went back to it, audited my own evaluation, rebuilt it, and re-ran the work. This page reports what held up, what didn’t, and the bugs I found in my own simulator.</p>
         <div class="hero-actions">
-          <a class="button" href="projects.html">All selected work <i class="ph ph-arrow-left" aria-hidden="true"></i></a>
-          <a class="button secondary" href="resume.html">View résumé <i class="ph ph-file-text" aria-hidden="true"></i></a>
+          <a class="btn" href="#results">Results so far</a>
+          <a class="btn ghost out" href="https://github.com/ManojReddy999/Reinforcement-Learning-for-Autonomous-Navigation">Code</a>
         </div>
       </div>
-      <div>
-        <div class="case-hero-media plot-on-dark">
-          <img src="assets/images/sample-research.png" alt="Red and blue graph representation from an autonomous-navigation representation experiment" />
-        </div>
-        <p class="status-line">Visualization from a representation-learning experiment (not simulator footage).</p>
-      </div>
+      <figure class="case-hero-media pixel" style="margin:0">
+        <img src="assets/images/research/policy-depth.webp" alt="A 64 by 128 pixel depth image from the car's camera: nearby obstacles in light blue, distant ones darker, open floor at the bottom" width="768" height="384">
+      </figure>
     </section>
 
-    <dl class="case-meta" data-reveal>
-      <div>
-        <dt class="meta-label">Role</dt>
-        <dd>Graduate Student Researcher / Primary implementation</dd>
-      </div>
-      <div>
-        <dt class="meta-label">Core stack</dt>
-        <dd>MuJoCo · dm_control · SB3 · PyTorch</dd>
-      </div>
-      <div>
-        <dt class="meta-label">Research status</dt>
-        <dd>Reproducing prior results</dd>
-      </div>
+    <dl class="case-meta">
+      <div><dt class="meta-label">Role</dt><dd>Graduate researcher · built the environment and training</dd></div>
+      <div><dt class="meta-label">Stack</dt><dd>MuJoCo · dm_control · Stable-Baselines3 · PyTorch</dd></div>
+      <div><dt class="meta-label">Status, Oct 2026</dt><dd>Physics corrected · retraining next</dd></div>
     </dl>
 
     <div class="case-layout">
-      <aside class="case-aside" aria-label="Research sections" data-reveal>
-        <span class="section-kicker">Contents</span>
+      <aside class="case-aside" aria-label="Sections">
+        <p class="section-kicker">Contents</p>
         <ul>
-          <li><a href="#overview">Overview</a></li>
-          <li><a href="#role">My role</a></li>
-          <li><a href="#system-design">System design</a></li>
-          <li><a href="#implementation">What I built</a></li>
-          <li><a href="#evaluation">Evaluation approach</a></li>
-          <li><a href="#failure-log">Observed failure modes</a></li>
-          <li><a href="#limitations">Limitations</a></li>
-          <li><a href="#next-experiment">Next experiment</a></li>
+          <li><a href="#task">The task</a></li>
+          <li><a href="#built">What I built at UCSD</a></li>
+          <li><a href="#why">Why I re-ran it</a></li>
+          <li><a href="#method">How results are judged now</a></li>
+          <li><a href="#results">Results so far</a></li>
+          <li><a href="#bugs">Bugs in my own simulator</a></li>
+          <li><a href="#next">Next</a></li>
         </ul>
       </aside>
 
       <article class="case-content">
-        <section id="overview" data-reveal>
-          <span class="section-kicker">01 / Overview</span>
-          <h2>Behavior starts with the environment contract</h2>
-          <p>
-            My graduate research explored reinforcement learning for autonomous navigation without treating the simulator as a neutral backdrop. Vehicle dynamics, obstacle placement, observations, reward terms, contacts, and termination rules jointly define what a policy can learn. I built a custom Ackermann-drive environment in MuJoCo through dm_control, then used it to train and inspect PPO and SAC agents with Stable-Baselines3.
-          </p>
-          <p>
-            The goal was to evaluate safety, stability, and generalization across obstacle layouts rather than only maximize episodic return.
-          </p>
-          <div class="case-note">
-            <strong>Results status</strong><br />
-            I am rerunning these experiments with documented configurations and seed sets. Final performance numbers will be added after the results are reproducible.
+        <section id="task">
+          <p class="section-kicker">01</p>
+          <h2>The task</h2>
+          <p>A 1/10-scale MuSHR race car with Ackermann steering starts in a 16 m walled arena scattered with 100–200 obstacles in five shapes. Every 50 ms the policy gets one 64 × 128 depth image from the car’s camera, 79° wide (the image above is a real one), and outputs steering and throttle. The reward is forward speed plus a small bonus for staying alive, and a collision ends the episode.</p>
+          <p>There is no map and no goal. The policy has to keep moving without crashing, using only what one forward camera shows it. You can drive the same car in the same arena in <a href="lab/">the lab</a>, with a classical planner standing in for the policy.</p>
+        </section>
+
+        <section id="built">
+          <p class="section-kicker">02</p>
+          <h2>What I built at UCSD</h2>
+          <ul>
+            <li>A custom MuJoCo / dm_control environment: the Ackermann car with a simulated RealSense depth camera, randomised obstacle fields, contact-based collision checks, reward and termination.</li>
+            <li>Training with PPO and SAC in Stable-Baselines3, with depth, RGB-D, point-cloud and vehicle-state observations.</li>
+            <li>Three families of feature extractor compared on the same task: a CNN, a point-cloud graph network (k-nearest-neighbour graph with EdgeConv), and a port of LocoTransformer (Yang et al., ICLR 2022) from a quadruped to a car.</li>
+          </ul>
+        </section>
+
+        <section id="why">
+          <p class="section-kicker">03</p>
+          <h2>Why I re-ran it</h2>
+          <p>When I returned to the code in 2026, I audited the evaluation before building on it. It could not support the conclusions I had drawn:</p>
+          <ul>
+            <li><strong>The wrong thing was measured.</strong> Evaluation never ended an episode on a collision (training did), so “episode length” measured time until the car got stuck, not time until it crashed.</li>
+            <li><strong>A sentinel value was averaged in.</strong> Episodes with no collision recorded time-to-first-collision as −1, so the best episodes lowered their own model’s score.</li>
+            <li><strong>One run per model, and a picked checkpoint.</strong> The “best” transformer was one checkpoint of one training run; two of its other checkpoints were no better than the graph network.</li>
+            <li><strong>The transformer never attended over time.</strong> Stacked frames went in as image channels, so it attended over space only. The comparison never tested temporal attention.</li>
+          </ul>
+        </section>
+
+        <section id="method">
+          <p class="section-kicker">04</p>
+          <h2>How results are judged now</h2>
+          <ul>
+            <li><strong>Held-out scenes.</strong> 100–300 obstacle layouts no policy has trained or been tuned on, identical for every policy so comparisons are paired.</li>
+            <li><strong>Training seeds and intervals.</strong> Several training seeds where the question needs them; interquartile means with 95% bootstrap intervals that resample seeds and scenes together (after Agarwal et al., 2021).</li>
+            <li><strong>Rules before results.</strong> Each experiment’s pass/fail rules are written down before it runs, including what a single seed cannot decide.</li>
+            <li><strong>Everything written up.</strong> Every change and run has a dated write-up and its analysis scripts, kept alongside the code.</li>
+          </ul>
+        </section>
+
+        <section id="results">
+          <p class="section-kicker">05</p>
+          <h2>Results so far</h2>
+          <div class="table-wrap">
+            <table class="results">
+              <thead><tr><th scope="col">Question</th><th scope="col">What the evidence says</th></tr></thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Does a plain CNN on depth alone beat the earlier models?</th>
+                  <td><strong>Yes, on every training seed.</strong> About +30 m interquartile mean over the earlier best models, pooled over seeds on 100 fresh scenes, with 2.8–4.2× fewer collisions per metre. That is smaller than the +45 m the first single-seed, 20-scene run suggested.</td>
+                </tr>
+                <tr>
+                  <th scope="row">Does a short stack of recent frames help?</th>
+                  <td><strong>Not reliably.</strong> Across three seeds the gain was +14.9 m with an interval of −6.8 to +36.9. Where it did help, the policy needed only the newest pair of frames: it was reading motion, not using memory.</td>
+                </tr>
+                <tr>
+                  <th scope="row">Does a reverse gear fix the runs that end stuck?</th>
+                  <td><strong>It removes them, for an unexpected reason.</strong> Trapped episodes went from 39 of 1,200 to 0 of 900, and stops from 106 to 0. But no policy ever reverses on purpose, and distance didn’t improve. The likely reason, not yet tested: with reverse available, zero throttle stops being a free place to rest.</td>
+                </tr>
+                <tr>
+                  <th scope="row">Why do the policies crash?</th>
+                  <td><strong>They don’t brake in time.</strong> Replaying all 454 crashes on 100 held-out scenes, braking 0.75 s earlier would have avoided 98–99% of them. Why they don’t learn to brake is open.</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
+          <div class="case-note"><strong>Caveat.</strong> These were measured on the original simulator, before the fixes below. Comparisons between runs stand; absolute speeds and distances describe the old car.</div>
         </section>
 
-        <section id="role" data-reveal>
-          <span class="section-kicker">02 / Ownership</span>
-          <h2>My role</h2>
-          <p>
-            I owned the research implementation loop: translating the navigation problem into an RL environment, modeling the car and its interactions, defining observations and actions, wiring training through Stable-Baselines3, and debugging the gap between reward curves and visible behavior.
-          </p>
+        <section id="bugs">
+          <p class="section-kicker">06</p>
+          <h2>Bugs in my own simulator</h2>
           <ul>
-            <li>Built and iterated the Ackermann-drive MuJoCo model and dm_control task.</li>
-            <li>Implemented obstacle generation, contact-based collision checks, resets, and episode termination.</li>
-            <li>Designed reward terms and inspected how their relative scale changed policy behavior.</li>
-            <li>Configured PPO and SAC training and compared policy behavior under a shared environment contract.</li>
-            <li>Explored CNN, graph-based, and transformer-style representations for spatial observations.</li>
-            <li>Produced trajectory and representation artifacts for qualitative debugging alongside scalar logs.</li>
+            <li><strong>Every wheel was tilted 26.6°.</strong> The wheel collision shapes were written in degrees, but dm_control compiles the model in radians, so <code>90</code> meant 90 radians. The car rode on its rim edges, bounced, and was 13% slower. The one-line fix broke steering, because flat tyres scrubbed harder than the steering could turn them, so the real fix rebuilt the wheel contacts.</li>
+            <li><strong>Most of the car couldn’t crash.</strong> In the car model I generated, the chassis, camera and LiDAR had collision switched off (the upstream MuSHR model has it on), and the front bumper’s contacts were silently culled because obstacles were moved without updating MuJoCo’s bounding volumes. Only the wheels ever registered a crash, and a car that tipped over could drive on upside down.</li>
+            <li><strong>Brief contacts were missed.</strong> Collisions were checked once per 50 ms control step. They now count at every physics substep, and tilting past 70° ends the episode.</li>
           </ul>
+          <p>All three are fixed, and the corrected car drives identically when upright. Older runs still reproduce exactly on the legacy physics, so earlier results can be re-checked.</p>
         </section>
 
-        <section id="system-design" data-reveal>
-          <span class="section-kicker">03 / Architecture</span>
-          <h2>System design</h2>
+        <section id="next">
+          <p class="section-kicker">07</p>
+          <h2>Next</h2>
           <ol>
-            <li><strong>Simulation and dynamics:</strong> MuJoCo resolves vehicle motion, steering behavior, geometry, and contacts for an Ackermann-drive model.</li>
-            <li><strong>Task layer:</strong> dm_control manages observations, action application, randomized obstacle scenes, reset logic, reward calculation, and termination.</li>
-            <li><strong>Representation:</strong> proprioceptive state and spatial observations are converted into policy inputs; learned encoder experiments included visual and graph-oriented feature extraction.</li>
-            <li><strong>Policy learning:</strong> Stable-Baselines3 provides PPO and SAC training loops while custom PyTorch modules handle representation experiments.</li>
-            <li><strong>Inspection:</strong> episode logs, contact checks, trajectories, and rendered behavior are used together to find disagreement between numerical reward and navigation quality.</li>
+            <li>Retrain the baselines on the corrected physics.</li>
+            <li>Study why the policies don’t brake.</li>
+            <li>Put a trained policy into <a href="lab/">the lab</a>, once the browser renders the same depth image MuJoCo does and it drives well enough to show.</li>
           </ol>
-          <pre aria-label="Research system flow"><code>MuJoCo dynamics + obstacles
-          ↓
-dm_control observation / reward / termination
-          ↓
-state or learned spatial representation
-          ↓
-PPO or SAC policy
-          ↓
-steering + drive action
-          ↓
-contacts, trajectory, clearance, return</code></pre>
-        </section>
-
-        <section id="implementation" data-reveal>
-          <span class="section-kicker">04 / Implementation</span>
-          <h2>What I built</h2>
-
-          <h3>Vehicle and action model</h3>
-          <p>
-            The simulated vehicle used Ackermann steering rather than a point-mass shortcut. The action interface exposed steering and drive commands, while the environment translated them into actuator controls and enforced bounds that kept the learning problem tied to the modeled vehicle.
-          </p>
-
-          <h3>Scene generation and collision logic</h3>
-          <p>
-            Obstacle placement and reset logic created variation across episodes. Collision checks used MuJoCo contact data and named geometry pairs, allowing termination and penalties to follow physical interactions instead of relying only on center-point distance.
-          </p>
-
-          <h3>Reward and termination</h3>
-          <p>
-            Reward design combined progress and motion incentives with safety costs. Collision, boundary behavior, control quality, and episode termination were treated as coupled decisions: changing one can create a shortcut elsewhere, so the behavior was inspected after each revision rather than judged from return alone.
-          </p>
-
-          <h3>Representation experiments</h3>
-          <p>
-            The image shown on this research page is a representation-work artifact from experiments with structured spatial input; it is not a screenshot of the MuJoCo vehicle. CNN-based visual features and graph-oriented alternatives were explored to test how the policy could consume richer environmental structure beyond low-dimensional state alone.
-          </p>
-        </section>
-
-        <section id="evaluation" data-reveal>
-          <span class="section-kicker">05 / Evaluation</span>
-          <h2>Evaluation approach</h2>
-          <p>
-            The intended evaluation separates learning progress from navigation quality. PPO and SAC should be compared only when the dynamics, observation contract, reward, training budget, and held-out layouts are controlled.
-          </p>
-          <ul>
-            <li><strong>Repeatability:</strong> log environment, library, model, and training configuration with explicit random seeds.</li>
-            <li><strong>Generalization:</strong> reserve obstacle layouts and seed ranges that the policy does not see during training.</li>
-            <li><strong>Safety:</strong> measure collisions and minimum clearance, not only aggregate episode return.</li>
-            <li><strong>Task behavior:</strong> track episode duration, forward progress, stalled motion, and boundary violations.</li>
-            <li><strong>Control quality:</strong> inspect steering oscillation and abrupt command changes alongside task completion.</li>
-            <li><strong>Qualitative audit:</strong> retain representative and worst-case rollouts so failure modes remain visible.</li>
-          </ul>
-          <p>
-            These are the criteria for the refresh, not published results. Metric values will be added only after the rerun can be reproduced from a documented configuration.
-          </p>
-        </section>
-
-        <section id="failure-log" data-reveal>
-          <span class="section-kicker">06 / Debugging</span>
-          <h2>Observed failure modes</h2>
-          <p>The implementation was checked for the following failure modes:</p>
-          <ul>
-            <li><strong>Reward sensitivity:</strong> progress incentives can dominate collision costs, so the visible path must be checked whenever reward weights change.</li>
-            <li><strong>Contact ambiguity:</strong> incorrect geometry names or contact-pair handling can let real collisions pass uncounted—or terminate on harmless contacts.</li>
-            <li><strong>Layout memorization:</strong> a narrow obstacle generator can produce a convincing policy that only understands a recurring scene pattern.</li>
-            <li><strong>Representation instability:</strong> a more complex encoder can improve the training curve without yielding consistently safer motion on held-out layouts.</li>
-            <li><strong>Seed dependence:</strong> evaluation should cover a fixed set of seeds and adverse cases rather than a single successful rollout.</li>
-          </ul>
-        </section>
-
-        <section id="limitations" data-reveal>
-          <span class="section-kicker">07 / Limitations</span>
-          <h2>Current limitations</h2>
-          <ul>
-            <li>The work remains simulation research and has not been deployed on a physical vehicle.</li>
-            <li>A final, versioned benchmark table is not yet available after the interruption in active development.</li>
-            <li>A one-command training package and downloadable checkpoint are not currently available.</li>
-            <li>Generalization across broader sensing conditions and dynamics variation still needs controlled testing.</li>
-            <li>ONNX and TensorRT conversion paths were explored; the models were not deployed in production.</li>
-          </ul>
-        </section>
-
-        <section id="next-experiment" data-reveal>
-          <span class="section-kicker">08 / Next experiment</span>
-          <h2>Rebuild the baseline, then add complexity</h2>
-          <ol>
-            <li>Freeze a minimal state-based baseline with pinned dependencies and a deterministic smoke test.</li>
-            <li>Publish the environment contract, configuration files, and distinct train/evaluation seed lists.</li>
-            <li>Rerun PPO and SAC under matched budgets; report central tendency and spread, not a best seed.</li>
-            <li>Release representative, median, and failure rollouts with collision and clearance summaries.</li>
-            <li>Reintroduce richer learned representations only after the baseline can be reproduced.</li>
-            <li>Add dynamics and observation randomization before evaluating transfer beyond simulation.</li>
-          </ol>
-          <div class="case-note">
-            <strong>Sequence:</strong> establish a reproducible baseline before comparing CNN, graph, or transformer representations.
+          <div class="hero-actions">
+            <a class="btn" href="./#contact">Talk to me about it</a>
+            <a class="btn ghost" href="live-lab.html">How the lab works</a>
           </div>
-          <a class="button" href="contact.html">Contact me <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
         </section>
       </article>
     </div>
@@ -232,12 +174,8 @@ contacts, trajectory, clearance, return</code></pre>
 
   <footer class="site-footer">
     <div class="footer-inner container">
-      <span>&copy; <span data-year>2026</span> Manoj Reddy Manchala</span>
-      <div class="footer-links" aria-label="External profiles">
-        <a href="https://www.linkedin.com/in/manojreddymanchala/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="https://github.com/ManojReddy999" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="mailto:manojreddymanchalaus@gmail.com">Email</a>
-      </div>
+      <p>© <span data-year>2026</span> Manoj Reddy Manchala</p>
+      <div class="footer-links"><a href="https://github.com/ManojReddy999">GitHub</a><a href="https://www.linkedin.com/in/manojreddymanchala/">LinkedIn</a><a href="mailto:manojreddymanchalaus@gmail.com">Email</a></div>
     </div>
   </footer>
 </body>

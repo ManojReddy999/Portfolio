@@ -1,208 +1,391 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Manoj Reddy Manchala is a robotics and applied ML engineer working across autonomous navigation, SLAM, computer vision, and learning-based systems." />
-  <meta name="theme-color" content="#050b11" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Manoj Reddy Manchala | Robotics &amp; Applied ML Engineer" />
-  <meta property="og:description" content="Autonomous navigation, perception, and learning systems for robots operating under uncertainty." />
-  <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/" />
-  <meta property="og:image" content="https://manojreddy999.github.io/Portfolio/assets/images/sample-research.png" />
-  <meta property="og:image:alt" content="A research visualization from Manoj Reddy Manchala's autonomous navigation work" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/" />
-  <link rel="icon" type="image/png" href="assets/images/car-unique.png" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" />
-  <script src="assets/js/script.js" defer></script>
-  <title>Manoj Reddy Manchala | Robotics &amp; Applied ML Engineer</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manoj Reddy Manchala · Robotics &amp; RL Engineer</title>
+  <meta name="description" content="Manoj Reddy Manchala, robotics and applied-ML engineer (M.S. UC San Diego, B.Tech. IIT Bombay). Reinforcement learning for navigation, state estimation, and production software. The page opens on a live MuJoCo simulation running in your browser.">
+  <meta name="theme-color" content="#020407">
+  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Manoj Reddy Manchala · Robotics &amp; RL Engineer">
+  <meta property="og:description" content="Reinforcement learning for navigation, state estimation, and production software, opening on a robot car mapping a dark arena in live MuJoCo physics.">
+  <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/">
+  <meta property="og:image" content="https://manojreddy999.github.io/Portfolio/assets/images/lab/og.jpg">
+  <meta property="og:image:alt" content="A robot car in a dark arena, lit only by what its LiDAR sees, with a glowing map of where it has been">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="assets/images/car-unique.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="preload" as="image" href="assets/images/lab/hero-poster.webp" media="(min-width: 821px)" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/images/lab/hero-poster-mobile.webp" media="(max-width: 820px)" fetchpriority="high">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script src="assets/js/site.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Manoj Reddy Manchala",
+    "jobTitle": "Robotics and applied-ML engineer",
+    "url": "https://manojreddy999.github.io/Portfolio/",
+    "email": "mailto:manojreddymanchalaus@gmail.com",
+    "alumniOf": [
+      { "@type": "CollegeOrUniversity", "name": "University of California San Diego" },
+      { "@type": "CollegeOrUniversity", "name": "Indian Institute of Technology Bombay" }
+    ],
+    "sameAs": ["https://github.com/ManojReddy999", "https://www.linkedin.com/in/manojreddymanchala/"]
+  }
+  </script>
 </head>
-<body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+<body class="home">
+  <a class="skip-link" href="#work">Skip to projects</a>
 
   <header class="site-header">
-    <nav class="navbar" aria-label="Primary navigation">
-      <div class="nav-logo">
-        <a href="index.html" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a>
-      </div>
-
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
-        <i class="ph ph-list" aria-hidden="true"></i>
-      </button>
-
+    <nav class="navbar" aria-label="Primary">
+      <div class="nav-logo"><a href="./" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">☰</button>
       <ul class="nav-links" id="primary-navigation" data-open="false">
-        <li><a href="#selected-work">Selected Work</a></li>
-        <li><a href="#profile">Profile</a></li>
-        <li><a href="resume.html">Resume</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="#work">Robotics</a></li>
+        <li><a href="#production">Production</a></li>
+        <li><a href="lab/">Lab</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a class="nav-cta" href="Resume_Manoj.pdf">Résumé</a></li>
       </ul>
     </nav>
   </header>
 
-  <main id="main-content">
-    <section class="home-hero container" aria-labelledby="hero-title">
-      <div class="hero-copy" data-reveal>
-        <p class="eyebrow">Robotics &amp; Applied ML Engineer</p>
-        <h1 id="hero-title">ROBOTICS AND<br>APPLIED MACHINE<br>LEARNING.</h1>
-        <p class="hero-summary">Graduate research and projects in autonomous navigation, computer vision, SLAM, motion planning, and robot control.</p>
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <picture>
+        <source media="(max-width: 820px)" srcset="assets/images/lab/hero-poster-mobile.webp" width="750" height="1624">
+        <img class="hero-poster" src="assets/images/lab/hero-poster.webp" alt="" width="1600" height="900" fetchpriority="high">
+      </picture>
+      <div class="hero-stage" id="hero-stage" aria-hidden="true"></div>
+      <div class="hero-shade"></div>
 
+      <div class="hero-copy container">
+        <p class="eyebrow">Robotics · Reinforcement learning · Autonomy</p>
+        <h1 id="hero-title">Manoj Reddy<br>Manchala</h1>
+        <p class="lede">I build robot autonomy (reinforcement learning, state estimation, planning) and production software that people use.</p>
+        <p class="hero-caption"><span>Behind this text, a robot car explores a dark arena in <b>real MuJoCo physics, running in your browser</b>. It sees only what its LiDAR hits, and it works out where it is as it goes.</span></p>
+        <button class="hero-run" id="hero-run" type="button" hidden>Run it live <small>1.7 MB</small></button>
         <div class="hero-actions">
-          <a class="button" href="#selected-work">
-            View research and projects
-            <i class="ph ph-arrow-down" aria-hidden="true"></i>
-          </a>
-          <a class="button secondary" href="Resume_Manoj.pdf" target="_blank" rel="noopener noreferrer">
-            View résumé
-            <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
-          </a>
-        </div>
-
-        <div class="credential" aria-label="Education">
-          <i class="ph ph-graduation-cap" aria-hidden="true"></i>
-          <span>M.S., UC San Diego</span>
-          <span class="separator" aria-hidden="true"></span>
-          <span>B.Tech., IIT Bombay</span>
+          <a class="btn" href="#work">See my work</a>
+          <a class="btn ghost" href="lab/">Open the full lab</a>
         </div>
       </div>
 
-      <div class="hero-visual" role="figure" aria-describedby="hero-visual-caption" data-reveal>
-        <img src="assets/images/sample-research.png" alt="Static red-and-blue navigation graph visualization from the autonomous navigation research archive." />
-        <div id="hero-visual-caption" role="figcaption">
-          <dl class="system-stamp">
-            <dt>Project</dt>
-            <dd>RL for Autonomous Navigation</dd>
-            <dt>Institution</dt>
-            <dd>UC San Diego</dd>
+      <div class="hero-readout" id="hero-readout" aria-live="off" hidden>
+        <span class="label"><span class="live-dot"></span>Live SLAM</span>
+        <span>localisation</span><output id="stat-loc">—</output>
+        <span>pose error</span><output id="stat-error">—</output>
+        <span>arena mapped</span><output id="stat-coverage">—</output>
+      </div>
+    </section>
+
+    <section class="watching container" id="watching" aria-labelledby="watching-title">
+      <h2 class="eyebrow" id="watching-title">What you’re watching</h2>
+      <div class="watch-grid">
+        <div>
+          <h3>The physics</h3>
+          <p>MuJoCo compiled to WebAssembly, loading the exact scene my navigation policies train in. It matches the Python simulator to within 10<sup>−15</sup> m.</p>
+          <a class="arrow" href="project-details.html">The research it comes from</a>
+        </div>
+        <div>
+          <h3>The light</h3>
+          <p>There isn’t any, except where 360 LiDAR rays land right now. Obstacles cast the same shadows a range sensor really has.</p>
+          <a class="arrow" href="live-lab.html">How the lab works</a>
+        </div>
+        <div>
+          <h3>The map and the estimate</h3>
+          <p>Wheel odometry and a gyro feed an EKF that learns its own sensor errors. Scan matching against the map it is building pulls it back when it drifts.</p>
+          <a class="arrow" href="#slam">My SLAM projects</a>
+        </div>
+        <div>
+          <h3>The driver</h3>
+          <p>A classical stand-in planner, for now. My trained depth-camera policy replaces it once it drives well enough to show you.</p>
+          <a class="arrow" href="project-details.html#results">Where the policy is</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="work" aria-labelledby="work-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Robotics</p>
+            <h2 id="work-title">Learning, estimation, planning, control</h2>
+          </div>
+          <p>My navigation research first, then graduate projects from UC San Diego. Each has a write-up or a report, and its code.</p>
+        </div>
+
+        <article class="feature feature-wide">
+            <figure class="feature-media">
+              <img class="pixel" src="assets/images/research/policy-depth.webp" alt="A 64 by 128 pixel depth image from the car's camera: obstacles in blue at different distances, floor in pale blue" width="768" height="384" loading="lazy" decoding="async">
+              <figcaption>Everything the policy sees: one 64 × 128 depth image</figcaption>
+            </figure>
+            <div class="feature-body">
+              <p class="eyebrow">UC San Diego · Existential Robotics Lab</p>
+              <h3>Learning to drive from depth alone</h3>
+              <p>PPO policies that drive the same car through cluttered arenas from a forward depth camera. I built the environment at UCSD, then in 2026 rebuilt the evaluation and re-ran the work properly.</p>
+              <ul class="proof">
+                <li>Judged on 100–300 held-out scenes, with pass/fail rules written before each run</li>
+                <li>Found and fixed simulator bugs that had shaped earlier results</li>
+                <li>Some earlier findings held up and some didn’t; the write-up says which</li>
+              </ul>
+              <ul class="tech-list" aria-label="Technologies"><li>MuJoCo</li><li>dm_control</li><li>PPO</li><li>PyTorch</li><li>Stable-Baselines3</li></ul>
+              <div class="links"><a class="text-link arrow" href="project-details.html">Read the research</a><a class="text-link out" href="https://github.com/ManojReddy999/Reinforcement-Learning-for-Autonomous-Navigation">Code</a></div>
+            </div>
+          </article>
+
+        <div class="cards">
+          <article class="card" id="slam">
+            <div class="card-media plot"><img src="assets/images/thumbs/vi-slam.webp" alt="Estimated vehicle trajectory and landmark map from visual-inertial SLAM" width="640" height="363" loading="lazy" decoding="async"></div>
+            <div class="card-body">
+              <p class="project-type">State estimation</p>
+              <h3>Visual-inertial SLAM</h3>
+              <p>An EKF fusing IMU motion with stereo features to estimate a vehicle’s trajectory and a landmark map.</p>
+              <div class="links"><a class="out" href="ECE276A_PR3_Report.pdf">Report</a><a class="out" href="https://github.com/ManojReddy999/Visual-Inertial-SLAM">Code</a></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-media light"><img src="assets/images/thumbs/lidar-slam.webp" alt="Occupancy-grid map built by the LiDAR SLAM pipeline" width="640" height="670" loading="lazy" decoding="async"></div>
+            <div class="card-body">
+              <p class="project-type">Mapping · localisation</p>
+              <h3>LiDAR SLAM</h3>
+              <p>Encoder and IMU odometry, ICP scan matching, occupancy-grid mapping and pose-graph optimisation for a wheeled robot.</p>
+              <div class="links"><a class="out" href="ECE276A_PR2_Report.pdf">Report</a><a class="out" href="https://github.com/ManojReddy999/LiDAR-SLAM">Code</a></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-media"><img src="assets/images/thumbs/youbot.webp" alt="KUKA YouBot mobile manipulator next to a cube in CoppeliaSim" width="640" height="600" loading="lazy" decoding="async"></div>
+            <div class="card-body">
+              <p class="project-type">Manipulation · control</p>
+              <h3>YouBot pick-and-place</h3>
+              <p>Kinematics, trajectory generation and feedforward-plus-PI control for a mobile manipulator, with the failure cases tuned out.</p>
+              <div class="links"><a class="arrow" href="Mobile-Manipulator.html">Project</a><a class="out" href="https://github.com/ManojReddy999/Motion-Control-of-Mobile-Manipulator-Robot">Code</a></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-media"><img src="assets/images/thumbs/astar-rrt.webp" alt="A 3D maze with a planned path from start to goal" width="640" height="615" loading="lazy" decoding="async"></div>
+            <div class="card-body">
+              <p class="project-type">Motion planning</p>
+              <h3>A* and RRT in 3D</h3>
+              <p>Search-based and sampling-based planners with collision checking, compared in continuous 3D environments.</p>
+              <div class="links"><a class="arrow" href="astar-rrt.html">Project</a><a class="out" href="https://github.com/ManojReddy999/Motion-Planning">Code</a></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-media light"><img src="assets/images/thumbs/calibration.webp" alt="Dashcam frame with the estimated vanishing point marked" width="640" height="629" loading="lazy" decoding="async"></div>
+            <div class="card-body">
+              <p class="project-type">Computer vision · team project</p>
+              <h3>Comma.ai calibration</h3>
+              <p>Camera pitch and yaw from dashcam video, using optical flow, vanishing points and a Conv-LSTM.</p>
+              <div class="links"><a class="arrow" href="Calibration-challenge.html">Project</a><a class="out" href="https://github.com/ManojReddy999/Calibration_Challenge">Code</a></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-media plot"><img src="assets/images/thumbs/gpi.webp" alt="Robot path tracking a reference trajectory around obstacles" width="640" height="532" loading="lazy" decoding="async"></div>
+            <div class="card-body">
+              <p class="project-type">Optimal control</p>
+              <h3>Stochastic trajectory tracking</h3>
+              <p>Certainty-equivalent control against generalised policy iteration for tracking a trajectory under noise, around obstacles.</p>
+              <div class="links"><a class="arrow" href="GPI.html">Project</a><a class="out" href="https://github.com/ManojReddy999/Infinite-Horizon-Stochastic-Optimal-Control">Code</a></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-media pixel"><img src="assets/images/thumbs/door-key.webp" alt="Grid world with an agent, a key, a locked door and a goal" width="640" height="640" loading="lazy" decoding="async"></div>
+            <div class="card-body">
+              <p class="project-type">Dynamic programming</p>
+              <h3>Door &amp; key</h3>
+              <p>Optimal policies for picking up a key, unlocking a door and reaching a goal across fixed and random grid worlds.</p>
+              <div class="links"><a class="arrow" href="Door-key.html">Project</a><a class="out" href="https://github.com/ManojReddy999/Door-Key-Navigation-Task">Code</a></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-media"><img src="assets/images/thumbs/orientation.webp" alt="The IMU and camera sensor rig used for orientation tracking" width="640" height="425" loading="lazy" decoding="async"></div>
+            <div class="card-body">
+              <p class="project-type">Sensor fusion</p>
+              <h3>Orientation tracking</h3>
+              <p>IMU calibration and quaternion orientation estimation by projected gradient descent, then a panorama stitched from the tracked camera.</p>
+              <div class="links"><a class="out" href="ECE276A_PR1_Report.pdf">Report</a></div>
+            </div>
+          </article>
+          <article class="card text-only">
+            <div class="card-body">
+              <p class="project-type">Control · field robotics</p>
+              <h3>Model predictive control on rough terrain</h3>
+              <p>MPC for a vehicle driving over uneven farm terrain, with elevation and friction in the model.</p>
+              <div class="links"><a class="out" href="https://github.com/ManojReddy999/Model-Predictive-Control">Code</a></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="production" aria-labelledby="production-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Software in production</p>
+            <h2 id="production-title">Built for people at work</h2>
+          </div>
+          <p>As AI Tech Lead I built two systems that are now in production. Both repositories are private, and I’m happy to walk through either.</p>
+        </div>
+
+        <div class="features">
+          <article class="feature">
+            <div class="feature-media" role="img" aria-label="Illustration of a payroll run: earnings and deductions, and a run moving from draft to locked to paid">
+              <div class="panel-art">
+                <div class="payroll">
+                  <div class="row"><span>basic + HRA</span><span class="bar" style="width:92%"></span></div>
+                  <div class="row"><span>allowances</span><span class="bar" style="width:46%"></span></div>
+                  <div class="row"><span>loss of pay</span><span class="bar out" style="width:14%"></span></div>
+                  <div class="row"><span>PF · PT · ESI</span><span class="bar out" style="width:26%"></span></div>
+                  <div class="row"><span>TDS</span><span class="bar out" style="width:18%"></span></div>
+                  <div class="runs"><span>DRAFT</span>→<span class="now">LOCKED</span>→<span>PAID</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="feature-body">
+              <p class="eyebrow">In production · sole engineer</p>
+              <h3>Growero HRMS</h3>
+              <p>An HR and payroll platform that a company’s employees use, which I built and maintain on my own.</p>
+              <ul class="proof">
+                <li>Indian payroll: PF, PT, ESI and TDS, prorated from attendance, with runs that lock once approved</li>
+                <li>Geofenced attendance with per-shift location trails for field staff</li>
+                <li>Leave and expense approvals, payslip and offer-letter PDFs, installable as an app</li>
+              </ul>
+              <ul class="tech-list" aria-label="Technologies"><li>Next.js</li><li>React</li><li>TypeScript</li><li>Prisma</li><li>PostgreSQL</li></ul>
+              <div class="links"><a class="text-link arrow" href="applied-ai.html#growero-hrms">Details</a><span class="label">Private repo · happy to walk through it</span></div>
+            </div>
+          </article>
+
+          <article class="feature">
+            <div class="feature-media" role="img" aria-label="Illustration of the chatbot: a question about unfinished visits, answered by generated SQL">
+              <div class="panel-art">
+                <div class="chat">
+                  <div class="q">Which planned visits in my team are still unfinished?</div>
+                  <div class="a"><code>SELECT officer, farmer, planned_date
+FROM visit_plans v JOIN … reports_to(:me)
+WHERE v.status &lt;&gt; 'SUBMITTED' …</code><small>Answer, the SQL behind it, and follow-up questions</small></div>
+                </div>
+              </div>
+            </div>
+            <div class="feature-body">
+              <p class="eyebrow">In production · AI Tech Lead</p>
+              <h3>FarmInsta Chatbot</h3>
+              <p>A deployed chatbot that answers field teams’ questions about farmer histories, unfinished visits and team activity by writing SQL against a read-only copy of the operational database.</p>
+              <ul class="proof">
+                <li>Carries conversation context into SQL generation, so follow-up questions work</li>
+                <li>Encodes the business’s definitions: scheduled vs completed work, “my team” vs the whole hierarchy</li>
+                <li>Repairs a failed query once from the database’s own error</li>
+              </ul>
+              <ul class="tech-list" aria-label="Technologies"><li>Python</li><li>Gemini</li><li>Text-to-SQL</li></ul>
+              <div class="links"><a class="text-link arrow" href="applied-ai.html#farminsta">Details</a><span class="label">Client project · private</span></div>
+            </div>
+          </article>
+        </div>
+        <p class="also">Also: a <a class="arrow" href="applied-ai.html#growero-sales">sales analytics prototype</a> that turns 105,359 spreadsheet transactions into a database you can question in plain English, and <a class="out" href="https://github.com/ManojReddy999/windows-ipad-control">windows-ipad-control</a>, which drives an iPad from a Windows laptop’s keyboard and trackpad over Bluetooth LE.</p>
+      </div>
+    </section>
+
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="container about">
+        <div>
+          <p class="eyebrow">About</p>
+          <h2 class="section-title" id="about-title">Mechanical engineer turned roboticist</h2>
+          <p class="availability" style="margin-top:1.4rem">Open to robotics, RL and autonomy roles · based in India · remote preferred</p>
+        </div>
+        <div class="about-copy">
+          <p>I studied mechanical engineering at IIT Bombay, then did a master’s in robotics at UC San Diego. There I was a graduate student researcher in Prof. Nikolay Atanasov’s Existential Robotics Laboratory, working on reinforcement learning for autonomous navigation.</p>
+          <p>Back in India, as AI Tech Lead I built two systems that are now in production: an HR and payroll platform a company’s staff use, and a chatbot that answers field teams’ questions from their database. Alongside that, I have rebuilt my navigation research with a much stricter evaluation.</p>
+          <p>I am looking for work where I own learning or estimation systems end to end: simulation, training, evaluation, and getting them in front of people.</p>
+          <dl class="facts">
+            <div><dt>Education</dt><dd>M.S. Mechanical Engineering (Robotics), UC San Diego, 2025<br>B.Tech. Mechanical Engineering, IIT Bombay, 2021</dd></div>
+            <div><dt>Research</dt><dd>Graduate Student Researcher, Existential Robotics Laboratory, UC San Diego</dd></div>
+            <div><dt>Production</dt><dd>AI Tech Lead: Growero HRMS and the FarmInsta Chatbot</dd></div>
           </dl>
+          <div class="skills">
+            <div><h3>Robotics &amp; learning</h3><ul class="tech-list"><li>MuJoCo</li><li>dm_control</li><li>PPO / SAC</li><li>Stable-Baselines3</li><li>PyTorch</li><li>Reward &amp; observation design</li><li>Multi-seed evaluation</li></ul></div>
+            <div><h3>Estimation &amp; perception</h3><ul class="tech-list"><li>EKF</li><li>Visual-inertial &amp; LiDAR SLAM</li><li>Motion planning</li><li>Optical flow</li><li>Camera calibration</li><li>OpenCV</li></ul></div>
+            <div><h3>Software</h3><ul class="tech-list"><li>Python</li><li>NumPy</li><li>SQL</li><li>TypeScript</li><li>Next.js</li><li>React</li><li>Prisma</li><li>PostgreSQL</li><li>Gemini API</li></ul></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section container" id="selected-work" aria-labelledby="selected-work-title">
-      <h2 id="selected-work-title" class="visually-hidden">Selected work</h2>
-
-      <div class="project-list">
-        <article class="project-row featured" data-reveal>
-          <div class="project-media plot-on-dark">
-            <img src="assets/images/sample-research.png" alt="Navigation graph visualization used in the autonomous navigation research archive" loading="lazy" />
-          </div>
-          <div class="project-content">
-            <p class="project-type">01 · UC San Diego graduate research</p>
-            <h3>RL for Autonomous Navigation</h3>
-            <p>At UC San Diego's Existential Robotics Laboratory, I built custom MuJoCo and dm_control environments for Ackermann-drive navigation with PPO and SAC, including obstacle generation, collision logic, and reward design.</p>
-          </div>
-          <div class="project-links">
-            <a class="text-link" href="project-details.html">
-              View research
-              <i class="ph ph-arrow-right" aria-hidden="true"></i>
-            </a>
-          </div>
-        </article>
-
-        <article class="project-row" data-reveal>
-          <div class="project-media plot-on-dark">
-            <img src="assets/images/VI-SLAM/Pasted image.png" alt="Visual-inertial SLAM trajectory and landmark map" loading="lazy" />
-          </div>
-          <div class="project-content">
-            <p class="project-type">02 · State estimation / Mapping</p>
-            <h3>Visual-Inertial SLAM</h3>
-            <p>Fused stereo observations and IMU measurements with an extended Kalman filter to estimate motion and build a landmark map.</p>
-          </div>
-          <div class="project-links">
-            <a class="text-link" href="ECE276A_PR3_Report.pdf" target="_blank" rel="noopener noreferrer">
-              Read report
-              <i class="ph ph-file-pdf" aria-hidden="true"></i>
-            </a>
-            <a class="text-link" href="https://github.com/ManojReddy999/Visual-Inertial-SLAM" target="_blank" rel="noopener noreferrer">
-              Source
-              <i class="ph ph-github-logo" aria-hidden="true"></i>
-            </a>
-          </div>
-        </article>
-
-        <article class="project-row" data-reveal>
-          <div class="project-media">
-            <img src="assets/images/Calibration challenge/vanishing_point.png" alt="Road scene annotated with a vanishing point for camera calibration" loading="lazy" />
-          </div>
-          <div class="project-content">
-            <p class="project-type">03 · ECE 228 team project</p>
-            <h3>Comma.ai Calibration Challenge</h3>
-            <p>An ECE 228 team project for the Comma.ai Calibration Challenge, combining optical flow, vanishing-point geometry, and a Conv-LSTM model to estimate camera pitch and yaw from monocular driving video.</p>
-          </div>
-          <div class="project-links">
-            <a class="text-link" href="Calibration-challenge.html">
-              View project
-              <i class="ph ph-arrow-right" aria-hidden="true"></i>
-            </a>
-            <a class="text-link" href="https://github.com/ManojReddy999/Calibration_Challenge" target="_blank" rel="noopener noreferrer">
-              Source
-              <i class="ph ph-github-logo" aria-hidden="true"></i>
-            </a>
-          </div>
-        </article>
-      </div>
-
-      <p class="availability work-availability">Based in India · Open to remote startup teams · <a class="text-link" href="projects.html">View all projects</a></p>
-    </section>
-
-    <section class="section container" id="profile" aria-labelledby="profile-title">
-      <div class="profile-grid">
-        <div class="profile-intro" data-reveal>
-          <p class="section-kicker">Background</p>
-          <h2 id="profile-title">Mechanical engineering to robotics.</h2>
-          <p class="availability">Based in India · Open to remote startup teams</p>
+    <section class="section" id="contact" aria-labelledby="contact-title">
+      <div class="container contact">
+        <div>
+          <p class="eyebrow">Contact</p>
+          <h2 class="section-title" id="contact-title">Let’s talk</h2>
+          <a class="big-mail" href="mailto:manojreddymanchalaus@gmail.com">manojreddymanchalaus@gmail.com</a>
         </div>
-
-        <div class="profile-copy" data-reveal>
-          <p>My path began with mechanical engineering and hands-on robotic systems, then moved through estimation and perception into learning-based decision-making. Graduate research at UC San Diego's Existential Robotics Laboratory focused on reinforcement learning for autonomous navigation under Prof. Nikolay Atanasov.</p>
-          <p>My work combines software with physical-system constraints such as sensor noise, vehicle dynamics, collision risk, and compute limits.</p>
-
-          <ul class="capability-list" aria-label="Core capabilities">
-            <li>
-              <strong>Learning-based navigation</strong>
-              <span>Simulation environments, PPO/SAC, reward design, and evaluation.</span>
-            </li>
-            <li>
-              <strong>State estimation &amp; mapping</strong>
-              <span>Visual-inertial and LiDAR SLAM, filtering, mapping, and sensor fusion.</span>
-            </li>
-            <li>
-              <strong>Vision &amp; temporal models</strong>
-              <span>Optical flow, CNNs, LSTMs, and calibration from video.</span>
-            </li>
-            <li>
-              <strong>Robotics implementation</strong>
-              <span>Python, PyTorch, MuJoCo, technical debugging, and system integration.</span>
-            </li>
-          </ul>
-
+        <div class="contact-links">
+          <a href="https://www.linkedin.com/in/manojreddymanchala/"><strong class="out">LinkedIn</strong><span>Experience and background</span></a>
+          <a href="https://github.com/ManojReddy999"><strong class="out">GitHub</strong><span>Code and experiments</span></a>
+          <a href="Resume_Manoj.pdf"><strong class="out">Résumé</strong><span>PDF</span></a>
         </div>
       </div>
-    </section>
-
-    <section class="contact-strip container" aria-labelledby="contact-title" data-reveal>
-      <div>
-        <p class="section-kicker">Contact</p>
-        <h2 id="contact-title">Interested in robotics or applied ML work?</h2>
-      </div>
-      <a class="button" href="contact.html">
-        Contact me
-        <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
-      </a>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="footer-inner container">
-      <p>&copy; <span data-year>2026</span> Manoj Reddy Manchala. Robotics &amp; Applied ML.</p>
-      <div class="footer-links" aria-label="External links">
-        <a href="https://github.com/ManojReddy999" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://www.linkedin.com/in/manojreddymanchala/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="mailto:manojreddymanchalaus@gmail.com">Email</a>
-      </div>
+      <p>© <span data-year>2026</span> Manoj Reddy Manchala</p>
+      <p>Static HTML and CSS. The lab is MuJoCo 3.12 compiled to WebAssembly, drawn with three.js.</p>
     </div>
   </footer>
+
+  <script type="module">
+    // The hero simulation is progressive: the page is complete without it.
+    // Large screens start it once the page has loaded; phones, data-saver and
+    // reduced-motion visitors get a button instead.
+    const hero = document.querySelector('.hero');
+    const stage = document.getElementById('hero-stage');
+    const run = document.getElementById('hero-run');
+    const auto = matchMedia('(min-width: 821px)').matches
+      && !matchMedia('(prefers-reduced-motion: reduce)').matches
+      && !(navigator.connection && navigator.connection.saveData);
+    let started = false;
+
+    async function start() {
+      if (started) return;
+      started = true;
+      run.hidden = true;
+      try {
+        const { startLab } = await import('./lab/src/lab.js');
+        await startLab({
+          stage, ui: hero, hero: true,
+          // keep the car clear of the text: right of it on wide screens, below it on narrow ones
+          frame: (w) => (w > 820 ? [0.2, 0.04] : [0, 0.32]),
+        });
+        stage.classList.add('live');
+        document.getElementById('hero-readout').hidden = false;
+      } catch (err) {
+        console.warn('Live Lab could not start; keeping the still image.', err);
+      }
+    }
+
+    run.addEventListener('click', start);
+    if (auto) {
+      const later = () => ('requestIdleCallback' in window ? requestIdleCallback(start, { timeout: 1500 }) : setTimeout(start, 300));
+      if (document.readyState === 'complete') later(); else addEventListener('load', later, { once: true });
+    } else {
+      run.hidden = false;
+    }
+  </script>
 </body>
 </html>

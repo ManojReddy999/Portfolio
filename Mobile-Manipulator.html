@@ -11,45 +11,44 @@
   <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/Mobile-Manipulator.html" />
   <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/Mobile-Manipulator.html" />
   <link rel="icon" type="image/png" href="assets/images/car-unique.png" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" />
-  <script src="assets/js/script.js" defer></script>
   <title>YouBot Motion Control | Manoj Reddy Manchala</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/site.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
   <header class="site-header">
-    <nav class="navbar" aria-label="Primary navigation">
-      <div class="nav-logo">
-        <a href="index.html" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a>
-      </div>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
-        <i class="ph ph-list" aria-hidden="true"></i>
-      </button>
+    <nav class="navbar" aria-label="Primary">
+      <div class="nav-logo"><a href="./" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">☰</button>
       <ul class="nav-links" id="primary-navigation" data-open="false">
-        <li><a href="projects.html" aria-current="page">Selected Work</a></li>
-        <li><a href="index.html#profile">Profile</a></li>
-        <li><a href="resume.html">Resume</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="./#work">Robotics</a></li>
+        <li><a href="./#production">Production</a></li>
+        <li><a href="lab/">Lab</a></li>
+        <li><a href="./#about">About</a></li>
+        <li><a href="./#contact">Contact</a></li>
+        <li><a class="nav-cta" href="Resume_Manoj.pdf">Résumé</a></li>
       </ul>
     </nav>
   </header>
 
   <main class="container project-details-page" id="main-content">
-    <div class="project-details-card">
-      <div class="heading-buttons" data-reveal>
+    <a class="back-link" href="./#work">← All projects</a>
+<div class="project-details-card">
+      <div class="heading-buttons">
         <div>
           <span class="project-type">Robot control · simulation</span>
           <h1>Motion Control of a Mobile Manipulator</h1>
         </div>
         <div class="button-group" aria-label="Project resources">
           <a class="button secondary" href="https://www.youtube.com/playlist?list=PLNTqfp1IsYFb94NbPhJJMrlI-eNQuOVJU" target="_blank" rel="noopener noreferrer">
-            <i class="ph ph-play-circle" aria-hidden="true"></i>
             Demo playlist
           </a>
           <a class="button" href="https://github.com/ManojReddy999/Motion-Control-of-Mobile-Manipulator-Robot" target="_blank" rel="noopener noreferrer">
-            <i class="ph ph-github-logo" aria-hidden="true"></i>
             GitHub
           </a>
         </div>
@@ -74,7 +73,7 @@
             CSV output connected the controller results to CoppeliaSim for visual inspection of the task.
           </p>
           <figure>
-            <img class="center-image" src="assets/images/Mobile Manipulator/Screenshot from 2025-03-12 11-46-40.png" alt="YouBot mobile manipulator and cube in the simulated pick-and-place scene" loading="lazy" />
+            <img class="center-image" src="assets/images/Mobile Manipulator/Screenshot from 2025-03-12 11-46-40.webp" alt="YouBot mobile manipulator and cube in the simulated pick-and-place scene" loading="lazy" />
             <figcaption>The YouBot and cube in the CoppeliaSim task environment.</figcaption>
           </figure>
         </section>
@@ -117,8 +116,8 @@
             One gain setting produced comparatively smooth trajectory tracking and rapid error reduction in the simulated task.
           </p>
           <div class="media-row" aria-label="Balanced controller response">
-            <img src="assets/images/Mobile Manipulator/Best_case.png" alt="End-effector error curves for the balanced controller setting" loading="lazy" />
-            <img src="assets/images/Mobile Manipulator/Best_Case.gif" alt="YouBot executing the pick-and-place sequence with the balanced controller setting" loading="lazy" />
+            <img src="assets/images/Mobile Manipulator/Best_case.webp" alt="End-effector error curves for the balanced controller setting" loading="lazy" />
+            <video controls muted loop playsinline preload="none" poster="assets/images/Mobile Manipulator/Best_Case-poster.webp" aria-label="YouBot executing the pick-and-place sequence with the balanced controller setting"><source src="assets/images/Mobile Manipulator/Best_Case.webm" type="video/webm"><a href="assets/images/Mobile Manipulator/Best_Case.gif">YouBot executing the pick-and-place sequence with the balanced controller setting (GIF)</a></video>
           </div>
 
           <h3>Overshoot response</h3>
@@ -126,7 +125,7 @@
             A more aggressive response overshot before settling, making the effect of gain selection visible in the error trajectory.
           </p>
           <figure>
-            <img class="center-image" src="assets/images/Mobile Manipulator/Overshoot.png" alt="End-effector error curves showing controller overshoot" loading="lazy" />
+            <img class="center-image" src="assets/images/Mobile Manipulator/Overshoot.webp" alt="End-effector error curves showing controller overshoot" loading="lazy" />
           </figure>
 
           <h3>Changed task configuration</h3>
@@ -135,8 +134,8 @@
             This additional configuration is a limited scenario check and does not establish general-purpose adaptability.
           </p>
           <div class="media-row" aria-label="Changed pick-and-place task">
-            <img src="assets/images/Mobile Manipulator/New_Task.png" alt="Error curves for the changed pick-and-place target configuration" loading="lazy" />
-            <img src="assets/images/Mobile Manipulator/New_Task.gif" alt="YouBot executing the changed pick-and-place task in simulation" loading="lazy" />
+            <img src="assets/images/Mobile Manipulator/New_Task.webp" alt="Error curves for the changed pick-and-place target configuration" loading="lazy" />
+            <video controls muted loop playsinline preload="none" poster="assets/images/Mobile Manipulator/New_Task-poster.webp" aria-label="YouBot executing the changed pick-and-place task in simulation"><source src="assets/images/Mobile Manipulator/New_Task.webm" type="video/webm"><a href="assets/images/Mobile Manipulator/New_Task.gif">YouBot executing the changed pick-and-place task in simulation (GIF)</a></video>
           </div>
 
           <h3>Slow convergence and oscillation</h3>
@@ -145,8 +144,8 @@
             Together, these cases expose the response-speed and stability trade-off in the selected PI structure.
           </p>
           <div class="media-row" aria-label="Controller failure-mode comparisons">
-            <img src="assets/images/Mobile Manipulator/Slow_Convergence.png" alt="End-effector error curves showing slow convergence" loading="lazy" />
-            <img src="assets/images/Mobile Manipulator/High_Oscillations.png" alt="End-effector error curves showing high oscillation" loading="lazy" />
+            <img src="assets/images/Mobile Manipulator/Slow_Convergence.webp" alt="End-effector error curves showing slow convergence" loading="lazy" />
+            <img src="assets/images/Mobile Manipulator/High_Oscillations.webp" alt="End-effector error curves showing high oscillation" loading="lazy" />
           </div>
         </section>
 
@@ -174,12 +173,8 @@
 
   <footer class="site-footer">
     <div class="footer-inner container">
-      <p>&copy; <span data-year>2026</span> Manoj Reddy Manchala. Robotics &amp; Applied ML.</p>
-      <div class="footer-links" aria-label="External links">
-        <a href="https://github.com/ManojReddy999" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://www.linkedin.com/in/manojreddymanchala/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="mailto:manojreddymanchalaus@gmail.com">Email</a>
-      </div>
+      <p>© <span data-year>2026</span> Manoj Reddy Manchala</p>
+      <div class="footer-links"><a href="https://github.com/ManojReddy999">GitHub</a><a href="https://www.linkedin.com/in/manojreddymanchala/">LinkedIn</a><a href="mailto:manojreddymanchalaus@gmail.com">Email</a></div>
     </div>
   </footer>
 </body>

@@ -1,0 +1,17 @@
+{
+ "scene": "scene.xml",
+ "files": [
+  "mushr_base_nano-web4mm.stl.gz",
+  "mushr_wheel-15bd670c3fe49ba88c5aebac8c02710cbfa13734.stl.gz",
+  "mushr_ydlidar-d490b6c3ee521f9350f794dab8971b1d9e5758ba.stl.gz",
+  "scene.xml"
+ ],
+ "num_obstacles": 150,
+ "arena_size": 8,
+ "chassis_mesh": {
+  "source": "mushr_base_nano-04555a607f17732acb8b15bf9d58a6c399349ff1.stl",
+  "triangles": 199913,
+  "web_triangles": 13047,
+  "cell_m": 0.004
+ }
+}

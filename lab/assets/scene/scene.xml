@@ -1,0 +1,724 @@
+<mujoco model="floor">
+  <compiler boundmass="1.0000000000000001e-05" boundinertia="9.9999999999999994e-12" coordinate="local" angle="radian" eulerseq="xyz"/>
+  <option timestep="0.0050000000000000001" noslip_tolerance="0" gravity="0 0 -9.8100000000000005" cone="elliptic" noslip_iterations="5"/>
+  <visual>
+    <headlight ambient="0.40000000000000002 0.40000000000000002 0.40000000000000002" diffuse="0.80000000000000004 0.80000000000000004 0.80000000000000004" specular="0.10000000000000001 0.10000000000000001 0.10000000000000001"/>
+    <map znear="0.01"/>
+    <scale forcewidth="0.01" contactwidth="0.059999999999999998" contactheight="0.01" jointwidth="0.01" framelength="0.29999999999999999" framewidth="0.01"/>
+  </visual>
+  <default>
+    <default class="/"/>
+    <default class="car/">
+      <default class="car/buddy_wheel">
+        <geom type="ellipsoid" contype="1" conaffinity="1" friction="2 0.0050000000000000001 0.0001" mass="0.49895200000000001" mesh="car/buddy_mushr_wheel" fitscale="1.2" rgba="0 0 0 0"/>
+      </default>
+      <default class="car/buddy_wheel_collision">
+        <geom type="cylinder" contype="1" conaffinity="1" size="0.048800000000000003 0.021729999999999999" friction="2 0.0050000000000000001 0.0001" mass="0.49895200000000001" euler="90 0 0" rgba="0 0 0 0"/>
+      </default>
+      <default class="car/buddy_steering">
+        <joint type="hinge" axis="0 0 1" limited="true" range="-0.38 0.38" armature="0.00020000000000000001" damping="0.001" frictionloss="0.01"/>
+      </default>
+      <default class="car/buddy_throttle">
+        <joint type="hinge" axis="0 1 0" limited="false" armature="0.01" damping="0.01" frictionloss="0.001"/>
+      </default>
+    </default>
+    <default class="unnamed_model/"/>
+    <default class="unnamed_model_1/"/>
+    <default class="unnamed_model_2/"/>
+    <default class="unnamed_model_3/"/>
+    <default class="unnamed_model_4/"/>
+    <default class="unnamed_model_5/"/>
+    <default class="unnamed_model_6/"/>
+    <default class="unnamed_model_7/"/>
+    <default class="unnamed_model_8/"/>
+    <default class="unnamed_model_9/"/>
+    <default class="unnamed_model_10/"/>
+    <default class="unnamed_model_11/"/>
+    <default class="unnamed_model_12/"/>
+    <default class="unnamed_model_13/"/>
+    <default class="unnamed_model_14/"/>
+    <default class="unnamed_model_15/"/>
+    <default class="unnamed_model_16/"/>
+    <default class="unnamed_model_17/"/>
+    <default class="unnamed_model_18/"/>
+    <default class="unnamed_model_19/"/>
+    <default class="unnamed_model_20/"/>
+    <default class="unnamed_model_21/"/>
+    <default class="unnamed_model_22/"/>
+    <default class="unnamed_model_23/"/>
+    <default class="unnamed_model_24/"/>
+    <default class="unnamed_model_25/"/>
+    <default class="unnamed_model_26/"/>
+    <default class="unnamed_model_27/"/>
+    <default class="unnamed_model_28/"/>
+    <default class="unnamed_model_29/"/>
+    <default class="unnamed_model_30/"/>
+    <default class="unnamed_model_31/"/>
+    <default class="unnamed_model_32/"/>
+    <default class="unnamed_model_33/"/>
+    <default class="unnamed_model_34/"/>
+    <default class="unnamed_model_35/"/>
+    <default class="unnamed_model_36/"/>
+    <default class="unnamed_model_37/"/>
+    <default class="unnamed_model_38/"/>
+    <default class="unnamed_model_39/"/>
+    <default class="unnamed_model_40/"/>
+    <default class="unnamed_model_41/"/>
+    <default class="unnamed_model_42/"/>
+    <default class="unnamed_model_43/"/>
+    <default class="unnamed_model_44/"/>
+    <default class="unnamed_model_45/"/>
+    <default class="unnamed_model_46/"/>
+    <default class="unnamed_model_47/"/>
+    <default class="unnamed_model_48/"/>
+    <default class="unnamed_model_49/"/>
+    <default class="unnamed_model_50/"/>
+    <default class="unnamed_model_51/"/>
+    <default class="unnamed_model_52/"/>
+    <default class="unnamed_model_53/"/>
+    <default class="unnamed_model_54/"/>
+    <default class="unnamed_model_55/"/>
+    <default class="unnamed_model_56/"/>
+    <default class="unnamed_model_57/"/>
+    <default class="unnamed_model_58/"/>
+    <default class="unnamed_model_59/"/>
+    <default class="unnamed_model_60/"/>
+    <default class="unnamed_model_61/"/>
+    <default class="unnamed_model_62/"/>
+    <default class="unnamed_model_63/"/>
+    <default class="unnamed_model_64/"/>
+    <default class="unnamed_model_65/"/>
+    <default class="unnamed_model_66/"/>
+    <default class="unnamed_model_67/"/>
+    <default class="unnamed_model_68/"/>
+    <default class="unnamed_model_69/"/>
+    <default class="unnamed_model_70/"/>
+    <default class="unnamed_model_71/"/>
+    <default class="unnamed_model_72/"/>
+    <default class="unnamed_model_73/"/>
+    <default class="unnamed_model_74/"/>
+    <default class="unnamed_model_75/"/>
+    <default class="unnamed_model_76/"/>
+    <default class="unnamed_model_77/"/>
+    <default class="unnamed_model_78/"/>
+    <default class="unnamed_model_79/"/>
+    <default class="unnamed_model_80/"/>
+    <default class="unnamed_model_81/"/>
+    <default class="unnamed_model_82/"/>
+    <default class="unnamed_model_83/"/>
+    <default class="unnamed_model_84/"/>
+    <default class="unnamed_model_85/"/>
+    <default class="unnamed_model_86/"/>
+    <default class="unnamed_model_87/"/>
+    <default class="unnamed_model_88/"/>
+    <default class="unnamed_model_89/"/>
+    <default class="unnamed_model_90/"/>
+    <default class="unnamed_model_91/"/>
+    <default class="unnamed_model_92/"/>
+    <default class="unnamed_model_93/"/>
+    <default class="unnamed_model_94/"/>
+    <default class="unnamed_model_95/"/>
+    <default class="unnamed_model_96/"/>
+    <default class="unnamed_model_97/"/>
+    <default class="unnamed_model_98/"/>
+    <default class="unnamed_model_99/"/>
+    <default class="unnamed_model_100/"/>
+    <default class="unnamed_model_101/"/>
+    <default class="unnamed_model_102/"/>
+    <default class="unnamed_model_103/"/>
+    <default class="unnamed_model_104/"/>
+    <default class="unnamed_model_105/"/>
+    <default class="unnamed_model_106/"/>
+    <default class="unnamed_model_107/"/>
+    <default class="unnamed_model_108/"/>
+    <default class="unnamed_model_109/"/>
+    <default class="unnamed_model_110/"/>
+    <default class="unnamed_model_111/"/>
+    <default class="unnamed_model_112/"/>
+    <default class="unnamed_model_113/"/>
+    <default class="unnamed_model_114/"/>
+    <default class="unnamed_model_115/"/>
+    <default class="unnamed_model_116/"/>
+    <default class="unnamed_model_117/"/>
+    <default class="unnamed_model_118/"/>
+    <default class="unnamed_model_119/"/>
+    <default class="unnamed_model_120/"/>
+    <default class="unnamed_model_121/"/>
+    <default class="unnamed_model_122/"/>
+    <default class="unnamed_model_123/"/>
+    <default class="unnamed_model_124/"/>
+    <default class="unnamed_model_125/"/>
+    <default class="unnamed_model_126/"/>
+    <default class="unnamed_model_127/"/>
+    <default class="unnamed_model_128/"/>
+    <default class="unnamed_model_129/"/>
+    <default class="unnamed_model_130/"/>
+    <default class="unnamed_model_131/"/>
+    <default class="unnamed_model_132/"/>
+    <default class="unnamed_model_133/"/>
+    <default class="unnamed_model_134/"/>
+    <default class="unnamed_model_135/"/>
+    <default class="unnamed_model_136/"/>
+    <default class="unnamed_model_137/"/>
+    <default class="unnamed_model_138/"/>
+    <default class="unnamed_model_139/"/>
+    <default class="unnamed_model_140/"/>
+    <default class="unnamed_model_141/"/>
+    <default class="unnamed_model_142/"/>
+    <default class="unnamed_model_143/"/>
+    <default class="unnamed_model_144/"/>
+    <default class="unnamed_model_145/"/>
+    <default class="unnamed_model_146/"/>
+    <default class="unnamed_model_147/"/>
+    <default class="unnamed_model_148/"/>
+    <default class="unnamed_model_149/"/>
+    <default class="unnamed_model_150/"/>
+    <default class="unnamed_model_151/"/>
+    <default class="unnamed_model_152/"/>
+    <default class="unnamed_model_153/"/>
+  </default>
+  <asset>
+    <texture name="groundplane" type="2d" builtin="checker" rgb1="0.20000000000000001 0.29999999999999999 0.40000000000000002" rgb2="0.10000000000000001 0.20000000000000001 0.29999999999999999" mark="edge" markrgb="0.80000000000000004 0.80000000000000004 0.80000000000000004" width="200" height="200"/>
+    <material name="groundplane" class="/" texture="groundplane" texrepeat="2 2" texuniform="true" reflectance="0.20000000000000001"/>
+    <mesh name="car/buddy_mushr_base_nano" class="car/" file="mushr_base_nano-web4mm.stl"/>
+    <mesh name="car/buddy_mushr_wheel" class="car/" file="mushr_wheel-15bd670c3fe49ba88c5aebac8c02710cbfa13734.stl"/>
+    <mesh name="car/buddy_mushr_ydlidar" class="car/" file="mushr_ydlidar-d490b6c3ee521f9350f794dab8971b1d9e5758ba.stl"/>
+    <texture name="car/grid" type="2d" builtin="checker" rgb1="0.10000000000000001 0.20000000000000001 0.29999999999999999" rgb2="0.20000000000000001 0.29999999999999999 0.40000000000000002" width="300" height="300"/>
+    <material name="car/grid" class="car/" texture="car/grid" texrepeat="8 8" reflectance="0.20000000000000001"/>
+  </asset>
+  <worldbody>
+    <geom name="groundplane" class="/" type="plane" size="8 8 0.25" material="groundplane"/>
+    <camera name="top_camera" class="/" fovy="10.058147163570894" pos="0 0 100" quat="1 0 0 0"/>
+    <body name="car/">
+      <freejoint name="car/"/>
+      <body name="car/buddy" pos="0 0 0" euler="0 0 0">
+        <inertial pos="-0.019542393212677655 -7.802241728458619e-05 0.0899644378769523" quat="0.4895407646948336 0.5100546605118116 0.5100359465453768 0.489956545240231" mass="3.8541369999999997" diaginertia="0.04443277978360226 0.043338530396322426 0.013230472253032616"/>
+        <camera name="car/buddy_third_person" class="car/" pos="-1 0 1" xyaxes="0 -1 0 0.70699999999999996 0 0.70699999999999996" mode="fixed"/>
+        <camera name="car/buddy_realsense_d435i" class="car/" pos="-0.0050000000000000001 0 0.16500000000000001" euler="0 4.7119999999999997 4.7119999999999997" mode="fixed"/>
+        <site name="car/buddy_imu" class="car/" pos="-0.0050000000000000001 0 0.16500000000000001"/>
+        <camera name="car/overhead_track" class="car/" pos="0 0 9" euler="0 0 0" mode="track"/>
+        <geom name="car//unnamed_geom_0" class="car/" type="mesh" contype="0" conaffinity="0" mass="3.5421369999999999" pos="0 0 0.094655000000000003" mesh="car/buddy_mushr_base_nano"/>
+        <geom name="car/buddy_realsense_d435i" class="car/" type="box" contype="0" conaffinity="0" size="0.012525 0.044999999999999998 0.012500000000000001" mass="0.071999999999999995" pos="0.0123949 0 0.16217799999999999"/>
+        <geom name="car/buddy_ydlidar" class="car/" type="mesh" contype="0" conaffinity="0" mass="0.17999999999999999" pos="-0.035325000000000002 0 0.202405" mesh="car/buddy_mushr_ydlidar"/>
+        <geom name="car/buddy_pusher_connector" class="car/" type="box" contype="1" conaffinity="1" size="0.0025000000000000001 0.025000000000000001 0.02" mass="0.01" pos="0.20730000000000001 0 0.063"/>
+        <geom name="car/buddy_pusher" class="car/" type="box" contype="1" conaffinity="1" size="0.0050000000000000001 0.11 0.035000000000000003" mass="0.050000000000000003" pos="0.215 0 0.048000000000000001"/>
+        <body name="car/buddy_steering_wheel" pos="0.13850000000000001 0 0.048800000000000003">
+          <joint name="car/buddy_steering_wheel" class="car/buddy_steering"/>
+          <geom name="car//unnamed_geom_5" class="car/buddy_wheel" contype="0" conaffinity="0" mass="0.01" rgba="0 0 0 1"/>
+        </body>
+        <body name="car/buddy_wheel_fl" pos="0.13850000000000001 0.115 0.048800000000000003">
+          <joint name="car/buddy_wheel_fl_steering" class="car/buddy_steering"/>
+          <joint name="car/buddy_wheel_fl_throttle" class="car/buddy_throttle"/>
+          <geom name="car//unnamed_geom_6" class="car/buddy_wheel_collision"/>
+          <geom name="car//unnamed_geom_7" class="car/buddy_wheel" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1"/>
+        </body>
+        <body name="car/buddy_wheel_fr" pos="0.13850000000000001 -0.115 0.048800000000000003">
+          <joint name="car/buddy_wheel_fr_steering" class="car/buddy_steering"/>
+          <joint name="car/buddy_wheel_fr_throttle" class="car/buddy_throttle"/>
+          <geom name="car//unnamed_geom_8" class="car/buddy_wheel_collision"/>
+          <geom name="car//unnamed_geom_9" class="car/buddy_wheel" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1"/>
+        </body>
+        <body name="car/buddy_wheel_bl" pos="-0.158 0.115 0.048800000000000003">
+          <joint name="car/buddy_wheel_bl_throttle" class="car/buddy_throttle"/>
+          <geom name="car//unnamed_geom_10" class="car/buddy_wheel_collision"/>
+          <geom name="car//unnamed_geom_11" class="car/buddy_wheel" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1"/>
+        </body>
+        <body name="car/buddy_wheel_br" pos="-0.158 -0.115 0.048800000000000003">
+          <joint name="car/buddy_wheel_br_throttle" class="car/buddy_throttle"/>
+          <geom name="car//unnamed_geom_12" class="car/buddy_wheel_collision"/>
+          <geom name="car//unnamed_geom_13" class="car/buddy_wheel" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1"/>
+        </body>
+      </body>
+    </body>
+    <body name="unnamed_model/">
+      <geom name="unnamed_model/1_0" class="unnamed_model/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="0.78101606283719605 3.4430298619587116 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_1/">
+      <geom name="unnamed_model_1/2_0" class="unnamed_model_1/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="0.71813092795034983 -1.2215232105775247 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_2/">
+      <geom name="unnamed_model_2/3_0" class="unnamed_model_2/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-0.99860461979691983 6.2683680125132764 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_3/">
+      <geom name="unnamed_model_3/4_0" class="unnamed_model_3/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-1.8649356987875567 4.6676006093226334 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_4/">
+      <geom name="unnamed_model_4/5_0" class="unnamed_model_4/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="1.088712977502917 6.8095462126825765 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_5/">
+      <geom name="unnamed_model_5/6_0" class="unnamed_model_5/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-6.6059312047753487 -7.6765056409547885 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_6/">
+      <geom name="unnamed_model_6/7_0" class="unnamed_model_6/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="4.4505080151976077 5.9201943719491066 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_7/">
+      <geom name="unnamed_model_7/8_0" class="unnamed_model_7/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="4.7865370274675776 -0.61633020395309046 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_8/">
+      <geom name="unnamed_model_8/9_0" class="unnamed_model_8/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-6.1076091860970685 2.2387363412403811 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_9/">
+      <geom name="unnamed_model_9/10_0" class="unnamed_model_9/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="7.1147026727933422 0.34957314800114681 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_10/">
+      <geom name="unnamed_model_10/11_0" class="unnamed_model_10/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-3.7671102063259685 4.3877390309474666 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_11/">
+      <geom name="unnamed_model_11/12_0" class="unnamed_model_11/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="1.0949431818983761 -7.6993631930183177 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_12/">
+      <geom name="unnamed_model_12/13_0" class="unnamed_model_12/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="1.7935315635587425 1.8709439499961107 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_13/">
+      <geom name="unnamed_model_13/14_0" class="unnamed_model_13/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="2.9091247856557345 -2.2478735908194238 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_14/">
+      <geom name="unnamed_model_14/15_0" class="unnamed_model_14/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="3.1620991348362377 -7.0363924539316827 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_15/">
+      <geom name="unnamed_model_15/16_0" class="unnamed_model_15/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="2.7302059138905506 -4.6338790228185456 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_16/">
+      <geom name="unnamed_model_16/17_0" class="unnamed_model_16/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-2.9531463852130582 -2.1806276649180383 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_17/">
+      <geom name="unnamed_model_17/18_0" class="unnamed_model_17/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-0.98237578460287445 7.8139814089476189 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_18/">
+      <geom name="unnamed_model_18/19_0" class="unnamed_model_18/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-4.6579719024826449 -5.4190477138400599 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_19/">
+      <geom name="unnamed_model_19/20_0" class="unnamed_model_19/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-3.9473343593634862 -0.53902763429909939 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_20/">
+      <geom name="unnamed_model_20/21_0" class="unnamed_model_20/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-5.4564866616716845 -6.2339977413711178 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_21/">
+      <geom name="unnamed_model_21/22_0" class="unnamed_model_21/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-5.7890727784221792 -4.8546822131191441 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_22/">
+      <geom name="unnamed_model_22/23_0" class="unnamed_model_22/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="5.1358916775669616 -6.4463795873110197 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_23/">
+      <geom name="unnamed_model_23/24_0" class="unnamed_model_23/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-6.4624254736965909 7.6233514402143321 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_24/">
+      <geom name="unnamed_model_24/25_0" class="unnamed_model_24/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="7.6281774110453942 1.6775283159207355 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_25/">
+      <geom name="unnamed_model_25/26_0" class="unnamed_model_25/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-7.3729953239308692 -3.4750885987774467 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_26/">
+      <geom name="unnamed_model_26/27_0" class="unnamed_model_26/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-3.2617568396456811 -6.1003564967320951 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_27/">
+      <geom name="unnamed_model_27/28_0" class="unnamed_model_27/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-1.3717920877652805 -6.9736400584194502 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_28/">
+      <geom name="unnamed_model_28/29_0" class="unnamed_model_28/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="1.0656232673052024 -3.7537681449688733 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_29/">
+      <geom name="unnamed_model_29/30_0" class="unnamed_model_29/" type="sphere" contype="1" conaffinity="1" size="0.20000000000000001" friction="0.80000000000000004 0.02 0.001" mass="1.2" pos="-6.4969518278649332 1.2151439288988684 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_30/">
+      <geom name="unnamed_model_30/31_0" class="unnamed_model_30/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-2.9028967607788214 2.678566079418907 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_31/">
+      <geom name="unnamed_model_31/32_0" class="unnamed_model_31/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="3.4612352658970487 -3.3695025128447824 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_32/">
+      <geom name="unnamed_model_32/33_0" class="unnamed_model_32/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="1.3842069569613304 -7.6782792610001032 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_33/">
+      <geom name="unnamed_model_33/34_0" class="unnamed_model_33/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-7.924872380919247 2.8450645887396817 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_34/">
+      <geom name="unnamed_model_34/35_0" class="unnamed_model_34/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="3.7631043539615181 7.3950167218790117 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_35/">
+      <geom name="unnamed_model_35/36_0" class="unnamed_model_35/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="1.2185173506853904 1.4726709003494243 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_36/">
+      <geom name="unnamed_model_36/37_0" class="unnamed_model_36/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-4.430693877750107 7.2439841842717598 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_37/">
+      <geom name="unnamed_model_37/38_0" class="unnamed_model_37/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="5.5425387595380453 3.191668405080069 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_38/">
+      <geom name="unnamed_model_38/39_0" class="unnamed_model_38/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="5.0207651152396355 -1.6559081464482457 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_39/">
+      <geom name="unnamed_model_39/40_0" class="unnamed_model_39/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="1.3003659621737391 6.1077657896776447 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_40/">
+      <geom name="unnamed_model_40/41_0" class="unnamed_model_40/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="3.6040684771142484 0.021190110827236097 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_41/">
+      <geom name="unnamed_model_41/42_0" class="unnamed_model_41/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="2.3038431876741985 -1.2183192230691251 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_42/">
+      <geom name="unnamed_model_42/43_0" class="unnamed_model_42/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-7.6929088270506636 -3.1748029332072107 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_43/">
+      <geom name="unnamed_model_43/44_0" class="unnamed_model_43/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-3.3587582846328949 1.8882468639814647 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_44/">
+      <geom name="unnamed_model_44/45_0" class="unnamed_model_44/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.8324149724407963 -3.2274827847035077 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_45/">
+      <geom name="unnamed_model_45/46_0" class="unnamed_model_45/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="1.4539641799707717 1.1892039815932609 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_46/">
+      <geom name="unnamed_model_46/47_0" class="unnamed_model_46/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="2.4336523200270221 -1.0973050330564167 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_47/">
+      <geom name="unnamed_model_47/48_0" class="unnamed_model_47/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-2.1190100792336555 -1.026161195749971 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_48/">
+      <geom name="unnamed_model_48/49_0" class="unnamed_model_48/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="4.8991038247373719 3.2622173366458611 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_49/">
+      <geom name="unnamed_model_49/50_0" class="unnamed_model_49/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="6.7117218199147768 3.4278607927857827 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_50/">
+      <geom name="unnamed_model_50/51_0" class="unnamed_model_50/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.6088271254721001 5.8900169178914279 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_51/">
+      <geom name="unnamed_model_51/52_0" class="unnamed_model_51/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="1.8489530285415068 -6.0188802744089358 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_52/">
+      <geom name="unnamed_model_52/53_0" class="unnamed_model_52/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="4.9171033396001711 1.105611817833493 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_53/">
+      <geom name="unnamed_model_53/54_0" class="unnamed_model_53/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-6.8933280727177912 3.1588603703130183 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_54/">
+      <geom name="unnamed_model_54/55_0" class="unnamed_model_54/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="3.5528895915255667 5.8621172148580669 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_55/">
+      <geom name="unnamed_model_55/56_0" class="unnamed_model_55/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="5.6928534782817763 -7.8125746530399685 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_56/">
+      <geom name="unnamed_model_56/57_0" class="unnamed_model_56/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="3.6798489987849283 -5.2539251638169517 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_57/">
+      <geom name="unnamed_model_57/58_0" class="unnamed_model_57/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-7.1305921865719419 -4.8000556016575988 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_58/">
+      <geom name="unnamed_model_58/59_0" class="unnamed_model_58/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="4.69916325371873 -4.4172049910339179 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_59/">
+      <geom name="unnamed_model_59/60_0" class="unnamed_model_59/" type="box" contype="1" conaffinity="1" size="0.20000000000000001 0.20000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="6.849300695449454 3.2706304307765244 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_60/">
+      <geom name="unnamed_model_60/61_0" class="unnamed_model_60/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.364893496033396 1.9436544239962164 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_61/">
+      <geom name="unnamed_model_61/62_0" class="unnamed_model_61/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-4.193714858007862 6.9474239667967002 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_62/">
+      <geom name="unnamed_model_62/63_0" class="unnamed_model_62/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="0.57012484839933286 1.4385596216731358 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_63/">
+      <geom name="unnamed_model_63/64_0" class="unnamed_model_63/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-3.0088800723263702 -1.6284630045425299 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_64/">
+      <geom name="unnamed_model_64/65_0" class="unnamed_model_64/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.0209119059146214 7.1099582397429373 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_65/">
+      <geom name="unnamed_model_65/66_0" class="unnamed_model_65/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-0.15265906211892677 -4.3613659524268282 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_66/">
+      <geom name="unnamed_model_66/67_0" class="unnamed_model_66/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-7.0715334348179901 -1.0493339910700676 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_67/">
+      <geom name="unnamed_model_67/68_0" class="unnamed_model_67/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="3.1414958210473518 -1.9559705713203055 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_68/">
+      <geom name="unnamed_model_68/69_0" class="unnamed_model_68/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-7.6051403457387003 -6.9240058965880227 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_69/">
+      <geom name="unnamed_model_69/70_0" class="unnamed_model_69/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-0.74085048710327506 0.58526737773955517 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_70/">
+      <geom name="unnamed_model_70/71_0" class="unnamed_model_70/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="7.8454231583472698 -4.529648249624417 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_71/">
+      <geom name="unnamed_model_71/72_0" class="unnamed_model_71/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-3.7868419722055897 -7.6695840085483411 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_72/">
+      <geom name="unnamed_model_72/73_0" class="unnamed_model_72/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-2.8797255868405145 -1.8645776932496325 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_73/">
+      <geom name="unnamed_model_73/74_0" class="unnamed_model_73/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="5.2967752837790467 2.0637094974583796 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_74/">
+      <geom name="unnamed_model_74/75_0" class="unnamed_model_74/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-3.6233274429498277 4.7687493426010192 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_75/">
+      <geom name="unnamed_model_75/76_0" class="unnamed_model_75/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="7.2446665115511131 2.9998124222050446 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_76/">
+      <geom name="unnamed_model_76/77_0" class="unnamed_model_76/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="7.1579294478227879 3.6936929083225252 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_77/">
+      <geom name="unnamed_model_77/78_0" class="unnamed_model_77/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-4.5870083621202884 0.29121142289061197 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_78/">
+      <geom name="unnamed_model_78/79_0" class="unnamed_model_78/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-4.6804787929422496 -1.2050324999758999 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_79/">
+      <geom name="unnamed_model_79/80_0" class="unnamed_model_79/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-0.58279321016302887 -3.5579406992842895 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_80/">
+      <geom name="unnamed_model_80/81_0" class="unnamed_model_80/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="5.8216896947717025 -6.1194903046074707 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_81/">
+      <geom name="unnamed_model_81/82_0" class="unnamed_model_81/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.886910298477547 3.469754899081499 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_82/">
+      <geom name="unnamed_model_82/83_0" class="unnamed_model_82/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="1.0467409897361435 -5.0675226205747421 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_83/">
+      <geom name="unnamed_model_83/84_0" class="unnamed_model_83/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-0.19109950961672695 -2.3101961944007101 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_84/">
+      <geom name="unnamed_model_84/85_0" class="unnamed_model_84/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="4.2452040609114441 3.9786179176087568 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_85/">
+      <geom name="unnamed_model_85/86_0" class="unnamed_model_85/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-6.6652410329277032 0.83507951875850495 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_86/">
+      <geom name="unnamed_model_86/87_0" class="unnamed_model_86/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="7.3909820567556643 -3.3256395713192184 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_87/">
+      <geom name="unnamed_model_87/88_0" class="unnamed_model_87/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-6.395296923752035 -7.7371259265364127 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_88/">
+      <geom name="unnamed_model_88/89_0" class="unnamed_model_88/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="2.7186647454545607 4.562446592370204 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_89/">
+      <geom name="unnamed_model_89/90_0" class="unnamed_model_89/" type="cylinder" contype="1" conaffinity="1" size="0.29999999999999999 0.29999999999999999" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="1.382562658981227 -6.976715742064302 0.29999999999999999" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_90/">
+      <geom name="unnamed_model_90/91_0" class="unnamed_model_90/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="7.6399222359111487 6.0240839250654528 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_91/">
+      <geom name="unnamed_model_91/92_0" class="unnamed_model_91/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="7.3851224726639764 -4.2927739764607278 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_92/">
+      <geom name="unnamed_model_92/93_0" class="unnamed_model_92/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="7.0620432753039779 4.7872413976382671 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_93/">
+      <geom name="unnamed_model_93/94_0" class="unnamed_model_93/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="5.9886074659991522 -3.3116754478752526 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_94/">
+      <geom name="unnamed_model_94/95_0" class="unnamed_model_94/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="1.886027070680381 -7.7882102758576082 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_95/">
+      <geom name="unnamed_model_95/96_0" class="unnamed_model_95/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.6297462248293595 7.7092702370920509 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_96/">
+      <geom name="unnamed_model_96/97_0" class="unnamed_model_96/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-0.041738152021396857 2.2315602623795776 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_97/">
+      <geom name="unnamed_model_97/98_0" class="unnamed_model_97/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.8095956530304171 5.1538837311079284 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_98/">
+      <geom name="unnamed_model_98/99_0" class="unnamed_model_98/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="0.18110372074329639 -4.4109275364041718 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_99/">
+      <geom name="unnamed_model_99/100_0" class="unnamed_model_99/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="5.7950642787469331 7.5667118243700848 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_100/">
+      <geom name="unnamed_model_100/101_0" class="unnamed_model_100/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="6.5048879875388632 4.3847573231782206 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_101/">
+      <geom name="unnamed_model_101/102_0" class="unnamed_model_101/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-6.7023777601920518 -1.4841412573790826 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_102/">
+      <geom name="unnamed_model_102/103_0" class="unnamed_model_102/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.8801978438722724 -7.1451650914107958 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_103/">
+      <geom name="unnamed_model_103/104_0" class="unnamed_model_103/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-7.8171606619995035 4.32929197604442 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_104/">
+      <geom name="unnamed_model_104/105_0" class="unnamed_model_104/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-6.727646678611908 -6.5663514521823139 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_105/">
+      <geom name="unnamed_model_105/106_0" class="unnamed_model_105/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-4.0741246423544837 -1.2713685331184248 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_106/">
+      <geom name="unnamed_model_106/107_0" class="unnamed_model_106/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="5.7688187812607001 3.6327082033812523 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_107/">
+      <geom name="unnamed_model_107/108_0" class="unnamed_model_107/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.8962752113419583 -7.1140108732608329 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_108/">
+      <geom name="unnamed_model_108/109_0" class="unnamed_model_108/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-3.8061096121651481 -0.70175093119232557 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_109/">
+      <geom name="unnamed_model_109/110_0" class="unnamed_model_109/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="3.1300071302217152 -3.4636984546853338 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_110/">
+      <geom name="unnamed_model_110/111_0" class="unnamed_model_110/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.1015846122095514 4.6167281969042993 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_111/">
+      <geom name="unnamed_model_111/112_0" class="unnamed_model_111/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="3.1519558675997974 4.459126335057654 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_112/">
+      <geom name="unnamed_model_112/113_0" class="unnamed_model_112/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-3.8492389704743211 -2.018989793079017 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_113/">
+      <geom name="unnamed_model_113/114_0" class="unnamed_model_113/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-3.6348495612085276 -2.0663552125137805 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_114/">
+      <geom name="unnamed_model_114/115_0" class="unnamed_model_114/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-0.64230585990388178 -7.2862031799341747 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_115/">
+      <geom name="unnamed_model_115/116_0" class="unnamed_model_115/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-6.7686968482138763 0.30136238130441662 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_116/">
+      <geom name="unnamed_model_116/117_0" class="unnamed_model_116/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="1.2406871813020075 7.3509334533348021 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_117/">
+      <geom name="unnamed_model_117/118_0" class="unnamed_model_117/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-7.4342010279121453 -1.1135609678710203 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_118/">
+      <geom name="unnamed_model_118/119_0" class="unnamed_model_118/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="0.57883991525523193 2.902280169661406 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_119/">
+      <geom name="unnamed_model_119/120_0" class="unnamed_model_119/" type="box" contype="1" conaffinity="1" size="0.40000000000000002 0.10000000000000001 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.938230952538877 -1.7171891752464905 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_120/">
+      <geom name="unnamed_model_120/121_0" class="unnamed_model_120/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.0059057319864841 6.4637432788517923 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_121/">
+      <geom name="unnamed_model_121/122_0" class="unnamed_model_121/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-0.68941725366774698 6.1126625636782332 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_122/">
+      <geom name="unnamed_model_122/123_0" class="unnamed_model_122/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="3.5866821857846922 -1.6155948527503678 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_123/">
+      <geom name="unnamed_model_123/124_0" class="unnamed_model_123/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="3.0404003230596377 3.1939528680082674 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_124/">
+      <geom name="unnamed_model_124/125_0" class="unnamed_model_124/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="4.1084582837902275 2.176976887154261 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_125/">
+      <geom name="unnamed_model_125/126_0" class="unnamed_model_125/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.4313788402358973 4.7422635922773075 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_126/">
+      <geom name="unnamed_model_126/127_0" class="unnamed_model_126/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-0.66977876383931445 1.4557466451789587 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_127/">
+      <geom name="unnamed_model_127/128_0" class="unnamed_model_127/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-0.68442474633828709 7.2299916293237789 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_128/">
+      <geom name="unnamed_model_128/129_0" class="unnamed_model_128/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="5.1322739312210395 6.5414994946038139 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_129/">
+      <geom name="unnamed_model_129/130_0" class="unnamed_model_129/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.4493685848167051 2.0623750249872064 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_130/">
+      <geom name="unnamed_model_130/131_0" class="unnamed_model_130/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-6.9965927676264688 -1.2154839697625288 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_131/">
+      <geom name="unnamed_model_131/132_0" class="unnamed_model_131/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="5.5846129348561728 -7.4671259752528609 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_132/">
+      <geom name="unnamed_model_132/133_0" class="unnamed_model_132/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-2.3140984244491261 -2.2926897535593138 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_133/">
+      <geom name="unnamed_model_133/134_0" class="unnamed_model_133/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.036282796221057 -1.5798479871422604 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_134/">
+      <geom name="unnamed_model_134/135_0" class="unnamed_model_134/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-6.4061611164596588 7.1248245356652724 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_135/">
+      <geom name="unnamed_model_135/136_0" class="unnamed_model_135/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-0.73340164947917152 -2.772785891707839 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_136/">
+      <geom name="unnamed_model_136/137_0" class="unnamed_model_136/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="1.8314353036299895 -7.4708065363919101 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_137/">
+      <geom name="unnamed_model_137/138_0" class="unnamed_model_137/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-1.1392684400281947 -6.9108148164044767 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_138/">
+      <geom name="unnamed_model_138/139_0" class="unnamed_model_138/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-4.4614253544626585 -3.9489409004343692 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_139/">
+      <geom name="unnamed_model_139/140_0" class="unnamed_model_139/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-7.8074204336375317 -6.1522512457800307 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_140/">
+      <geom name="unnamed_model_140/141_0" class="unnamed_model_140/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="7.5880994050888049 7.8455200249743022 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_141/">
+      <geom name="unnamed_model_141/142_0" class="unnamed_model_141/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-5.3927291832543141 2.2201881178644687 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_142/">
+      <geom name="unnamed_model_142/143_0" class="unnamed_model_142/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="7.8305564365509035 -6.9551326855715168 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_143/">
+      <geom name="unnamed_model_143/144_0" class="unnamed_model_143/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-3.3856240426960973 -4.137302078774816 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_144/">
+      <geom name="unnamed_model_144/145_0" class="unnamed_model_144/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-4.0629890401445685 2.6537458809470031 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_145/">
+      <geom name="unnamed_model_145/146_0" class="unnamed_model_145/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-1.2145761850264112 0.87500493858270367 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_146/">
+      <geom name="unnamed_model_146/147_0" class="unnamed_model_146/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="3.3051953003676626 -1.3622900906629756 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_147/">
+      <geom name="unnamed_model_147/148_0" class="unnamed_model_147/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="5.2585106328918041 6.7994705912510742 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_148/">
+      <geom name="unnamed_model_148/149_0" class="unnamed_model_148/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-4.2779681147237518 -2.4236900881189882 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_149/">
+      <geom name="unnamed_model_149/150_0" class="unnamed_model_149/" type="box" contype="1" conaffinity="1" size="0.10000000000000001 0.40000000000000002 0.20000000000000001" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="7.7678628422927609 7.5035472747256282 0.20000000000000001" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_150/">
+      <geom name="unnamed_model_150/box_1" class="unnamed_model_150/" type="box" contype="1" conaffinity="1" size="0.050000000000000003 10 0.80000000000000004" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="8 0 0.80000000000000004" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_151/">
+      <geom name="unnamed_model_151/box_2" class="unnamed_model_151/" type="box" contype="1" conaffinity="1" size="0.050000000000000003 10 0.80000000000000004" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="-8 0 0.80000000000000004" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_152/">
+      <geom name="unnamed_model_152/box_3" class="unnamed_model_152/" type="box" contype="1" conaffinity="1" size="10 0.050000000000000003 0.40000000000000002" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="0 8 0.40000000000000002" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+    <body name="unnamed_model_153/">
+      <geom name="unnamed_model_153/box_4" class="unnamed_model_153/" type="box" contype="1" conaffinity="1" size="10 0.050000000000000003 0.40000000000000002" friction="0.40000000000000002 0.0050000000000000001 1.0000000000000001e-05" mass="1.2" pos="0 -8 0.40000000000000002" rgba="0.80000000000000004 0.29999999999999999 0.29999999999999999 1"/>
+    </body>
+  </worldbody>
+  <tendon>
+    <fixed name="car/buddy_throttle" class="car/">
+      <joint joint="car/buddy_wheel_fl_throttle" coef="0.25"/>
+      <joint joint="car/buddy_wheel_fr_throttle" coef="0.25"/>
+      <joint joint="car/buddy_wheel_bl_throttle" coef="0.25"/>
+      <joint joint="car/buddy_wheel_br_throttle" coef="0.25"/>
+    </fixed>
+  </tendon>
+  <equality>
+    <joint name="car//unnamed_equality_0" class="car/" joint1="car/buddy_wheel_fl_steering" joint2="car/buddy_steering_wheel" polycoef="0 1 0.375 0.140625 -0.072265599999999999"/>
+    <joint name="car//unnamed_equality_1" class="car/" joint1="car/buddy_wheel_fr_steering" joint2="car/buddy_steering_wheel" polycoef="0 1 -0.375 0.140625 0.072265599999999999"/>
+  </equality>
+  <actuator>
+    <position name="car/buddy_steering_pos" class="car/buddy_steering" ctrlrange="-0.38 0.38" ctrllimited="true" joint="car/buddy_steering_wheel" kp="25"/>
+    <velocity name="car/buddy_throttle_velocity" class="car/" ctrlrange="-1 3" ctrllimited="true" forcelimited="true" forcerange="-50 50" gear="0.040000000000000001" tendon="car/buddy_throttle" kv="100"/>
+  </actuator>
+  <sensor>
+    <accelerometer name="car/buddy_accelerometer" site="car/buddy_imu"/>
+    <framequat name="car/framequat" objtype="body" objname="car/buddy"/>
+    <gyro name="car/buddy_gyro" site="car/buddy_imu"/>
+    <velocimeter name="car/velocimeter" site="car/buddy_imu"/>
+    <jointpos name="car/buddy_steering_pos" joint="car/buddy_steering_wheel"/>
+    <jointvel name="car/buddy_steering_vel" joint="car/buddy_steering_wheel"/>
+    <jointvel name="car/buddy_wheel_fl_vel" joint="car/buddy_wheel_fl_throttle"/>
+    <jointvel name="car/buddy_wheel_fr_vel" joint="car/buddy_wheel_fr_throttle"/>
+    <jointvel name="car/buddy_wheel_bl_vel" joint="car/buddy_wheel_bl_throttle"/>
+    <jointvel name="car/buddy_wheel_br_vel" joint="car/buddy_wheel_br_throttle"/>
+  </sensor>
+</mujoco>

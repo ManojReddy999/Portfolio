@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Lab — Manoj Reddy Manchala</title>
+<meta name="description" content="A MuSHR race car exploring a dark arena in real MuJoCo physics, in your browser. The only light is what its LiDAR sees; the glowing map is what it remembers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+<style>
+  :root {
+    --bg: #020407; --text: #eef3f6; --soft: #c3ced6; --muted: #8fa1af;
+    --line: rgba(143, 161, 175, 0.18); --signal: #58b9ff; --amber: #f2a93b;
+    --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+    --body: "IBM Plex Sans", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font: 15px/1.5 var(--body); }
+  #stage { position: fixed; inset: 0; }
+  #stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+
+  .hud { position: fixed; pointer-events: none; z-index: 2; }
+  .hud > * { pointer-events: auto; }
+
+  .intro { top: 28px; left: 32px; max-width: 470px; }
+  .crumbs { display: flex; gap: 18px; margin-bottom: 14px; font-size: 13px; }
+  .crumbs a { color: var(--soft); text-decoration: none; border-bottom: 1px solid var(--line); }
+  .crumbs a:hover { color: var(--text); border-color: var(--signal); }
+  .eyebrow { font: 600 12px/1 var(--display); letter-spacing: .18em; text-transform: uppercase; color: var(--signal); }
+  .intro h1 { margin: 10px 0 10px; font: 700 clamp(34px, 5vw, 58px)/.92 var(--display); text-transform: uppercase; letter-spacing: .005em; }
+  .intro p { margin: 0; color: var(--soft); text-shadow: 0 1px 12px #000; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; font-size: 13px; color: var(--muted); }
+  .legend i { display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 2px; vertical-align: -1px; }
+
+  .facts { bottom: 28px; left: 32px; max-width: 440px; display: grid; gap: 6px; font-size: 12.5px; color: var(--muted); }
+  .facts b { color: var(--soft); font-weight: 500; }
+  .fact { padding: 7px 10px; border-left: 2px solid var(--line); background: rgba(2, 4, 7, 0.55); backdrop-filter: blur(6px); }
+  .fact.real { border-left-color: var(--signal); }
+  .fact.standin { border-left-color: var(--amber); }
+
+  .panel { right: 28px; bottom: 28px; width: 236px; padding: 12px; border: 1px solid var(--line);
+           background: rgba(2, 4, 7, 0.7); backdrop-filter: blur(8px); border-radius: 8px; }
+  .panel h2 { margin: 0 0 8px; font: 600 12px/1 var(--display); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+  #minimap { display: block; width: 210px; height: 210px; border-radius: 4px; image-rendering: pixelated; }
+  .stats { display: grid; grid-template-columns: 1fr auto; gap: 3px 10px; margin-top: 10px; font: 12px/1.4 var(--mono); color: var(--muted); }
+  .stats span:nth-child(even) { color: var(--text); text-align: right; }
+  .controls { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  button { font: 500 12px/1 var(--body); color: var(--soft); background: transparent; border: 1px solid var(--line);
+           border-radius: 4px; padding: 7px 9px; cursor: pointer; }
+  button:hover, button.on { color: var(--text); border-color: var(--signal); }
+  button:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+  #stat-loc[data-state="tracking"] { color: #8fd3ff; }
+  #stat-loc[data-state="dead reckoning"] { color: var(--amber); }
+  #stat-loc[data-state="relocalising"], #stat-loc[data-state="slip"] { color: var(--amber); }
+  #stat-loc[data-state="lost"] { color: #ff6b57; }
+  .slam-controls { display: grid; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+  .noise { display: flex; align-items: center; gap: 8px; font: 12px/1 var(--mono); color: var(--muted); }
+  .noise input { flex: 1; min-width: 0; accent-color: var(--signal); }
+  .noise span { min-width: 30px; text-align: right; color: var(--text); }
+
+  #loading { position: fixed; inset: 0; display: grid; place-items: center; z-index: 5; background: var(--bg);
+             font: 500 14px/1.5 var(--mono); color: var(--muted); }
+  #loading[hidden] { display: none; }
+  #loading.error { color: #ff6b57; }
+  #loading .pulse { width: 10px; height: 10px; margin: 0 auto 14px; border-radius: 50%; background: var(--signal);
+                    box-shadow: 0 0 24px var(--signal); animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 50% { transform: scale(1.6); opacity: .45; } }
+
+  .disclosure { display: none; }
+  @media (max-width: 760px) {
+    .intro { top: 18px; left: 16px; right: 16px; }
+    .intro p, .legend { display: none; }
+    .disclosure { display: block; margin-top: 8px; font-size: 12px; color: var(--muted); text-shadow: 0 1px 10px #000; }
+    .disclosure b { color: var(--amber); font-weight: 500; }
+    .facts { display: none; }
+    .panel { left: 16px; right: 16px; bottom: 16px; width: auto; display: grid; grid-template-columns: 120px 1fr; gap: 0 12px; }
+    .panel h2 { grid-column: 1 / -1; }
+    #minimap { width: 120px; height: 120px; }
+    .stats { margin-top: 0; }
+    .controls, .slam-controls { grid-column: 1 / -1; }
+    /* On a phone the panel must not bury the car: keep only the SLAM story. */
+    .panel { padding: 10px; }
+    .panel .opt { display: none; }
+    #minimap { width: 96px; height: 96px; }
+    .panel { grid-template-columns: 96px 1fr; }
+    .slam-controls { margin-top: 8px; padding-top: 8px; gap: 6px; }
+    .controls { margin-top: 6px; }
+  }
+  @media (prefers-reduced-motion: reduce) { #loading .pulse { animation: none; } }
+</style>
+</head>
+<body>
+<div id="stage" aria-label="3D view of a robot car exploring a dark arena"></div>
+
+<div id="loading"><div><div class="pulse"></div><span id="loading-text">Starting…</span></div></div>
+
+<header class="hud intro">
+  <nav class="crumbs" aria-label="Site"><a href="../">← Manoj Reddy Manchala</a><a href="../live-lab.html">How it’s built</a></nav>
+  <div class="eyebrow">Live Lab · running in your browser</div>
+  <h1>A robot exploring<br>in the dark.</h1>
+  <div class="disclosure">Real MuJoCo physics &amp; LiDAR · EKF + scan-matching SLAM · <b>stand-in planner</b> (trained policy next)</div>
+  <p>The only light is what its LiDAR can see right now — anything behind an obstacle stays dark. The glowing map on the floor is what it has seen before and remembers.</p>
+  <div class="legend">
+    <span><i style="background:#fff4e6"></i>sensed now</span>
+    <span><i style="background:#58b9ff"></i>mapped surface</span>
+    <span><i style="background:#16405f"></i>mapped free space</span>
+    <span><i style="background:#8fd3ff"></i>where it thinks it is</span>
+    <span><i style="background:#f2a93b"></i>where it really went</span>
+    <span><i style="background:#ff6b57"></i>odometry-only drift</span>
+  </div>
+</header>
+
+<aside class="hud facts" aria-label="What is real in this demo">
+  <div class="fact real"><b>Physics:</b> MuJoCo 3.12 compiled to WebAssembly, loading the exact scene my navigation policy trains in — verified bit-identical to the Python simulator.</div>
+  <div class="fact real"><b>Sensing:</b> a 360-ray, 4 m LiDAR cast by MuJoCo from where the MuSHR car mounts its YDLidar.</div>
+  <div class="fact standin"><b>Driver:</b> a classical stand-in — it samples steering arcs, checks the car's real footprint against every LiDAR return, and takes the longest clear path. My trained depth-camera policy replaces it next.</div>
+  <div class="fact real"><b>SLAM:</b> the car doesn't know where it is. It dead-reckons from wheel encoders and a gyro in an EKF, builds the map from that estimate, and corrects itself by matching each scan against the map, learning its own gyro bias and wheel scale as it goes. The sensor errors are synthetic. No loop closure yet, so an error made early on stays baked into the map.</div>
+</aside>
+
+<section class="hud panel" aria-label="Live map and statistics">
+  <h2>Map · layout <span id="layout"></span></h2>
+  <canvas id="minimap" width="420" height="420" aria-label="Top-down occupancy map"></canvas>
+  <div>
+    <div class="stats">
+      <span class="opt">sim time</span><span class="opt" id="stat-time">—</span>
+      <span class="opt">driven</span><span class="opt" id="stat-distance">—</span>
+      <span>mapped</span><span id="stat-coverage">—</span>
+      <span title="Distance and heading between where the car is and where it thinks it is">pose error</span><span id="stat-error">—</span>
+      <span>localisation</span><span id="stat-loc">—</span>
+      <span title="The filter's estimate of its own gyro bias in degrees per second, with the true injected value in brackets">gyro bias °/s</span><span id="stat-bias">—</span>
+      <span class="opt">collisions</span><span class="opt" id="stat-collisions">—</span>
+      <span class="opt">driver</span><span class="opt" id="stat-mode">—</span>
+      <span class="opt">fps</span><span class="opt" id="stat-fps">—</span>
+    </div>
+  </div>
+  <div class="slam-controls">
+    <button id="btn-matching" class="on" type="button">Scan matching: on</button>
+    <label class="noise">odometry noise <input id="noise" type="range" min="0" max="3" step="0.25" value="1" aria-label="Odometry noise level"> <span id="noise-value">1×</span></label>
+  </div>
+  <div class="controls">
+    <button id="btn-pause" type="button">Pause</button>
+    <button class="opt on" data-speed="1" type="button">1×</button>
+    <button class="opt" data-speed="2" type="button">2×</button>
+    <button class="opt" data-speed="4" type="button">4×</button>
+    <button class="opt" id="btn-clear" type="button">Restart map</button>
+    <button id="btn-layout" type="button">New layout</button>
+  </div>
+</section>
+
+<script type="module">
+  import { startLab } from './src/lab.js';
+  const $ = (id) => document.getElementById(id);
+  const status = (text) => { $('loading-text').textContent = text; };
+  const fromUrl = Number(new URLSearchParams(location.search).get('layout'));
+  startLab({ stage: $('stage'), onStatus: status, seed: Number.isFinite(fromUrl) && fromUrl > 0 ? fromUrl : undefined })
+    .then(() => { $('loading').hidden = true; })
+    .catch((e) => {
+      console.error(e);
+      status(`Could not start the simulation: ${e.message}`);
+      $('loading').classList.add('error');
+    });
+</script>
+</body>
+</html>

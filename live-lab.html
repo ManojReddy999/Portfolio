@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Lab: how it works · Manoj Reddy Manchala</title>
+  <meta name="description" content="How Live Lab works: MuJoCo compiled to WebAssembly running the training scene, a LiDAR-shaped light, and EKF + scan-matching SLAM with wheel-slip handling. What was verified, and what broke on the way.">
+  <meta name="theme-color" content="#050b11">
+  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/live-lab.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Live Lab: how it works">
+  <meta property="og:description" content="Real MuJoCo physics in the browser, a light that is the sensor, and SLAM that has to earn its map.">
+  <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/live-lab.html">
+  <meta property="og:image" content="https://manojreddy999.github.io/Portfolio/assets/images/lab/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="assets/images/car-unique.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="navbar" aria-label="Primary">
+      <div class="nav-logo"><a href="./" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">☰</button>
+      <ul class="nav-links" id="primary-navigation" data-open="false">
+        <li><a href="./#work">Robotics</a></li>
+        <li><a href="./#production">Production</a></li>
+        <li><a href="lab/">Lab</a></li>
+        <li><a href="./#about">About</a></li>
+        <li><a href="./#contact">Contact</a></li>
+        <li><a class="nav-cta" href="Resume_Manoj.pdf">Résumé</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" class="case-study-page container">
+    <section class="case-hero">
+      <div>
+        <p class="eyebrow">Live Lab · robotics in the browser</p>
+        <h1>A robot exploring in the dark</h1>
+        <p>A MuSHR race car drives through a dark arena in real MuJoCo physics, entirely in the browser. The only light is what its LiDAR can see right now. It doesn’t know where it is: it estimates its own pose, builds a map from that estimate, and corrects itself against the map as it goes.</p>
+        <p>The idea was to show navigation and SLAM running instead of describing them, and to make the honesty of the SLAM visible: the true path and the estimated one are both drawn, and so is the gap between them.</p>
+        <div class="hero-actions">
+          <a class="btn" href="lab/">Open the lab</a>
+          <a class="btn ghost" href="./">Back to the portfolio</a>
+        </div>
+      </div>
+      <div class="case-hero-media"><img src="assets/images/lab/feature-lab.webp" alt="The car in the dark arena: obstacles its LiDAR sees are lit, the mapped floor glows blue, and two trails show the true and estimated paths" width="1280" height="720"></div>
+    </section>
+
+    <dl class="case-meta">
+      <div><dt class="meta-label">Physics</dt><dd>MuJoCo 3.12 → WebAssembly</dd></div>
+      <div><dt class="meta-label">Estimation</dt><dd>5-state EKF · correlative scan matching</dd></div>
+      <div><dt class="meta-label">Download</dt><dd>About 1.7 MB, after the page</dd></div>
+    </dl>
+
+    <div class="case-layout">
+      <aside class="case-aside" aria-label="Sections">
+        <p class="section-kicker">Contents</p>
+        <ul>
+          <li><a href="#real">What is real</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#verified">What was verified</a></li>
+          <li><a href="#broke">What broke on the way</a></li>
+          <li><a href="#light">Making it light</a></li>
+          <li><a href="#limits">Limits and next</a></li>
+        </ul>
+      </aside>
+
+      <article class="case-content">
+        <section id="real">
+          <p class="section-kicker">01</p>
+          <h2>What is real, and what is a stand-in</h2>
+          <div class="table-wrap">
+            <table class="results">
+              <thead><tr><th scope="col">Part</th><th scope="col">Status</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Physics</th><td><strong>Real.</strong> MuJoCo 3.12 compiled to WebAssembly (the official DeepMind bindings), loading the exact scene my navigation policies train in.</td></tr>
+                <tr><th scope="row">Scene</th><td><strong>Real.</strong> Exported from the training code, not rebuilt by hand. Obstacles are re-scattered on each visit using the training rule.</td></tr>
+                <tr><th scope="row">LiDAR</th><td><strong>Real raycasts</strong> by MuJoCo: 360 rays, 4 m range, from where the MuSHR car mounts its YDLidar.</td></tr>
+                <tr><th scope="row">SLAM</th><td><strong>Real algorithms on real simulated sensors.</strong> The sensor errors are synthetic: the simulated encoders and gyro are perfect, so a per-session wheel-scale error, a gyro bias and per-sample noise are injected.</td></tr>
+                <tr><th scope="row">Driver</th><td><strong>Stand-in.</strong> A classical arc-sampling planner that sees the full LiDAR scan. My trained depth-camera policy sees far less, and will replace it once it drives well enough.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="how">
+          <p class="section-kicker">02</p>
+          <h2>How it works</h2>
+          <h3>The light is the sensor</h3>
+          <p>Each frame, the LiDAR’s visibility polygon is drawn into a top-down mask with a radial falloff. Every surface in the world samples that mask in its shader, slightly toward the sensor, so the faces a ray actually struck are lit and their far sides are not. Obstacles cast the same occlusion shadows a range sensor has, with no shadow maps. The light always shows the <em>true</em> sensor view; the map shows what the robot believes.</p>
+          <h3>Odometry</h3>
+          <p>Rear-wheel encoders and the gyro are integrated at the 200 Hz physics rate. The wheel’s effective rolling radius was calibrated from the simulator itself: a least-squares fit of true forward speed against encoder rate over 60 s of driving gives 0.05234 m (R² = 0.998), 7.2% above the nominal 0.0488 m.</p>
+          <h3>A filter that learns its own sensor errors</h3>
+          <p>The EKF state is <strong>[x, y, θ, gyro bias, wheel-scale error]</strong>. The two calibration states matter: those errors are systematic, so their effect grows linearly with time rather than with its square root, and white process noise cannot represent that. Scan matches teach the filter its own errors. It typically learns the gyro bias to within 0.03 °/s, and the lab shows its estimate beside the true injected value.</p>
+          <h3>Scan matching</h3>
+          <p>A correlative matcher, after Olson (2009), searches a window of poses and scores each by how well the scan lands on mapped surfaces in a blurred likelihood field. The window is the EKF’s 3σ uncertainty, so the filter tells the matcher where to look. If the best pose lands on the window’s edge, the window doubles and the search repeats. Matches must pass a χ² gate (3 degrees of freedom, 99.9%).</p>
+          <h3>Mapping only while localised</h3>
+          <p>Scans are written into the map only while the filter is tracking. With scan matching switched off they go to a separate coral <em>drift layer</em>: the map that odometry alone would have drawn. When matching resumes and relocalises, the drift layer clears.</p>
+          <h3>Wheel slip</h3>
+          <p>If a good match says the car moved less than half of what the encoders claimed, that is slip. The filter then treats the encoder distance as an upper bound and stops learning its calibration, so a spinning wheel is never learned as a wheel-scale error.</p>
+        </section>
+
+        <section id="verified">
+          <p class="section-kicker">03</p>
+          <h2>What was verified</h2>
+          <div class="table-wrap">
+            <table class="results">
+              <thead><tr><th scope="col">Check</th><th scope="col">Result</th></tr></thead>
+              <tbody>
+                <tr><td>Browser physics vs the Python training simulator, 600 physics steps</td><td class="num">5.0 × 10<sup>−16</sup> m max</td></tr>
+                <tr><td>Scan matcher alone, from offsets up to 25 cm and 8°</td><td class="num">within 0.9 cm, 0.5°</td></tr>
+                <tr><td>SLAM, 10 layouts × 60 s: mean position error</td><td class="num">11.0 cm</td></tr>
+                <tr><td>Worst position error on any layout</td><td class="num">35.6 cm</td></tr>
+                <tr><td>Worst heading error</td><td class="num">3.4°</td></tr>
+                <tr><td>Time spent lost</td><td class="num">0 s</td></tr>
+                <tr><td>Gyro bias learned to within (mean)</td><td class="num">0.03 °/s</td></tr>
+                <tr><td>Back to tracking after 8 s blind at 3× noise</td><td class="num">within 0.5 s</td></tr>
+                <tr><td>Parked against a wall at full throttle for 4 s (encoders claim 227 cm)</td><td class="num">error stays &lt; 15 cm</td></tr>
+                <tr><td>Speed with physics, LiDAR, SLAM and rendering</td><td class="num">8–13× real time</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The error is bounded rather than growing: it wanders in a band from a few centimetres to about 35 cm. Without loop closure, an error made early stays baked into the map. The car is then consistent with its own slightly shifted map, which is why it can show “tracking” while the estimate sits a little beside the car.</p>
+          <p>The stand-in planner drove 546 m over five layouts with 16 collisions: 34.1 m per collision, up from 2.7 m for a first follow-the-gap version whose crashes were all front wheels clipping obstacles while turning.</p>
+        </section>
+
+        <section id="broke">
+          <p class="section-kicker">04</p>
+          <h2>What broke on the way</h2>
+          <p>Each of these was found by measuring, and each changed the design.</p>
+          <ol>
+            <li><strong>An overconfident filter: 68 cm of error while it believed itself accurate to 0.7 cm.</strong> With only white process noise, the filter trusted its odometry to millimetres, its gain toward scan matches collapsed, and its search window shrank around a pose that had already drifted. Fix: estimate gyro bias and wheel scale as states.</li>
+            <li><strong>A false lock: 185 cm off while reporting “tracking”.</strong> Scans written while dead-reckoning corrupted the map, and later matches against the corrupted region confirmed the drift. Fix: write to the map only while tracking.</li>
+            <li><strong>Multi-metre errors after respawns.</strong> The first hypothesis, getting lost in unmapped territory, was tested by teleporting the car into unmapped space and was wrong. The cause was wheel slip: a stuck car spins its wheels, the encoders report motion that isn’t happening, and the gate rejected the correct matches as implausible. Fix: the slip handling above.</li>
+            <li><strong>Slip leaking into calibration (19–28% “scale error”).</strong> Freezing the calibration update wasn’t enough, because the prediction step still correlated position with wheel scale during slip. Fix: no position–scale coupling during slip, and re-initialisation keeps the learned calibration and its confidence.</li>
+            <li><strong>A slow likelihood field (192 ms per simulated second).</strong> It was rebuilt at every match. Fix: plain typed-array loops and a 4 Hz rebuild; the map barely changes in a quarter of a second.</li>
+          </ol>
+          <h3>Found in the tools</h3>
+          <ul>
+            <li><code>mj_multiRay</code> in MuJoCo 3.12 misses static geometry that has been moved through <code>geom_pos</code>, while <code>mj_ray</code> and the physics agree. The LiDAR uses one <code>mj_ray</code> per beam.</li>
+            <li>The training car model had its wheels tilted 26.6°: dm_control compiles with <code>angle="radian"</code>, so a wheel’s <code>euler="90 0 0"</code> meant 90 radians. That went back to the research as a bug report. The lab deliberately keeps the as-trained physics, so a policy trained on it sees what it trained on.</li>
+            <li>A static dev server without cache headers let browsers keep running stale ES modules after edits, which cost one wrong conclusion. The dev server now sends <code>no-store</code>.</li>
+          </ul>
+        </section>
+
+        <section id="light">
+          <p class="section-kicker">05</p>
+          <h2>Making it light</h2>
+          <p>The first version downloaded about 20 MB. The portfolio needed it to load after the page, and to stay small.</p>
+          <ul>
+            <li><strong>WebAssembly: 10.1 MB → 4.4 MB, 1.2 MB compressed.</strong> 5.8 MB of the official build is debug information and symbol names, which never affect execution. They are stripped.</li>
+            <li><strong>Car body mesh: 10 MB → 129 KB.</strong> The 200,000-triangle chassis is visual only, but MuJoCo derives the car’s mass properties from its geoms. The compiled inertia was written into the model explicitly, the mesh simplified to 13,000 triangles, and the result checked: every body’s mass properties are unchanged, and the physics still matches the Python simulator to 5 × 10<sup>−16</sup> m.</li>
+            <li><strong>Loaded last.</strong> On the home page the simulation starts only after the page has finished loading, on large screens. Phones, data-saver and reduced-motion visitors get a still image and a button. Off screen, it does no work.</li>
+          </ul>
+        </section>
+
+        <section id="limits">
+          <p class="section-kicker">06</p>
+          <h2>Limits and next</h2>
+          <ul>
+            <li><strong>No loop closure yet</strong>, so early errors stay in the map. Recognising revisited places and correcting the whole trajectory is the next SLAM step.</li>
+            <li><strong>The trained policy.</strong> Export the actor to ONNX, render the same 64 × 128 depth image in the browser, prove it matches MuJoCo’s depth render, and replace the stand-in planner.</li>
+            <li>The slip detector raises occasional false alarms at speed along walls; the cost is half a second of paused calibration.</li>
+          </ul>
+          <div class="hero-actions">
+            <a class="btn" href="lab/">Open the lab</a>
+            <a class="btn ghost" href="project-details.html">The research behind it</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <p>© <span data-year>2026</span> Manoj Reddy Manchala</p>
+      <div class="footer-links"><a href="https://github.com/ManojReddy999">GitHub</a><a href="https://www.linkedin.com/in/manojreddymanchala/">LinkedIn</a><a href="mailto:manojreddymanchalaus@gmail.com">Email</a></div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Production systems · Manoj Reddy Manchala</title>
+  <meta name="description" content="Production work by Manoj Reddy Manchala as AI Tech Lead: Growero HRMS, an HR and Indian payroll platform in use by a company's employees, and the FarmInsta Chatbot, deployed text-to-SQL analytics for field teams.">
+  <meta name="theme-color" content="#050b11">
+  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/applied-ai.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Production systems: Growero HRMS and the FarmInsta Chatbot">
+  <meta property="og:description" content="An HR and payroll platform people use at work, and a chatbot that answers field teams' questions from their database.">
+  <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/applied-ai.html">
+  <meta property="og:image" content="https://manojreddy999.github.io/Portfolio/assets/images/lab/og.jpg">
+  <link rel="icon" type="image/png" href="assets/images/car-unique.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="navbar" aria-label="Primary">
+      <div class="nav-logo"><a href="./" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">☰</button>
+      <ul class="nav-links" id="primary-navigation" data-open="false">
+        <li><a href="./#work">Robotics</a></li>
+        <li><a href="./#production">Production</a></li>
+        <li><a href="lab/">Lab</a></li>
+        <li><a href="./#about">About</a></li>
+        <li><a href="./#contact">Contact</a></li>
+        <li><a class="nav-cta" href="Resume_Manoj.pdf">Résumé</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" class="case-study-page container">
+    <section class="page-hero">
+      <p class="eyebrow">Production work · AI Tech Lead</p>
+      <h1>Software people use at work</h1>
+      <p>Since returning to India I have built two systems that are in production: an HR and payroll platform a company’s employees use, and a chatbot that answers field teams’ questions from their operational database. Both repositories are private, and neither page shows real data. I’m happy to walk through either in an interview.</p>
+    </section>
+
+    <dl class="case-meta">
+      <div><dt class="meta-label">Growero HRMS</dt><dd>In production · sole engineer</dd></div>
+      <div><dt class="meta-label">FarmInsta Chatbot</dt><dd>Deployed · used by clients</dd></div>
+      <div><dt class="meta-label">Sales analytics</dt><dd>Built prototype · not deployed</dd></div>
+    </dl>
+
+    <div class="case-layout">
+      <aside class="case-aside" aria-label="Sections">
+        <p class="section-kicker">Contents</p>
+        <ul>
+          <li><a href="#growero-hrms">Growero HRMS</a></li>
+          <li><a href="#payroll">The payroll engine</a></li>
+          <li><a href="#farminsta">FarmInsta Chatbot</a></li>
+          <li><a href="#definitions">Business definitions</a></li>
+          <li><a href="#growero-sales">Sales analytics prototype</a></li>
+        </ul>
+      </aside>
+
+      <article class="case-content">
+        <section id="growero-hrms">
+          <p class="section-kicker">In production · sole engineer</p>
+          <h2>Growero HRMS</h2>
+          <p>An HR platform for a company with staff spread across regions, many of whom never visit an office. I built and maintain it on my own: about 14,600 lines of TypeScript across 16 application modules, on Next.js 16, React 19, Prisma and PostgreSQL, installable on phones as a progressive web app.</p>
+          <ul>
+            <li><strong>Onboarding and directory:</strong> employee records with a four-state onboarding workflow, a regional structure and a reporting-manager hierarchy.</li>
+            <li><strong>Geofenced attendance:</strong> check-in and check-out coordinates verified against a geofence, plus a location trail per shift, so field visits are auditable rather than self-reported.</li>
+            <li><strong>Leave and expenses:</strong> requests with an approval chain; approved expense claims flow into payroll as reimbursements.</li>
+            <li><strong>Documents:</strong> payslip PDFs that employees download themselves, and generated offer letters with status tracking.</li>
+            <li><strong>Hand-off:</strong> an integration specification (schema, REST endpoints, business logic) so a partner team could rebuild attendance, leave and expenses on their own PHP stack.</li>
+          </ul>
+        </section>
+
+        <section id="payroll">
+          <h3>The payroll engine</h3>
+          <p>Payroll is the hardest part of an HR system: it is money, it is statutory, and a month that has been paid must never change. The engine:</p>
+          <ul>
+            <li>splits CTC into basic, HRA, conveyance, medical, special and vehicle allowances;</li>
+            <li>applies provident fund (fixed or percentage mode), professional tax, ESI, TDS and salary advances;</li>
+            <li>prorates earnings from attendance-derived payable days and loss of pay;</li>
+            <li>moves each payroll run through <code>DRAFT → LOCKED → PAID</code>, so a finalised month cannot drift when someone edits an employee record later.</li>
+          </ul>
+          <p>The commit history reads like a system real people use: serialisation errors that only appear on the hosting platform, dates that shift across the server–browser boundary, time zones, and a missing column that returned errors in production.</p>
+          <ul class="tech-list" aria-label="Technologies"><li>Next.js</li><li>React</li><li>TypeScript</li><li>Prisma</li><li>PostgreSQL</li><li>Tailwind</li><li>PWA</li></ul>
+        </section>
+
+        <section id="farminsta">
+          <p class="section-kicker">Deployed · AI Tech Lead</p>
+          <h2>FarmInsta Chatbot</h2>
+          <p>Agricultural field officers and their managers ask questions in plain language: a farmer’s visit and product-demo history, which planned visits are still unfinished, how many activities a team completed last month, which farmers need a follow-up after a demonstration. The chatbot answers by querying a read-only copy of the operational database.</p>
+          <ol>
+            <li><strong>Question and context.</strong> The question is combined with the last six messages of the conversation, the user’s place in the organisation, and domain-specific SQL instructions.</li>
+            <li><strong>SQL, then one repair.</strong> Gemini writes SQL for the read-only copy. If it fails, the database’s error goes back for one repair attempt.</li>
+            <li><strong>Answer and follow-ups.</strong> Results are formatted into an answer, the supporting SQL is shown, and follow-up questions are suggested. Each turn keeps the question, answer and query, so follow-ups can build on them.</li>
+          </ol>
+          <div class="table-wrap">
+            <table class="results">
+              <caption>Local test data: 10 tables, 112.6 MB. These counts describe the supplied test set, not the production database.</caption>
+              <thead><tr><th scope="col">Data</th><th scope="col" class="num">Records</th></tr></thead>
+              <tbody>
+                <tr><td>Location references (state, district, taluk, village)</td><td class="num">626,913</td></tr>
+                <tr><td>User-to-location assignments</td><td class="num">86,511</td></tr>
+                <tr><td>Visit plans</td><td class="num">60,807</td></tr>
+                <tr><td>Campaign-activity details</td><td class="num">53,444</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="definitions">
+          <h3>Business definitions in the query layer</h3>
+          <p>Most wrong answers from text-to-SQL come from ambiguity, not syntax. The prompt and its examples pin down distinctions specific to field work:</p>
+          <ul>
+            <li><strong>Scheduled vs completed:</strong> planned dates describe scheduled visits; submitted status and completion dates describe work done.</li>
+            <li><strong>Farmer vs field officer:</strong> a farmer’s history and an officer’s work history use different identities and joins.</li>
+            <li><strong>Current vs historical:</strong> team listings filter to active accounts; historical questions keep records from officers who have since left.</li>
+            <li><strong>“My team” vs the whole hierarchy:</strong> my team means direct reports; questions about the full hierarchy use recursive SQL.</li>
+          </ul>
+          <ul class="tech-list" aria-label="Technologies"><li>Python</li><li>Gemini</li><li>Text-to-SQL</li></ul>
+        </section>
+
+        <section id="growero-sales">
+          <p class="section-kicker">Built prototype · not deployed</p>
+          <h2>Sales analytics prototype</h2>
+          <p>A separate project from the HRMS: a Python pipeline that loads sales, customer and territory-target spreadsheets into SQLite, with a Streamlit interface for asking questions in plain English. It shows the generated SQL and the result table, so the answer can be checked.</p>
+          <ul>
+            <li>105,359 transaction rows and 14 query indexes across transaction, customer and territory tables.</li>
+            <li>Spreadsheet loading with pandas, including merged headers and reshaped territory targets.</li>
+            <li>April–March fiscal periods, and rules that tell invoices, returns, credit notes and internal transfers apart.</li>
+          </ul>
+          <p>These counts describe the scale of the prototype, not a measured speed-up or adoption. No accuracy or latency evaluation was done.</p>
+          <ul class="tech-list" aria-label="Technologies"><li>Python</li><li>pandas</li><li>SQLite</li><li>Gemini</li><li>Streamlit</li></ul>
+          <div class="hero-actions">
+            <a class="btn" href="./#contact">Ask me about these</a>
+            <a class="btn ghost" href="./#production">Back to the portfolio</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <p>© <span data-year>2026</span> Manoj Reddy Manchala</p>
+      <div class="footer-links"><a href="https://github.com/ManojReddy999">GitHub</a><a href="https://www.linkedin.com/in/manojreddymanchala/">LinkedIn</a><a href="mailto:manojreddymanchalaus@gmail.com">Email</a></div>
+    </div>
+  </footer>
+</body>
+</html>
