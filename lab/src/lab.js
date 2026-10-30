@@ -188,6 +188,24 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
     mctx.drawImage(view.mapCanvas, 0, 0, S, S);
     mctx.drawImage(driftLayer.canvas, 0, 0, S, S);
 
+    // Where it really went (amber) and where it believes it went (blue).
+    const path = (trail, color) => {
+      if (trail.count < 2) return;
+      mctx.beginPath();
+      const P = trail.pos;
+      for (let i = 0; i < trail.count; i++) {
+        const x = sx(P[3 * i]), y = sy(P[3 * i + 1]);
+        // a jump of over 1 m is a respawn (or a relocalisation), not a path
+        const jump = i === 0 || Math.hypot(P[3 * i] - P[3 * i - 3], P[3 * i + 1] - P[3 * i - 2]) > 1;
+        if (jump) mctx.moveTo(x, y); else mctx.lineTo(x, y);
+      }
+      mctx.strokeStyle = color;
+      mctx.lineWidth = 1.5;
+      mctx.stroke();
+    };
+    path(view.trueTrail, 'rgba(242, 169, 59, 0.75)');
+    path(view.estTrail, 'rgba(143, 211, 255, 0.75)');
+
     // Where the current scan really landed.
     mctx.fillStyle = 'rgba(255, 244, 230, 0.9)';
     for (let k = 0; k < lidar.n; k += 2) {

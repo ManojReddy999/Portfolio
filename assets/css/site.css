@@ -182,7 +182,7 @@ button, input, select, textarea { font: inherit; }
 .hero-readout[hidden] { display: none; }
 .hero-readout .label { grid-column: 1 / -1; margin-bottom: 0.25rem; font-size: 0.68rem; }
 .hero-readout span:nth-child(odd):not(.label) { color: var(--muted); }
-.hero-readout output { color: var(--text); text-align: right; }
+.hero-readout output { color: var(--text); text-align: right; white-space: nowrap; }
 #stat-loc[data-state="tracking"] { color: var(--estimate); }
 #stat-loc[data-state="dead reckoning"], #stat-loc[data-state="relocalising"], #stat-loc[data-state="slip"] { color: var(--amber); }
 #stat-loc[data-state="lost"] { color: var(--danger); }
@@ -480,3 +480,11 @@ code { font-family: var(--mono); color: #b8dcf6; }
   .boot { left: 16px; right: 16px; bottom: 1.2rem; width: auto; }
 }
 @media (prefers-reduced-motion: reduce) { .boot li[data-state="active"]::before { animation: none; } }
+
+/* the live map in the hero readout: the occupancy grid filling in as the car explores */
+.hero-readout { width: 252px; }
+.hero-readout canvas { grid-column: 1 / -1; width: 100%; aspect-ratio: 1; margin: 0.15rem 0 0.35rem; border-radius: 4px; background: #04080c; image-rendering: pixelated; filter: brightness(1.5) saturate(1.15); }
+.map-key { grid-column: 1 / -1; display: flex; gap: 1rem; margin-bottom: 0.45rem; font-size: 0.68rem; color: var(--muted); }
+.map-key i { display: inline-block; width: 8px; height: 8px; margin-right: 0.3rem; border-radius: 1px; vertical-align: 0; }
+.map-key .k-true { background: var(--amber); }
+.map-key .k-est { border: 1.5px solid var(--estimate); }

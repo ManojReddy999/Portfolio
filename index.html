@@ -100,7 +100,9 @@
       </div>
 
       <div class="hero-readout" id="hero-readout" aria-live="off" hidden>
-        <span class="label"><span class="live-dot"></span>Live SLAM</span>
+        <span class="label"><span class="live-dot"></span>Live SLAM · its map so far</span>
+        <canvas id="minimap" width="440" height="440" aria-label="Top-down map the car has built so far: mapped surfaces in blue, its true position in amber, its estimate outlined"></canvas>
+        <span class="map-key"><span><i class="k-true"></i>real path</span><span><i class="k-est"></i>estimate</span></span>
         <span>localisation</span><output id="stat-loc">—</output>
         <span>pose error</span><output id="stat-error">—</output>
         <span>arena mapped</span><output id="stat-coverage">—</output>
