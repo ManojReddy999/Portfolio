@@ -20,8 +20,8 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
   <link rel="stylesheet" href="assets/css/site.css">
-  <link rel="preload" as="image" href="assets/images/lab/hero-poster.webp" media="(min-width: 821px)" fetchpriority="high">
-  <link rel="preload" as="image" href="assets/images/lab/hero-poster-mobile.webp" media="(max-width: 820px)" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/images/lab/hero-poster.webp" media="(min-width: 821px), (orientation: landscape)" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/images/lab/hero-poster-mobile.webp" media="(max-width: 820px) and (orientation: portrait)" fetchpriority="high">
   <script type="importmap">
   {
     "imports": {
@@ -68,7 +68,7 @@
   <main>
     <section class="hero" aria-labelledby="hero-title">
       <picture>
-        <source media="(max-width: 820px)" srcset="assets/images/lab/hero-poster-mobile.webp" width="750" height="1624">
+        <source media="(max-width: 820px) and (orientation: portrait)" srcset="assets/images/lab/hero-poster-mobile.webp" width="750" height="1624">
         <img class="hero-poster" src="assets/images/lab/hero-poster.webp" alt="" width="1600" height="900" fetchpriority="high">
       </picture>
       <div class="hero-stage" id="hero-stage" aria-hidden="true"></div>
@@ -84,6 +84,19 @@
           <a class="btn" href="#work">See my work</a>
           <a class="btn ghost" href="lab/">Open the full lab</a>
         </div>
+      </div>
+
+      <div class="boot" id="boot" role="status" aria-live="polite" hidden>
+        <p class="label">Starting the lab</p>
+        <ol>
+          <li data-step="code"><span>Simulator code</span><em></em></li>
+          <li data-step="wasm"><span>MuJoCo physics engine</span><em></em></li>
+          <li data-step="compile"><span>Compile it to WebAssembly</span><em></em></li>
+          <li data-step="scene"><span>Training scene: car + 150 obstacles</span><em></em></li>
+          <li data-step="build"><span>Build the arena</span><em></em></li>
+          <li data-step="live"><span>LiDAR on · SLAM tracking</span><em></em></li>
+        </ol>
+        <div class="boot-bar"><i id="boot-bar"></i></div>
       </div>
 
       <div class="hero-readout" id="hero-readout" aria-live="off" hidden>
@@ -352,37 +365,73 @@ WHERE v.status &lt;&gt; 'SUBMITTED' …</code><small>Answer, the SQL behind it, 
   <script type="module">
     // The hero simulation is progressive: the page is complete without it.
     // Large screens start it once the page has loaded; phones, data-saver and
-    // reduced-motion visitors get a button instead.
+    // reduced-motion visitors get a button instead. While it loads, a boot panel
+    // shows the real loading stages, then the arena builds itself in 3D.
     const hero = document.querySelector('.hero');
     const stage = document.getElementById('hero-stage');
     const run = document.getElementById('hero-run');
+    const boot = document.getElementById('boot');
+    const bar = document.getElementById('boot-bar');
     const auto = matchMedia('(min-width: 821px)').matches
       && !matchMedia('(prefers-reduced-motion: reduce)').matches
       && !(navigator.connection && navigator.connection.saveData);
-    let started = false;
 
+    // Share of the progress bar per stage, roughly by how long each takes.
+    const WEIGHT = { code: 15, wasm: 50, compile: 10, scene: 10, build: 15 };
+    const ORDER = Object.keys(WEIGHT).concat('live');
+    let current = null, startedAt = 0;
+    const row = (name) => boot.querySelector(`[data-step="${name}"]`);
+    function stepTo(name, fraction = 0) {
+      if (name !== current) {
+        if (current) {
+          row(current).dataset.state = 'done';
+          row(current).querySelector('em').textContent = `${Math.round(performance.now() - startedAt)} ms`;
+        }
+        current = name;
+        startedAt = performance.now();
+        row(name).dataset.state = 'active';
+      }
+      if (name === 'wasm') row(name).querySelector('em').textContent = `${Math.round(100 * fraction)}%`;
+      const before = ORDER.slice(0, ORDER.indexOf(name)).reduce((a, k) => a + (WEIGHT[k] || 0), 0);
+      bar.style.width = `${before + (WEIGHT[name] || 0) * fraction}%`;
+    }
+
+    let started = false;
     async function start() {
       if (started) return;
       started = true;
       run.hidden = true;
+      hero.classList.add('booting');
+      boot.hidden = false;
       try {
+        stepTo('code');
         const { startLab } = await import('./lab/src/lab.js');
-        await startLab({
-          stage, ui: hero, hero: true,
+        const lab = await startLab({
+          stage, ui: hero, hero: true, onStep: stepTo,
           // keep the car clear of the text: right of it on wide screens, below it on narrow ones
           frame: (w) => (w > 820 ? [0.2, 0.04] : [0, 0.32]),
         });
         stage.classList.add('live');
-        document.getElementById('hero-readout').hidden = false;
+        await lab.built;
+        stepTo('live', 1);
+        row('live').dataset.state = 'done';
+        row('live').querySelector('em').textContent = '';
+        setTimeout(() => {
+          boot.hidden = true;
+          hero.classList.remove('booting');
+          document.getElementById('hero-readout').hidden = false;
+        }, 900);
       } catch (err) {
         console.warn('Live Lab could not start; keeping the still image.', err);
+        hero.classList.remove('booting');
+        boot.querySelector('.label').textContent = 'The live simulation needs WebGL and WebAssembly; showing a still instead.';
+        setTimeout(() => { boot.hidden = true; }, 5000);
       }
     }
 
     run.addEventListener('click', start);
     if (auto) {
-      const later = () => ('requestIdleCallback' in window ? requestIdleCallback(start, { timeout: 1500 }) : setTimeout(start, 300));
-      if (document.readyState === 'complete') later(); else addEventListener('load', later, { once: true });
+      if (document.readyState === 'complete') start(); else addEventListener('load', start, { once: true });
     } else {
       run.hidden = false;
     }

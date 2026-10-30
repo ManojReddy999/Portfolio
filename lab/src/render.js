@@ -204,6 +204,12 @@ export class Renderer {
   }
 
   updateMask(lidar) {
+    this.lastLidar = lidar;
+    if (!this.build) this.#drawMask(lidar, 1);
+  }
+
+  // The LiDAR polygon with every ray shortened to `reach` of its length.
+  #drawMask(lidar, reach) {
     const ctx = this.maskCtx, N = MASK_RES, h = this.maskHalf;
     const sx = (x) => ((x + h) / (2 * h)) * N;
     const sy = (y) => ((h - y) / (2 * h)) * N;
@@ -211,7 +217,7 @@ export class Renderer {
     ctx.fillRect(0, 0, N, N);
 
     const ox = sx(lidar.origin[0]), oy = sy(lidar.origin[1]);
-    const r = (lidar.range / (2 * h)) * N;
+    const r = Math.max(1, (reach * lidar.range / (2 * h)) * N);
     const g = ctx.createRadialGradient(ox, oy, 0, ox, oy, r);
     g.addColorStop(0, '#ffffff');
     g.addColorStop(0.3, '#d2d2d2');
@@ -220,9 +226,11 @@ export class Renderer {
     g.addColorStop(1, '#000000');
 
     ctx.beginPath();
+    const [lx, ly] = lidar.origin;
     for (let k = 0; k < lidar.n; k++) {
       const [ex, ey] = lidar.endpoint(k);
-      if (k === 0) ctx.moveTo(sx(ex), sy(ey)); else ctx.lineTo(sx(ex), sy(ey));
+      const px = sx(lx + reach * (ex - lx)), py = sy(ly + reach * (ey - ly));
+      if (k === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
     }
     ctx.closePath();
     ctx.fillStyle = g;
@@ -316,7 +324,10 @@ export class Renderer {
       this.world.add(mesh);
       this.#placeGeom(mesh, g);
       if (onCar) this.dynamic.push({ mesh, g });
-      else mesh.userData.staticGeom = g;
+      else {
+        mesh.userData.staticGeom = g;
+        mesh.userData.obstacle = t !== T.plane && material !== mat.wall;
+      }
     }
   }
 
@@ -454,7 +465,52 @@ export class Renderer {
     }
   }
 
+  // ---- arena build-in ----------------------------------------------------------
+
+  // Obstacles grow out of the floor in a wave outward from the car while the LiDAR
+  // light sweeps out to full range. Resolves when done; the lab holds the car
+  // still until then (see `building`).
+  buildIn(duration = 1.8) {
+    const p = this.sim.data.geom_xpos, [cx, cy] = this.sim.carPosition();
+    const items = [];
+    this.world.traverse((o) => {
+      if (!o.userData.obstacle) return;
+      const g = o.userData.staticGeom;
+      items.push({ mesh: o, base: o.matrix.clone(), d: Math.hypot(p[3 * g] - cx, p[3 * g + 1] - cy) });
+    });
+    const far = Math.max(...items.map((i) => i.d), 1);
+    for (const i of items) i.delay = 0.6 * (i.d / far);
+    this.build = { start: performance.now(), duration: duration * 1000, items };
+    this.#applyBuild(0);
+    return new Promise((resolve) => setTimeout(resolve, duration * 1000));
+  }
+
+  get building() {
+    if (this.build && performance.now() - this.build.start >= this.build.duration) this.finishBuild();
+    return !!this.build;
+  }
+
+  finishBuild() {
+    if (!this.build) return;
+    this.#applyBuild(1);
+    this.build = null;
+    if (this.lastLidar) this.#drawMask(this.lastLidar, 1);
+  }
+
+  // t in [0, 1] over the whole build; each obstacle rises over 40% of it, after its delay.
+  #applyBuild(t) {
+    const ease = (x) => 1 - (1 - Math.min(Math.max(x, 0), 1)) ** 3;
+    const S = new THREE.Matrix4();
+    for (const { mesh, base, delay } of this.build.items) {
+      const s = Math.max(ease((t - delay) / 0.4), 1e-3);
+      mesh.matrix.copy(base).premultiply(S.makeScale(1, 1, s)); // world z is up: flatten onto the floor
+      mesh.matrixWorldNeedsUpdate = true;
+    }
+    if (this.lastLidar) this.#drawMask(this.lastLidar, 0.05 + 0.95 * ease(t / 0.8));
+  }
+
   render() {
+    if (this.building) this.#applyBuild((performance.now() - this.build.start) / this.build.duration);
     for (const { mesh, g } of this.dynamic) this.#placeGeom(mesh, g);
     this.followCar();
     this.updateMap();

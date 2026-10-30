@@ -37,16 +37,25 @@ function isLowPower() {
  *   ui        element whose descendants hold the optional HUD (#stat-*, #minimap, #btn-*)
  *   hero      embedded mode: no camera controls, no URL updates, pauses when off screen
  *   frame     (w, h) => [fx, fy]: shift the car by these fractions of the view
- *   onStatus  loading messages
+ *   onStatus  loading messages, one line
+ *   onStep    (step, fraction) as each real loading stage starts: 'wasm', 'compile', 'scene', 'build'
  *   seed      layout number; random if omitted
+ * Resolves once the scene is drawn; `lab.built` resolves when the arena has finished
+ * building itself and the car starts driving.
  */
-export async function startLab({ stage, ui = document, hero = false, frame, onStatus = () => {}, seed } = {}) {
+export async function startLab({ stage, ui = document, hero = false, frame, onStatus = () => {}, onStep = () => {}, seed } = {}) {
   const $ = (id) => ui.querySelector(`#${id}`);
   const setText = (id, text) => { const el = $(id); if (el) el.textContent = text; };
+  const STATUS = {
+    wasm: (f) => `Downloading MuJoCo physics… ${Math.round(100 * f)}%`,
+    compile: () => 'Compiling the physics engine…',
+    scene: () => 'Loading the training scene…',
+    build: () => 'Building the arena…',
+  };
+  const step = (name, f = 0) => { onStep(name, f); onStatus(STATUS[name](f)); };
 
-  onStatus('Loading MuJoCo physics (WebAssembly)…');
-  const sim = await loadSim();
-  onStatus('Building the scene…');
+  const sim = await loadSim(step);
+  step('build');
 
   const lidar = new Lidar(sim, LIDAR);
   const lidarOffset = sim.lidarOffset();
@@ -66,6 +75,8 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
     lastXY: null, progressAt: 0, progressXY: null, paused: false, speed: 1, visible: true,
     frames: 0, fpsAt: performance.now(), fps: 0, posErr: 0, headErr: 0,
   };
+
+  let built = Promise.resolve();
 
   // Start SLAM from a known pose: at the start, or after a respawn.
   function startLocalisation() {
@@ -91,6 +102,7 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
     state.lastXY = null; state.progressAt = sim.time; state.progressXY = sim.carPosition();
     startLocalisation();
     view.updateMask(lidar);
+    built = view.buildIn(); // obstacles rise around the car and the LiDAR light sweeps out
     setText('layout', `#${layout}`);
     if (!hero) history.replaceState(null, '', `?layout=${layout}`);
   }
@@ -220,7 +232,7 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
     const dt = Math.min(0.1, (now - last) / 1000);
     last = now;
     if (state.visible) {
-      if (!state.paused) {
+      if (!state.paused && !view.building) {
         acc += dt * state.speed;
         let n = 0;
         while (acc >= CONTROL_DT && n < MAX_CONTROL_STEPS_PER_FRAME) { controlStep(); acc -= CONTROL_DT; n++; }
@@ -277,7 +289,9 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
   // (which browsers suspend for hidden views), then draw one frame.
   const lab = {
     sim, lidar, grid, view, state, newLayout, restartMapping, setPaused,
+    get built() { return built; },
     advance(seconds) {
+      view.finishBuild();
       for (let i = 0, n = Math.round(seconds / CONTROL_DT); i < n; i++) controlStep();
       view.updateMask(lidar);
       drawFrame();

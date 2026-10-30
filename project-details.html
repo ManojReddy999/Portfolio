@@ -150,7 +150,7 @@
           <ul>
             <li><strong>Every wheel was tilted 26.6°.</strong> The wheel collision shapes were written in degrees, but dm_control compiles the model in radians, so <code>90</code> meant 90 radians. The car rode on its rim edges, bounced, and was 13% slower. The one-line fix broke steering, because flat tyres scrubbed harder than the steering could turn them, so the real fix rebuilt the wheel contacts.</li>
             <li><strong>Most of the car couldn’t crash.</strong> In the car model I generated, the chassis, camera and LiDAR had collision switched off (the upstream MuSHR model has it on), and the front bumper’s contacts were silently culled because obstacles were moved without updating MuJoCo’s bounding volumes. Only the wheels ever registered a crash, and a car that tipped over could drive on upside down.</li>
-            <li><strong>Brief contacts were missed.</strong> Collisions were checked once per 50 ms control step. They now count at every physics substep, and tilting past 70° ends the episode.</li>
+            <li><strong>Brief contacts were missed.</strong> Collisions were checked once per 50 ms control step. They now count at every physics substep.</li>
           </ul>
           <p>All three are fixed, and the corrected car drives identically when upright. Older runs still reproduce exactly on the legacy physics, so earlier results can be re-checked.</p>
         </section>

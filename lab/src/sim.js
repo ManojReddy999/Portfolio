@@ -11,6 +11,8 @@ export const THROTTLE_RANGE = [-1, 3];
 
 // Resolved against this module, so the lab can be embedded from any page.
 const SCENE = new URL('../assets/scene/', import.meta.url);
+const WASM = new URL('../vendor/mujoco/mujoco.wasm', import.meta.url);
+const WASM_BYTES = 4370260; // uncompressed size, for progress only (servers may send it gzipped)
 
 // Meshes ship gzipped (GitHub Pages doesn't compress STL); inflate them here.
 async function fetchBytes(name) {
@@ -20,12 +22,39 @@ async function fetchBytes(name) {
   return new Uint8Array(await new Response(body).arrayBuffer());
 }
 
-export async function loadSim() {
-  const [mujoco, manifest] = await Promise.all([
-    loadMujoco(),
-    fetch(new URL('manifest.json', SCENE)).then((r) => r.json()),
-  ]);
-  const files = await Promise.all(manifest.files.map(fetchBytes));
+// Download a body, reporting the fraction of `expected` bytes received so far.
+async function fetchWithProgress(url, expected, onProgress) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`${url.pathname}: HTTP ${res.status}`);
+  const reader = res.body.getReader(), chunks = [];
+  let got = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+    got += value.length;
+    onProgress(Math.min(got / expected, 1));
+  }
+  const bytes = new Uint8Array(got);
+  let at = 0;
+  for (const c of chunks) { bytes.set(c, at); at += c.length; }
+  return bytes;
+}
+
+// onStep(step, fraction) reports real progress: 'wasm' (downloading, with a
+// fraction), 'compile' (instantiating the engine), 'scene' (compiling the model).
+export async function loadSim(onStep = () => {}) {
+  // The scene is small; fetch it while the engine downloads.
+  const scene = fetch(new URL('manifest.json', SCENE))
+    .then((r) => r.json())
+    .then(async (manifest) => ({ manifest, files: await Promise.all(manifest.files.map(fetchBytes)) }));
+
+  onStep('wasm', 0);
+  const wasmBinary = await fetchWithProgress(WASM, WASM_BYTES, (f) => onStep('wasm', f));
+  onStep('compile');
+  const mujoco = await loadMujoco({ wasmBinary });
+  onStep('scene');
+  const { manifest, files } = await scene;
 
   const vfs = new mujoco.MjVFS();
   let xml = null;
