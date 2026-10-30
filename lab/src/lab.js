@@ -16,6 +16,11 @@ const ARENA = 8; // training arena half-size (m)
 const LIDAR = { rays: 360, range: 4.0 };
 const MAX_CONTROL_STEPS_PER_FRAME = 6;
 const HERO_ARENA_SECONDS = 180;
+// The home page widens the arena (same obstacle density) and keeps the car near the
+// middle, so the walls never come into view.
+const HERO_ARENA = 16;
+const HERO_LEASH = 6; // m from the centre before the driver starts heading back
+const HERO_MINIMAP_HALF = 8; // the hero minimap shows a window around the car
 
 const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 
@@ -55,19 +60,20 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
   };
   const step = (name, f = 0) => { onStep(name, f); onStatus(STATUS[name](f)); };
 
-  const sim = await loadSim(step);
+  const arena = hero ? HERO_ARENA : ARENA;
+  const sim = await loadSim(step, { arena });
   step('build');
 
   const lidar = new Lidar(sim, LIDAR);
   const lidarOffset = sim.lidarOffset();
-  const grid = new OccupancyGrid({ half: ARENA + 0.6, res: 0.05 });
+  const grid = new OccupancyGrid({ half: arena + 0.6, res: 0.05 });
   const view = new Renderer(stage, sim, {
-    maskHalf: ARENA + 0.6, lidarRange: LIDAR.range, mapGrid: grid, lowPower: isLowPower(),
+    maskHalf: arena + 0.6, lidarRange: LIDAR.range, mapGrid: grid, lowPower: isLowPower(),
     interactive: !hero, maxPixelRatio: hero ? 1.5 : 2, frame,
     chase: hero ? [2.2, 4.6] : undefined, // the hero looks down more steeply, so obstacles rarely hide the car
   });
   // Scans taken while not localised: drawn, but kept out of the map SLAM matches against.
-  const drift = new OccupancyGrid({ half: ARENA + 0.6, res: 0.05 });
+  const drift = new OccupancyGrid({ half: arena + 0.6, res: 0.05 });
   const driftLayer = view.addMapLayer(drift, DRIFT_COLORS, 0.006);
 
   const state = {
@@ -88,7 +94,7 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
   function newLayout(layout = Math.floor(Math.random() * 1e6)) {
     state.seed = layout;
     sim.reset();
-    sim.scatterObstacles(mulberry32(layout), ARENA);
+    sim.scatterObstacles(mulberry32(layout), arena);
     sim.placeCar(0, 0, 0);
     view.refreshStatic();
     grid.clear();
@@ -124,8 +130,8 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
   function respawn() {
     const rng = state.respawnRng;
     for (let attempt = 0; attempt < 200; attempt++) {
-      const x = (rng() * 2 - 1) * (ARENA - 0.8);
-      const y = (rng() * 2 - 1) * (ARENA - 0.8);
+      const x = (rng() * 2 - 1) * (hero ? HERO_LEASH : ARENA - 0.8);
+      const y = (rng() * 2 - 1) * (hero ? HERO_LEASH : ARENA - 0.8);
       sim.placeCar(x, y, rng() * 2 * Math.PI);
       lidar.scan();
       if (Math.min(...lidar.ranges) > 0.6 && !sim.inCollision()) break;
@@ -143,7 +149,13 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
     state.wasColliding = collided;
 
     // The driver reacts to the true scan; SLAM never feeds back into driving.
-    const cmd = state.driver.act(lidar, sim.time, sim.carForwardSpeed(), collided);
+    // In the hero, past the leash it is pulled back toward the middle of the arena.
+    let home = null;
+    if (hero) {
+      const [x, y, yaw] = sim.carPose(), past = Math.hypot(x, y) - HERO_LEASH;
+      if (past > 0) home = { angle: wrap(Math.atan2(-y, -x) - yaw), weight: 0.6 * Math.min(1, past / 3) };
+    }
+    const cmd = state.driver.act(lidar, sim.time, sim.carForwardSpeed(), collided, home);
     state.mode = cmd.mode;
     const slam = state.slam;
     sim.step(cmd.steer, cmd.throttle, (dt) => slam.odom.sample(dt));
@@ -175,10 +187,18 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
   // ---- HUD and minimap -------------------------------------------------------
 
   const mini = $('minimap'), mctx = mini && mini.getContext('2d');
+  // The part of the map the minimap shows: centre and half-size (m).
+  let win = { cx: 0, cy: 0, h: grid.half };
+  function updateWindow() {
+    if (!hero) return;
+    const [x, y] = sim.carPosition(), h = HERO_MINIMAP_HALF, lim = grid.half - h;
+    win = { cx: Math.max(-lim, Math.min(lim, x)), cy: Math.max(-lim, Math.min(lim, y)), h };
+  }
+  const mx = (x) => ((x - win.cx + win.h) / (2 * win.h)) * mini.width;
+  const my = (y) => ((win.cy + win.h - y) / (2 * win.h)) * mini.width;
   function drawCar(x, y, yaw, fill, stroke) {
-    const S = mini.width, h = grid.half;
     mctx.save();
-    mctx.translate(((x + h) / (2 * h)) * S, ((h - y) / (2 * h)) * S);
+    mctx.translate(mx(x), my(y));
     mctx.rotate(-yaw);
     mctx.beginPath();
     mctx.moveTo(7, 0); mctx.lineTo(-5, 4.5); mctx.lineTo(-5, -4.5);
@@ -190,13 +210,16 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
 
   function drawMinimap() {
     if (!mini) return;
-    const S = mini.width, h = grid.half;
-    const sx = (x) => ((x + h) / (2 * h)) * S, sy = (y) => ((h - y) / (2 * h)) * S;
+    updateWindow();
+    const S = mini.width, sx = mx, sy = my;
     mctx.fillStyle = '#04080c';
     mctx.fillRect(0, 0, S, S);
     mctx.imageSmoothingEnabled = false;
-    mctx.drawImage(view.mapCanvas, 0, 0, S, S);
-    mctx.drawImage(driftLayer.canvas, 0, 0, S, S);
+    // source rectangle of the map canvases (one pixel per cell, +y up)
+    const ppm = grid.size / (2 * grid.half);
+    const src = [(win.cx - win.h + grid.half) * ppm, (grid.half - win.cy - win.h) * ppm, 2 * win.h * ppm, 2 * win.h * ppm];
+    mctx.drawImage(view.mapCanvas, ...src, 0, 0, S, S);
+    mctx.drawImage(driftLayer.canvas, ...src, 0, 0, S, S);
 
     // Where it really went (amber) and where it believes it went (blue).
     const path = (trail, color) => {
@@ -241,7 +264,9 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
   function updateHud() {
     setText('stat-time', `${sim.time.toFixed(0)} s`);
     setText('stat-distance', `${state.distance.toFixed(1)} m`);
-    setText('stat-coverage', `${(100 * grid.coverage(ARENA)).toFixed(1)}%`);
+    // The hero's arena is too big to state a useful percentage; it shows the area mapped.
+    setText('stat-coverage', hero ? `${Math.round(grid.coverage(arena) * (2 * arena) ** 2)} m²`
+      : `${(100 * grid.coverage(ARENA)).toFixed(1)}%`);
     setText('stat-collisions', String(state.collisions));
     setText('stat-mode', state.mode || '—');
     const cm = 100 * state.posErr;

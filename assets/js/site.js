@@ -37,3 +37,57 @@ if (!probe.canPlayType('video/webm; codecs="vp9"')) {
     video.replaceWith(img);
   });
 }
+
+// ---- Motion: scroll reveals, reading progress, the contents list following along ----
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Content rises in as it reaches the viewport. Only what starts below the fold is
+// hidden, so nothing visible on load flickers; siblings in a grid stagger slightly.
+const REVEAL = '.section-head, .feature, .cards > .card, .watch-grid > div, .about-copy, .skills > div, .contact > div, '
+  + '.case-meta, .case-content section > h2, .case-content figure, .case-content .table-wrap, .case-content .deltas, '
+  + '.project-details-card section, .also';
+if (!reduceMotion && 'IntersectionObserver' in window) {
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }, { rootMargin: '0px 0px -6% 0px', threshold: 0.06 });
+  for (const el of document.querySelectorAll(REVEAL)) {
+    if (el.getBoundingClientRect().top < innerHeight) continue;
+    const peers = [...el.parentElement.children].filter((c) => c.matches(REVEAL));
+    el.style.setProperty('--i', String(Math.min(peers.indexOf(el) % 3, 2)));
+    el.classList.add('reveal');
+    io.observe(el);
+  }
+}
+
+// Reading progress on project pages.
+const article = document.querySelector('.case-study-page, .project-details-page');
+if (article) {
+  const bar = document.createElement('div');
+  bar.className = 'read-progress';
+  bar.setAttribute('aria-hidden', 'true');
+  document.body.append(bar);
+  let queued = false;
+  const update = () => {
+    queued = false;
+    const max = document.documentElement.scrollHeight - innerHeight;
+    bar.style.setProperty('--p', String(max > 0 ? Math.min(1, scrollY / max) : 0));
+  };
+  addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
+}
+
+// The contents list highlights the section on screen.
+const tocLinks = [...document.querySelectorAll('.case-aside a[href^="#"]')];
+if (tocLinks.length && 'IntersectionObserver' in window) {
+  const byId = new Map(tocLinks.map((a) => [a.getAttribute('href').slice(1), a]));
+  const visible = new Set();
+  const spy = new IntersectionObserver((entries) => {
+    for (const e of entries) e.isIntersecting ? visible.add(e.target.id) : visible.delete(e.target.id);
+    const first = [...byId.keys()].find((id) => visible.has(id));
+    if (first) tocLinks.forEach((a) => a.classList.toggle('active', a === byId.get(first)));
+  }, { rootMargin: '-20% 0px -55% 0px' });
+  byId.forEach((_, id) => { const s = document.getElementById(id); if (s) spy.observe(s); });
+}
+
+// Autoplaying hero videos stay on their first frame for reduced-motion visitors.
+if (reduceMotion) document.querySelectorAll('video[autoplay]').forEach((v) => { v.removeAttribute('autoplay'); v.pause(); v.controls = true; });

@@ -22,11 +22,11 @@ Then open <http://localhost:8765/lab/> (the trailing `..` serves the whole site,
 
 | Part | Status |
 |---|---|
-| **Physics** | Real. MuJoCo 3.12 compiled to WebAssembly (`@mujoco/mujoco`, the official DeepMind bindings), loading the exact scene my navigation policy trains in. |
+| **Physics** | Real. MuJoCo 3.12 compiled to WebAssembly (`@mujoco/mujoco`, the official DeepMind bindings), loading the exact training scene from my navigation research. |
 | **Scene** | Real. Exported from the training code by [`tools/export_scene.py`](tools/export_scene.py), not re-authored by hand. Obstacles are re-scattered per visit using the training rule. |
 | **LiDAR** | Real raycasts by MuJoCo: 360 rays, 4 m range, from where the MuSHR car mounts its YDLidar. |
 | **SLAM** | Real algorithms on real simulated sensors. The **sensor errors are synthetic**: the simulated encoders and gyro are perfect, so a per-session wheel scale error and gyro bias, plus per-sample noise, are injected. |
-| **Driver** | **Stand-in.** A classical arc-sampling local planner. My trained depth-camera policy replaces it. |
+| **Driver** | **Stand-in.** A classical arc-sampling local planner. |
 
 ## How it works
 
@@ -105,7 +105,7 @@ Each of these was found by measuring, and each changed the design.
 - **The simulated gyro equals the previous physics step's yaw rate** to within 9×10⁻¹⁵: a perfect sensor with a 5 ms lag, not an error.
 - **The LiDAR sits at x = −0.0434 m** in the body frame, not the −0.035 m in the XML; MuJoCo recentres the mesh on its centroid. Measured from the model at startup.
 - **The npm README lags the 3.12 bindings.** Buffers are `new DoubleBuffer(n)` or `DoubleBuffer.FromArray(arr)`, and the accessor is `GetView()`.
-- **A physics bug in the training car model.** dm_control compiles the scene with `angle="radian"`, so the wheel collision cylinders' `euler="90 0 0"` is read as 90 radians and every wheel is tilted 26.6°. Reported to the research workspace; the demo keeps the as-trained physics so the policy will see what it trained on. It is also why the calibrated rolling radius is 7.2% off nominal.
+- **The exported car model's wheels sit tilted 26.6°.** dm_control compiles the scene with `angle="radian"`, so the wheel collision cylinders' `euler="90 0 0"` is read as 90 radians. The lab keeps the model exactly as exported, which is also why the calibrated rolling radius is 7.2% off nominal.
 
 ## Structure
 

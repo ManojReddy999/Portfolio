@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LiDAR SLAM for a differential-drive robot from real sensor logs: odometry-seeded ICP scan matching, a GTSAM pose graph optimised with Levenberg-Marquardt, and occupancy-grid and RGB-D floor-texture maps.">
+  <meta name="theme-color" content="#050b11">
+  <title>LiDAR SLAM | Manoj Reddy Manchala</title>
+  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/lidar-slam.html">
+  <link rel="icon" href="assets/images/car-unique.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header">
+    <nav class="navbar" aria-label="Primary">
+      <div class="nav-logo"><a href="./" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">☰</button>
+      <ul class="nav-links" id="primary-navigation" data-open="false">
+        <li><a href="./#work">Robotics</a></li>
+        <li><a href="./#production">Production</a></li>
+        <li><a href="lab/">Lab</a></li>
+        <li><a href="./#about">About</a></li>
+        <li><a href="./#contact">Contact</a></li>
+        <li><a class="nav-cta" href="Resume_Manoj.pdf">Résumé</a></li>
+      </ul>
+    </nav>
+  </header>
+
+    <main id="main-content" class="container case-study-page">
+    <a class="back-link" href="./#work">← All projects</a>
+    <section class="case-hero">
+      <div>
+        <p class="eyebrow">Mapping · localisation · ECE 276A</p>
+        <h1>LiDAR SLAM</h1>
+        <p>A building mapped from a wheeled robot’s own sensor logs: ICP scan matching and a GTSAM pose graph correct the drift of wheel-and-IMU odometry, and the corrected poses build an occupancy grid and a colour map of the floor.</p>
+        <div class="hero-actions">
+          <a class="button" href="ECE276A_PR2_Report.pdf" target="_blank" rel="noopener noreferrer">Open report</a>
+          <a class="button secondary" href="https://github.com/ManojReddy999/LiDAR-SLAM" target="_blank" rel="noopener noreferrer">View code</a>
+        </div>
+      </div>
+      <figure class="case-hero-media contain light">
+        <img style="view-transition-name: p-lidar" src="assets/images/slam/lidar-texture-optimized.webp" width="431" height="435" alt="Top-down colour map of a building's floor, built by projecting RGB-D camera pixels along the robot's optimised trajectory">
+      </figure>
+    </section>
+
+    <dl class="case-meta">
+      <div><dt class="meta-label">Data</dt><dd>Real logs · 4 sensors</dd></div>
+      <div><dt class="meta-label">Methods</dt><dd>ICP · GTSAM pose graph</dd></div>
+      <div><dt class="meta-label">Output</dt><dd>Occupancy grid · floor texture</dd></div>
+    </dl>
+
+    <div class="case-layout">
+      <aside class="case-aside" aria-label="Project sections">
+        <p class="section-kicker">Contents</p>
+        <ul>
+          <li><a href="#data">Data</a></li>
+          <li><a href="#pipeline">Pipeline</a></li>
+          <li><a href="#results">Results</a></li>
+          <li><a href="#limits">Limits</a></li>
+        </ul>
+      </aside>
+      <article class="case-content">
+        <section id="data">
+          <p class="section-kicker">01 / Data</p>
+          <h2>Four sensors, four clocks.</h2>
+          <p>A differential-drive robot drove through a building recording, each at its own rate:</p>
+          <ul>
+            <li><strong>Wheel encoders</strong> on all four wheels, for distance travelled.</li>
+            <li><strong>An IMU</strong>, of which only the yaw rate is used, for turning.</li>
+            <li><strong>A Hokuyo 2D LiDAR</strong>: 270° field of view, 1,081 beams per scan, 30 m range.</li>
+            <li><strong>A Kinect RGB-D camera</strong>, whose frames arrive irregularly because the logger dropped some.</li>
+          </ul>
+          <p>Every measurement is matched to the others by its timestamp. There is no ground truth: the only check on the result is whether the map is consistent with itself.</p>
+        </section>
+
+        <section id="pipeline">
+          <p class="section-kicker">02 / Pipeline</p>
+          <h2>Odometry, then scans, then the whole graph.</h2>
+          <figure class="diagram">
+            <svg viewBox="0 0 820 200" role="img" aria-labelledby="lidar-title">
+              <title id="lidar-title">LiDAR SLAM pipeline: encoders and IMU give odometry; odometry seeds ICP scan matching between LiDAR scans; odometry and ICP constraints form a GTSAM pose graph optimised with Levenberg-Marquardt; the optimised poses build an occupancy grid from LiDAR and a floor texture map from the RGB-D camera.</title>
+              <defs><marker id="l1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#58b9ff"/></marker></defs>
+              <g font-family="IBM Plex Mono, monospace" font-size="13" text-anchor="middle">
+                <rect x="10" y="20" width="150" height="62" rx="6" fill="#08121c" stroke="#344b5f"/><text x="85" y="47" fill="#eef3f6">Encoders + IMU</text><text x="85" y="66" font-size="11" fill="#8fa1af">odometry</text>
+                <rect x="10" y="118" width="150" height="62" rx="6" fill="#08121c" stroke="#344b5f"/><text x="85" y="145" fill="#eef3f6">LiDAR scans</text><text x="85" y="164" font-size="11" fill="#8fa1af">1,081 beams</text>
+                <rect x="215" y="69" width="170" height="62" rx="6" fill="#08121c" stroke="#58b9ff"/><text x="300" y="96" fill="#eef3f6">ICP scan matching</text><text x="300" y="115" font-size="11" fill="#8fa1af">KD-tree + SVD</text>
+                <rect x="440" y="69" width="170" height="62" rx="6" fill="#163d5c" stroke="#58b9ff"/><text x="525" y="96" fill="#eef3f6">Pose graph</text><text x="525" y="115" font-size="11" fill="#c3ced6">GTSAM optimiser</text>
+                <rect x="665" y="20" width="145" height="62" rx="6" fill="#08121c" stroke="#f2a93b"/><text x="737" y="47" fill="#eef3f6">Occupancy grid</text><text x="737" y="66" font-size="11" fill="#8fa1af">ray-cast log-odds</text>
+                <rect x="665" y="118" width="145" height="62" rx="6" fill="#08121c" stroke="#f2a93b"/><text x="737" y="145" fill="#eef3f6">Floor texture</text><text x="737" y="164" font-size="11" fill="#8fa1af">RGB-D projection</text>
+              </g>
+              <g stroke="#58b9ff" stroke-width="1.5" fill="none" marker-end="url(#l1)">
+                <path d="M160 51 L213 92"/><path d="M160 149 L213 108"/><path d="M160 45 L470 45 L500 67"/><path d="M385 100 L438 100"/><path d="M610 92 L663 55"/><path d="M610 108 L663 145"/>
+              </g>
+            </svg>
+          </figure>
+          <h3>Odometry</h3>
+          <p>Encoder ticks give each wheel’s distance and the IMU’s yaw rate gives the turning; a differential-drive model integrates them into a first trajectory. It is smooth but drifts, mostly in distance.</p>
+          <h3>Scan matching</h3>
+          <p>My own ICP aligns each LiDAR scan to the previous one: nearest neighbours from a KD-tree, then the best rotation and translation in closed form by SVD (the Kabsch solution), repeated until the error stops falling. ICP starts from the odometry guess, and a match whose rotation disagrees with odometry is rejected, because ICP on its own falls into wrong local minima in long corridors.</p>
+          <h3>Pose graph</h3>
+          <p>Each pose is a node in a GTSAM factor graph. Consecutive poses are joined by their ICP alignment; extra ICP constraints join scans further apart, and the first scan to the last where the robot comes back. Levenberg–Marquardt then finds the trajectory that best agrees with all of them at once.</p>
+          <h3>Maps</h3>
+          <p>Every scan is ray-cast into an occupancy grid at 5 cm: Bresenham lines mark the cells a beam passed through as free and its end point as occupied. For the floor texture, Kinect disparity becomes depth, each pixel is projected into the world from the robot’s pose, and pixels near floor height colour the map.</p>
+        </section>
+
+        <section id="results">
+          <p class="section-kicker">03 / Results</p>
+          <h2>Corridors that line up.</h2>
+          <figure class="light">
+            <img src="assets/images/slam/lidar-trajectories.webp" width="573" height="454" loading="lazy" decoding="async" alt="Three trajectory estimates of the same drive: wheel-and-IMU odometry, ICP scan matching and the optimised pose graph, diverging from each other">
+            <figcaption>Odometry (green) drifts in distance, ICP (blue) in heading; the optimised pose graph (orange) reconciles them.</figcaption>
+          </figure>
+          <div class="gallery">
+            <figure><img src="assets/images/slam/lidar-occupancy-icp.webp" width="431" height="435" loading="lazy" decoding="async" alt="Occupancy grid built from the ICP trajectory, with smeared, doubled walls"><figcaption>Occupancy grid from ICP alone.</figcaption></figure>
+            <figure><img src="assets/images/slam/lidar-occupancy-optimized.webp" width="431" height="435" loading="lazy" decoding="async" alt="Occupancy grid built from the optimised trajectory, with straighter corridors"><figcaption>After pose-graph optimisation: corridors line up.</figcaption></figure>
+          </div>
+        </section>
+
+        <section id="limits">
+          <p class="section-kicker">04 / Limits</p>
+          <h2>Judged by the map, not a number.</h2>
+          <ul>
+            <li>With no ground truth, accuracy can only be judged by how straight and single the walls come out.</li>
+            <li>Loop constraints come from chosen pairs of scans rather than from recognising revisited places; automatic loop detection is the next step.</li>
+            <li>On the second log, ICP fell into wrong minima until its result was kept close to the odometry estimate.</li>
+          </ul>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <p>© <span data-year>2026</span> Manoj Reddy Manchala</p>
+      <div class="footer-links"><a href="https://github.com/ManojReddy999">GitHub</a><a href="https://www.linkedin.com/in/manojreddymanchala/">LinkedIn</a><a href="mailto:manojreddymanchala@gmail.com">Email</a></div>
+    </div>
+  </footer>
+</body>
+</html>

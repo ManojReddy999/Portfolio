@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Learning to drive from depth alone · Manoj Reddy Manchala</title>
-  <meta name="description" content="Reinforcement learning for autonomous navigation: PPO policies driving a MuSHR car through clutter from one depth camera. Built at UC San Diego's Existential Robotics Laboratory, re-evaluated in 2026 with held-out scenes, multiple seeds and pre-registered rules.">
+  <meta name="description" content="Reinforcement learning for autonomous navigation at UC San Diego's Existential Robotics Lab: PPO and SAC policies that drive an Ackermann car through clutter from onboard depth sensing, CNN, graph-network and transformer feature extractors compared, and policies deployed on a real F1TENTH car.">
   <meta name="theme-color" content="#050b11">
   <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/project-details.html">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Learning to drive from depth alone">
-  <meta property="og:description" content="What held up, what didn't, and the simulator bugs I found when I re-ran my navigation research properly.">
+  <meta property="og:description" content="Deep RL policies that drive a car through clutter from depth, compared across CNN, graph-network and transformer feature extractors, and deployed on a real F1TENTH car.">
   <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/project-details.html">
   <meta property="og:image" content="https://manojreddy999.github.io/Portfolio/assets/images/research/policy-depth.webp">
   <meta name="twitter:card" content="summary_large_image">
@@ -38,26 +38,26 @@
   </header>
 
   <main id="main" class="case-study-page container">
+    <a class="back-link" href="./#work">← All projects</a>
     <section class="case-hero">
       <div>
-        <p class="eyebrow">UC San Diego · Existential Robotics Laboratory · 2024–now</p>
+        <p class="eyebrow">UC San Diego · Existential Robotics Lab · 2024–2025</p>
         <h1>Learning to drive from depth alone</h1>
-        <p>Can a car learn to drive through clutter from a single depth camera, with nothing hand-engineered in between? I built the simulator and the training setup as a graduate researcher in Prof. Nikolay Atanasov’s lab at UC San Diego.</p>
-        <p>In 2026 I went back to it, audited my own evaluation, rebuilt it, and re-ran the work. This page reports what held up, what didn’t, and the bugs I found in my own simulator.</p>
+        <p>Deep RL policies (PPO, SAC) that drive an Ackermann-steered car through cluttered, obstacle-rich environments from onboard depth sensing, built as a graduate student researcher in Prof. Nikolay Atanasov’s lab and deployed on a real F1TENTH car.</p>
         <div class="hero-actions">
-          <a class="btn" href="#results">Results so far</a>
+          <a class="btn" href="#results">Results</a>
           <a class="btn ghost out" href="https://github.com/ManojReddy999/Reinforcement-Learning-for-Autonomous-Navigation">Code</a>
         </div>
       </div>
       <figure class="case-hero-media pixel" style="margin:0">
-        <img src="assets/images/research/policy-depth.webp" alt="A 64 by 128 pixel depth image from the car's camera: nearby obstacles in light blue, distant ones darker, open floor at the bottom" width="768" height="384">
+        <img style="view-transition-name: p-research" src="assets/images/research/policy-depth.webp" alt="A 64 by 128 pixel depth image from the car's camera: nearby obstacles in light blue, distant ones darker, open floor at the bottom" width="768" height="384">
       </figure>
     </section>
 
     <dl class="case-meta">
-      <div><dt class="meta-label">Role</dt><dd>Graduate researcher · built the environment and training</dd></div>
-      <div><dt class="meta-label">Stack</dt><dd>MuJoCo · dm_control · Stable-Baselines3 · PyTorch</dd></div>
-      <div><dt class="meta-label">Status, Oct 2026</dt><dd>Physics corrected · retraining next</dd></div>
+      <div><dt class="meta-label">Role</dt><dd>Graduate student researcher</dd></div>
+      <div><dt class="meta-label">Stack</dt><dd>MuJoCo · dm_control · PyTorch · Stable-Baselines3</dd></div>
+      <div><dt class="meta-label">Hardware</dt><dd>F1TENTH car · Jetson TX2 · TensorRT</dd></div>
     </dl>
 
     <div class="case-layout">
@@ -65,12 +65,10 @@
         <p class="section-kicker">Contents</p>
         <ul>
           <li><a href="#task">The task</a></li>
-          <li><a href="#built">What I built at UCSD</a></li>
-          <li><a href="#why">Why I re-ran it</a></li>
-          <li><a href="#method">How results are judged now</a></li>
-          <li><a href="#results">Results so far</a></li>
-          <li><a href="#bugs">Bugs in my own simulator</a></li>
-          <li><a href="#next">Next</a></li>
+          <li><a href="#built">What I built</a></li>
+          <li><a href="#models">Three ways to see</a></li>
+          <li><a href="#results">Results</a></li>
+          <li><a href="#car">On the real car</a></li>
         </ul>
       </aside>
 
@@ -78,91 +76,108 @@
         <section id="task">
           <p class="section-kicker">01</p>
           <h2>The task</h2>
-          <p>A 1/10-scale MuSHR race car with Ackermann steering starts in a 16 m walled arena scattered with 100–200 obstacles in five shapes. Every 50 ms the policy gets one 64 × 128 depth image from the car’s camera, 79° wide (the image above is a real one), and outputs steering and throttle. The reward is forward speed plus a small bonus for staying alive, and a collision ends the episode.</p>
-          <p>There is no map and no goal. The policy has to keep moving without crashing, using only what one forward camera shows it. You can drive the same car in the same arena in <a href="lab/">the lab</a>, with a classical planner standing in for the policy.</p>
+          <p>A 1/10-scale car with Ackermann steering starts in a walled arena scattered with obstacles of different shapes. The policy sees the scene through an onboard depth camera (the image above is a real frame) and outputs steering and throttle. The reward is forward speed plus a small bonus for staying alive, and a collision ends the episode.</p>
+          <p>There is no map and no goal: the car has to keep moving without crashing, using only what it senses. You can drive the same car in the same arena in <a href="lab/">the lab</a>, with a classical planner standing in for the policy.</p>
         </section>
 
         <section id="built">
           <p class="section-kicker">02</p>
-          <h2>What I built at UCSD</h2>
+          <h2>What I built</h2>
           <ul>
-            <li>A custom MuJoCo / dm_control environment: the Ackermann car with a simulated RealSense depth camera, randomised obstacle fields, contact-based collision checks, reward and termination.</li>
-            <li>Training with PPO and SAC in Stable-Baselines3, with depth, RGB-D, point-cloud and vehicle-state observations.</li>
-            <li>Three families of feature extractor compared on the same task: a CNN, a point-cloud graph network (k-nearest-neighbour graph with EdgeConv), and a port of LocoTransformer (Yang et al., ICLR 2022) from a quadruped to a car.</li>
+            <li><strong>The simulator.</strong> A custom MuJoCo / dm_control environment: the Ackermann car with a simulated depth camera, randomised obstacle fields, contact-based collision checks, reward and termination.</li>
+            <li><strong>The training setup.</strong> PPO and SAC in Stable-Baselines3, with depth, point-cloud and vehicle-state observations.</li>
+            <li><strong>The perception models.</strong> Three feature extractors compared on the same task, below.</li>
+            <li><strong>The deployment path.</strong> Policies exported from PyTorch to ONNX and TensorRT, running onboard the car’s NVIDIA Jetson TX2.</li>
           </ul>
         </section>
 
-        <section id="why">
+        <section id="models">
           <p class="section-kicker">03</p>
-          <h2>Why I re-ran it</h2>
-          <p>When I returned to the code in 2026, I audited the evaluation before building on it. It could not support the conclusions I had drawn:</p>
-          <ul>
-            <li><strong>The wrong thing was measured.</strong> Evaluation never ended an episode on a collision (training did), so “episode length” measured time until the car got stuck, not time until it crashed.</li>
-            <li><strong>A sentinel value was averaged in.</strong> Episodes with no collision recorded time-to-first-collision as −1, so the best episodes lowered their own model’s score.</li>
-            <li><strong>One run per model, and a picked checkpoint.</strong> The “best” transformer was one checkpoint of one training run; two of its other checkpoints were no better than the graph network.</li>
-            <li><strong>The transformer never attended over time.</strong> Stacked frames went in as image channels, so it attended over space only. The comparison never tested temporal attention.</li>
-          </ul>
-        </section>
+          <h2>Three ways to see</h2>
+          <p>Each extractor turns what the car senses into features for the same policy head, so the comparison isolates perception.</p>
+          <figure class="diagram">
+            <svg viewBox="0 0 820 330" role="img" aria-labelledby="arch-title">
+              <title id="arch-title">Depth frames and vehicle state feed one of three feature extractors (a CNN, a graph network on point clouds, or a cross-modal transformer), whose features drive a PPO or SAC policy that outputs steering and throttle, in simulation or on the F1TENTH car.</title>
+              <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#58b9ff"/></marker></defs>
+              <g font-family="IBM Plex Mono, monospace" font-size="13" fill="#c3ced6">
+                <rect x="10" y="70" width="150" height="70" rx="6" fill="#08121c" stroke="#344b5f"/>
+                <text x="85" y="100" text-anchor="middle" fill="#eef3f6">Depth frames</text>
+                <text x="85" y="120" text-anchor="middle" font-size="11" fill="#8fa1af">onboard camera</text>
+                <rect x="10" y="190" width="150" height="70" rx="6" fill="#08121c" stroke="#344b5f"/>
+                <text x="85" y="220" text-anchor="middle" fill="#eef3f6">Vehicle state</text>
+                <text x="85" y="240" text-anchor="middle" font-size="11" fill="#8fa1af">velocity history</text>
 
-        <section id="method">
-          <p class="section-kicker">04</p>
-          <h2>How results are judged now</h2>
+                <rect x="230" y="20" width="250" height="72" rx="6" fill="#08121c" stroke="#58b9ff"/>
+                <text x="355" y="50" text-anchor="middle" fill="#eef3f6">CNN</text>
+                <text x="355" y="72" text-anchor="middle" font-size="11" fill="#8fa1af">convolutions on the depth image</text>
+                <rect x="230" y="129" width="250" height="72" rx="6" fill="#08121c" stroke="#58b9ff"/>
+                <text x="355" y="159" text-anchor="middle" fill="#eef3f6">Graph network</text>
+                <text x="355" y="181" text-anchor="middle" font-size="11" fill="#8fa1af">point cloud → k-NN graph → EdgeConv</text>
+                <rect x="230" y="238" width="250" height="72" rx="6" fill="#08121c" stroke="#58b9ff"/>
+                <text x="355" y="268" text-anchor="middle" fill="#eef3f6">Cross-modal transformer</text>
+                <text x="355" y="290" text-anchor="middle" font-size="11" fill="#8fa1af">image patches + state tokens</text>
+
+                <rect x="555" y="129" width="110" height="72" rx="6" fill="#163d5c" stroke="#58b9ff"/>
+                <text x="610" y="159" text-anchor="middle" fill="#eef3f6">PPO / SAC</text>
+                <text x="610" y="181" text-anchor="middle" font-size="11" fill="#c3ced6">policy</text>
+                <rect x="700" y="129" width="110" height="72" rx="6" fill="#08121c" stroke="#f2a93b"/>
+                <text x="755" y="159" text-anchor="middle" fill="#eef3f6">steering</text>
+                <text x="755" y="181" text-anchor="middle" fill="#eef3f6">throttle</text>
+              </g>
+              <g stroke="#58b9ff" stroke-width="1.5" fill="none" marker-end="url(#ah)">
+                <path d="M160 105 L228 56"/><path d="M160 105 L228 165"/><path d="M160 105 L228 262"/>
+                <path d="M160 225 L228 286"/>
+                <path d="M480 56 L553 150"/><path d="M480 165 L553 165"/><path d="M480 274 L553 180"/>
+                <path d="M665 165 L698 165"/>
+              </g>
+            </svg>
+            <figcaption>The policy head and training are identical; only the feature extractor changes. The transformer embeds image patches with a CNN and vehicle state with an MLP, and attends over them together.</figcaption>
+          </figure>
           <ul>
-            <li><strong>Held-out scenes.</strong> 100–300 obstacle layouts no policy has trained or been tuned on, identical for every policy so comparisons are paired.</li>
-            <li><strong>Training seeds and intervals.</strong> Several training seeds where the question needs them; interquartile means with 95% bootstrap intervals that resample seeds and scenes together (after Agarwal et al., 2021).</li>
-            <li><strong>Rules before results.</strong> Each experiment’s pass/fail rules are written down before it runs, including what a single seed cannot decide.</li>
-            <li><strong>Everything written up.</strong> Every change and run has a dated write-up and its analysis scripts, kept alongside the code.</li>
+            <li><strong>CNN</strong>, the baseline: convolutions over the depth image.</li>
+            <li><strong>Graph network</strong>: the depth image becomes a point cloud, modelled as a graph so the network reasons about 3D structure rather than pixels.</li>
+            <li><strong>Cross-modal transformer</strong>, adapted from LocoTransformer (Yang et al., ICLR 2022), which was built for a quadruped: CNN patch embeddings and MLP-encoded state tokens inside a multi-head transformer encoder, for temporally aware state representations.</li>
           </ul>
         </section>
 
         <section id="results">
-          <p class="section-kicker">05</p>
-          <h2>Results so far</h2>
-          <div class="table-wrap">
-            <table class="results">
-              <thead><tr><th scope="col">Question</th><th scope="col">What the evidence says</th></tr></thead>
-              <tbody>
-                <tr>
-                  <th scope="row">Does a plain CNN on depth alone beat the earlier models?</th>
-                  <td><strong>Yes, on every training seed.</strong> About +30 m interquartile mean over the earlier best models, pooled over seeds on 100 fresh scenes, with 2.8–4.2× fewer collisions per metre. That is smaller than the +45 m the first single-seed, 20-scene run suggested.</td>
-                </tr>
-                <tr>
-                  <th scope="row">Does a short stack of recent frames help?</th>
-                  <td><strong>Not reliably.</strong> Across three seeds the gain was +14.9 m with an interval of −6.8 to +36.9. Where it did help, the policy needed only the newest pair of frames: it was reading motion, not using memory.</td>
-                </tr>
-                <tr>
-                  <th scope="row">Does a reverse gear fix the runs that end stuck?</th>
-                  <td><strong>It removes them, for an unexpected reason.</strong> Trapped episodes went from 39 of 1,200 to 0 of 900, and stops from 106 to 0. But no policy ever reverses on purpose, and distance didn’t improve. The likely reason, not yet tested: with reverse available, zero throttle stops being a free place to rest.</td>
-                </tr>
-                <tr>
-                  <th scope="row">Why do the policies crash?</th>
-                  <td><strong>They don’t brake in time.</strong> Replaying all 454 crashes on 100 held-out scenes, braking 0.75 s earlier would have avoided 98–99% of them. Why they don’t learn to brake is open.</td>
-                </tr>
-              </tbody>
-            </table>
+          <p class="section-kicker">04</p>
+          <h2>Results</h2>
+          <p>Each step up in perception made the car faster, let it cover more ground, and crash less.</p>
+          <div class="deltas" role="img" aria-label="Graph network versus CNN: 21% faster, 85% more distance covered, 17% fewer collisions. Transformer versus graph network: 20% higher mean velocity, 135% more coverage, 27% fewer collisions.">
+            <div class="delta-group">
+              <p class="delta-title">Graph network vs CNN</p>
+              <div class="delta"><span>Navigation speed</span><i style="--w:15.6%"></i><b>+21%</b></div>
+              <div class="delta"><span>Distance covered</span><i style="--w:63%"></i><b>+85%</b></div>
+              <div class="delta down"><span>Collisions</span><i style="--w:12.6%"></i><b>−17%</b></div>
+            </div>
+            <div class="delta-group">
+              <p class="delta-title">Transformer vs graph network</p>
+              <div class="delta"><span>Mean velocity</span><i style="--w:14.8%"></i><b>+20%</b></div>
+              <div class="delta"><span>Average coverage</span><i style="--w:100%"></i><b>+135%</b></div>
+              <div class="delta down"><span>Collision frequency</span><i style="--w:20%"></i><b>−27%</b></div>
+            </div>
           </div>
-          <div class="case-note"><strong>Caveat.</strong> These were measured on the original simulator, before the fixes below. Comparisons between runs stand; absolute speeds and distances describe the old car.</div>
+          <p>The graph network’s 3D view of the scene beat the image-only CNN, and the transformer beat the graph network, which I attribute to its ability to capture spatiotemporal dependencies across the depth frames and the car’s own motion.</p>
         </section>
 
-        <section id="bugs">
-          <p class="section-kicker">06</p>
-          <h2>Bugs in my own simulator</h2>
-          <ul>
-            <li><strong>Every wheel was tilted 26.6°.</strong> The wheel collision shapes were written in degrees, but dm_control compiles the model in radians, so <code>90</code> meant 90 radians. The car rode on its rim edges, bounced, and was 13% slower. The one-line fix broke steering, because flat tyres scrubbed harder than the steering could turn them, so the real fix rebuilt the wheel contacts.</li>
-            <li><strong>Most of the car couldn’t crash.</strong> In the car model I generated, the chassis, camera and LiDAR had collision switched off (the upstream MuSHR model has it on), and the front bumper’s contacts were silently culled because obstacles were moved without updating MuJoCo’s bounding volumes. Only the wheels ever registered a crash, and a car that tipped over could drive on upside down.</li>
-            <li><strong>Brief contacts were missed.</strong> Collisions were checked once per 50 ms control step. They now count at every physics substep.</li>
-          </ul>
-          <p>All three are fixed, and the corrected car drives identically when upright. Older runs still reproduce exactly on the legacy physics, so earlier results can be re-checked.</p>
-        </section>
-
-        <section id="next">
-          <p class="section-kicker">07</p>
-          <h2>Next</h2>
-          <ol>
-            <li>Retrain the baselines on the corrected physics.</li>
-            <li>Study why the policies don’t brake.</li>
-            <li>Put a trained policy into <a href="lab/">the lab</a>, once the browser renders the same depth image MuJoCo does and it drives well enough to show.</li>
-          </ol>
+        <section id="car">
+          <p class="section-kicker">05</p>
+          <h2>On the real car</h2>
+          <p>The policies left simulation: I converted them from PyTorch to ONNX and then TensorRT, and ran them onboard the NVIDIA Jetson TX2 of a real F1TENTH car.</p>
+          <figure class="diagram">
+            <svg viewBox="0 0 820 110" role="img" aria-labelledby="deploy-title">
+              <title id="deploy-title">Deployment path: trained in MuJoCo, exported from PyTorch to ONNX, compiled with TensorRT, and run on the Jetson TX2 of an F1TENTH car.</title>
+              <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#58b9ff"/></marker></defs>
+              <g font-family="IBM Plex Mono, monospace" font-size="13" text-anchor="middle">
+                <rect x="10" y="20" width="160" height="70" rx="6" fill="#08121c" stroke="#344b5f"/><text x="90" y="50" fill="#eef3f6">Train</text><text x="90" y="70" font-size="11" fill="#8fa1af">MuJoCo · PyTorch</text>
+                <rect x="225" y="20" width="160" height="70" rx="6" fill="#08121c" stroke="#344b5f"/><text x="305" y="50" fill="#eef3f6">Export</text><text x="305" y="70" font-size="11" fill="#8fa1af">ONNX</text>
+                <rect x="440" y="20" width="160" height="70" rx="6" fill="#08121c" stroke="#344b5f"/><text x="520" y="50" fill="#eef3f6">Compile</text><text x="520" y="70" font-size="11" fill="#8fa1af">TensorRT</text>
+                <rect x="655" y="20" width="160" height="70" rx="6" fill="#163d5c" stroke="#f2a93b"/><text x="735" y="50" fill="#eef3f6">Drive</text><text x="735" y="70" font-size="11" fill="#c3ced6">F1TENTH · Jetson TX2</text>
+              </g>
+              <g stroke="#58b9ff" stroke-width="1.5" marker-end="url(#ah2)"><path d="M170 55 L223 55"/><path d="M385 55 L438 55"/><path d="M600 55 L653 55"/></g>
+            </svg>
+          </figure>
           <div class="hero-actions">
             <a class="btn" href="./#contact">Talk to me about it</a>
             <a class="btn ghost" href="live-lab.html">How the lab works</a>

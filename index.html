@@ -92,7 +92,7 @@
           <li data-step="code"><span>Simulator code</span><em></em></li>
           <li data-step="wasm"><span>MuJoCo physics engine</span><em></em></li>
           <li data-step="compile"><span>Compile it to WebAssembly</span><em></em></li>
-          <li data-step="scene"><span>Training scene: car + 150 obstacles</span><em></em></li>
+          <li data-step="scene"><span>Training scene, widened: car + 600 obstacles</span><em></em></li>
           <li data-step="build"><span>Build the arena</span><em></em></li>
           <li data-step="live"><span>LiDAR on · SLAM tracking</span><em></em></li>
         </ol>
@@ -105,7 +105,7 @@
         <span class="map-key"><span><i class="k-true"></i>real path</span><span><i class="k-est"></i>estimate</span></span>
         <span>localisation</span><output id="stat-loc">—</output>
         <span>pose error</span><output id="stat-error">—</output>
-        <span>arena mapped</span><output id="stat-coverage">—</output>
+        <span>area mapped</span><output id="stat-coverage">—</output>
         <span>loop closures</span><output id="stat-loops">—</output>
       </div>
     </section>
@@ -115,7 +115,7 @@
       <div class="watch-grid">
         <div>
           <h3>The physics</h3>
-          <p>MuJoCo compiled to WebAssembly, loading the exact scene my navigation policies train in. It matches the Python simulator to within 10<sup>−15</sup> m.</p>
+          <p>MuJoCo compiled to WebAssembly, running the car and obstacles from my navigation research, in an arena widened four times here so the walls stay out of view. The physics matches the Python simulator to within 10<sup>−15</sup> m.</p>
           <a class="arrow" href="project-details.html">The research it comes from</a>
         </div>
         <div>
@@ -130,8 +130,8 @@
         </div>
         <div>
           <h3>The driver</h3>
-          <p>A classical stand-in planner, for now. My trained depth-camera policy replaces it once it drives well enough to show you.</p>
-          <a class="arrow" href="project-details.html#results">Where the policy is</a>
+          <p>A classical planner that samples steering arcs and takes the longest clear path. In my research, learned policies drive this car from a depth camera instead.</p>
+          <a class="arrow" href="project-details.html">The learned driver</a>
         </div>
       </div>
     </section>
@@ -148,80 +148,80 @@
 
         <article class="feature feature-wide">
             <figure class="feature-media">
-              <img class="pixel" src="assets/images/research/policy-depth.webp" alt="A 64 by 128 pixel depth image from the car's camera: obstacles in blue at different distances, floor in pale blue" width="768" height="384" loading="lazy" decoding="async">
+              <img style="view-transition-name: p-research" class="pixel" src="assets/images/research/policy-depth.webp" alt="A 64 by 128 pixel depth image from the car's camera: obstacles in blue at different distances, floor in pale blue" width="768" height="384" loading="lazy" decoding="async">
               <figcaption>Everything the policy sees: one 64 × 128 depth image</figcaption>
             </figure>
             <div class="feature-body">
               <p class="eyebrow">UC San Diego · Existential Robotics Lab</p>
               <h3>Learning to drive from depth alone</h3>
-              <p>PPO policies that drive the same car through cluttered arenas from a forward depth camera. I built the environment at UCSD, then in 2026 rebuilt the evaluation and re-ran the work properly.</p>
+              <p>Deep RL policies (PPO, SAC) that drive an Ackermann-steered car through clutter from onboard depth sensing, trained in a MuJoCo simulator I built and deployed on a real F1TENTH car.</p>
               <ul class="proof">
-                <li>Judged on 100–300 held-out scenes, with pass/fail rules written before each run</li>
-                <li>Found and fixed simulator bugs that had shaped earlier results</li>
-                <li>Some earlier findings held up and some didn’t; the write-up says which</li>
+                <li>Graph network over the CNN: +21% speed, +85% distance covered, −17% collisions</li>
+                <li>Cross-modal transformer over the graph network: +20% mean velocity, +135% coverage, −27% collisions</li>
+                <li>Ran onboard the car’s Jetson TX2 via ONNX and TensorRT</li>
               </ul>
-              <ul class="tech-list" aria-label="Technologies"><li>MuJoCo</li><li>dm_control</li><li>PPO</li><li>PyTorch</li><li>Stable-Baselines3</li></ul>
+              <ul class="tech-list" aria-label="Technologies"><li>MuJoCo</li><li>dm_control</li><li>PPO / SAC</li><li>PyTorch</li><li>TensorRT</li></ul>
               <div class="links"><a class="text-link arrow" href="project-details.html">Read the research</a><a class="text-link out" href="https://github.com/ManojReddy999/Reinforcement-Learning-for-Autonomous-Navigation">Code</a></div>
             </div>
           </article>
 
         <div class="cards">
           <article class="card" id="slam">
-            <div class="card-media plot"><img src="assets/images/thumbs/vi-slam.webp" alt="Estimated vehicle trajectory and landmark map from visual-inertial SLAM" width="640" height="363" loading="lazy" decoding="async"></div>
+            <div class="card-media plot"><img style="view-transition-name: p-vislam" src="assets/images/thumbs/vi-slam.webp" alt="Estimated vehicle trajectory and landmark map from visual-inertial SLAM" width="640" height="363" loading="lazy" decoding="async"></div>
             <div class="card-body">
               <p class="project-type">State estimation</p>
               <h3>Visual-inertial SLAM</h3>
-              <p>An EKF fusing IMU motion with stereo features to estimate a vehicle’s trajectory and a landmark map.</p>
-              <div class="links"><a class="out" href="ECE276A_PR3_Report.pdf">Report</a><a class="out" href="https://github.com/ManojReddy999/Visual-Inertial-SLAM">Code</a></div>
+              <p>An EKF on SE(3) that fuses IMU motion with stereo landmarks, correcting a car’s dead-reckoning drift while it maps.</p>
+              <div class="links"><a class="arrow" href="vi-slam.html">Project</a><a class="out" href="https://github.com/ManojReddy999/Visual-Inertial-SLAM">Code</a></div>
             </div>
           </article>
           <article class="card">
-            <div class="card-media light"><img src="assets/images/thumbs/lidar-slam.webp" alt="Occupancy-grid map built by the LiDAR SLAM pipeline" width="640" height="670" loading="lazy" decoding="async"></div>
+            <div class="card-media light"><img style="view-transition-name: p-lidar" src="assets/images/thumbs/lidar-slam.webp" alt="Occupancy-grid map built by the LiDAR SLAM pipeline" width="640" height="670" loading="lazy" decoding="async"></div>
             <div class="card-body">
               <p class="project-type">Mapping · localisation</p>
               <h3>LiDAR SLAM</h3>
-              <p>Encoder and IMU odometry, ICP scan matching, occupancy-grid mapping and pose-graph optimisation for a wheeled robot.</p>
-              <div class="links"><a class="out" href="ECE276A_PR2_Report.pdf">Report</a><a class="out" href="https://github.com/ManojReddy999/LiDAR-SLAM">Code</a></div>
+              <p>A building mapped from a wheeled robot’s logs: ICP scan matching and a GTSAM pose graph correct odometry drift.</p>
+              <div class="links"><a class="arrow" href="lidar-slam.html">Project</a><a class="out" href="https://github.com/ManojReddy999/LiDAR-SLAM">Code</a></div>
             </div>
           </article>
           <article class="card">
-            <div class="card-media"><img src="assets/images/thumbs/youbot.webp" alt="KUKA YouBot mobile manipulator next to a cube in CoppeliaSim" width="640" height="600" loading="lazy" decoding="async"></div>
+            <div class="card-media"><img style="view-transition-name: p-youbot" src="assets/images/thumbs/youbot.webp" alt="KUKA YouBot mobile manipulator next to a cube in CoppeliaSim" width="640" height="600" loading="lazy" decoding="async"></div>
             <div class="card-body">
               <p class="project-type">Manipulation · control</p>
               <h3>YouBot pick-and-place</h3>
-              <p>Kinematics, trajectory generation and feedforward-plus-PI control for a mobile manipulator, with the failure cases tuned out.</p>
+              <p>Kinematics, trajectory generation and feedforward + PI control through the base–arm Jacobian, recovering from a 30°, 0.2 m starting error.</p>
               <div class="links"><a class="arrow" href="Mobile-Manipulator.html">Project</a><a class="out" href="https://github.com/ManojReddy999/Motion-Control-of-Mobile-Manipulator-Robot">Code</a></div>
             </div>
           </article>
           <article class="card">
-            <div class="card-media"><img src="assets/images/thumbs/astar-rrt.webp" alt="A 3D maze with a planned path from start to goal" width="640" height="615" loading="lazy" decoding="async"></div>
+            <div class="card-media"><img style="view-transition-name: p-astar" src="assets/images/thumbs/astar-rrt.webp" alt="A 3D maze with a planned path from start to goal" width="640" height="615" loading="lazy" decoding="async"></div>
             <div class="card-body">
               <p class="project-type">Motion planning</p>
-              <h3>A* and RRT in 3D</h3>
-              <p>Search-based and sampling-based planners with collision checking, compared in continuous 3D environments.</p>
+              <h3>A* in 3D</h3>
+              <p>Weighted A* with exact segment–box collision checks: collision-free paths in all 7 environments, up to 29% shorter than RRT.</p>
               <div class="links"><a class="arrow" href="astar-rrt.html">Project</a><a class="out" href="https://github.com/ManojReddy999/Motion-Planning">Code</a></div>
             </div>
           </article>
           <article class="card">
-            <div class="card-media light"><img src="assets/images/thumbs/calibration.webp" alt="Dashcam frame with the estimated vanishing point marked" width="640" height="629" loading="lazy" decoding="async"></div>
+            <div class="card-media light"><img style="view-transition-name: p-calib" src="assets/images/thumbs/calibration.webp" alt="Dashcam frame with the estimated vanishing point marked" width="640" height="629" loading="lazy" decoding="async"></div>
             <div class="card-body">
               <p class="project-type">Computer vision · team project</p>
               <h3>Comma.ai calibration</h3>
-              <p>Camera pitch and yaw from dashcam video, using optical flow, vanishing points and a Conv-LSTM.</p>
-              <div class="links"><a class="arrow" href="Calibration-challenge.html">Project</a><a class="out" href="https://github.com/ManojReddy999/Calibration_Challenge">Code</a></div>
+              <p>Camera pitch and yaw from dashcam video with a Conv-LSTM over RGB frames stacked with dense optical flow.</p>
+              <div class="links"><a class="arrow" href="Calibration-challenge.html">Project</a><a class="out" href="https://github.com/potladurthy/Direction_of_travel_estimation">Code</a></div>
             </div>
           </article>
           <article class="card">
-            <div class="card-media plot"><img src="assets/images/thumbs/gpi.webp" alt="Robot path tracking a reference trajectory around obstacles" width="640" height="532" loading="lazy" decoding="async"></div>
+            <div class="card-media dark"><img style="view-transition-name: p-mpc" src="assets/images/thumbs/mpc.webp" alt="The MPC's path in blue following a figure-eight reference around two obstacles, beside the P controller's path in amber" width="640" height="582" loading="lazy" decoding="async"></div>
             <div class="card-body">
               <p class="project-type">Optimal control</p>
-              <h3>Stochastic trajectory tracking</h3>
-              <p>Certainty-equivalent control against generalised policy iteration for tracking a trajectory under noise, around obstacles.</p>
+              <h3>Trajectory tracking with MPC</h3>
+              <p>Receding-horizon MPC in CasADi/IPOPT: 0.21 m mean error under motion noise, 4.4× below a P controller, ~5 ms per solve.</p>
               <div class="links"><a class="arrow" href="GPI.html">Project</a><a class="out" href="https://github.com/ManojReddy999/Infinite-Horizon-Stochastic-Optimal-Control">Code</a></div>
             </div>
           </article>
           <article class="card">
-            <div class="card-media pixel"><img src="assets/images/thumbs/door-key.webp" alt="Grid world with an agent, a key, a locked door and a goal" width="640" height="640" loading="lazy" decoding="async"></div>
+            <div class="card-media pixel"><img style="view-transition-name: p-doorkey" src="assets/images/thumbs/door-key.webp" alt="Grid world with an agent, a key, a locked door and a goal" width="640" height="640" loading="lazy" decoding="async"></div>
             <div class="card-body">
               <p class="project-type">Dynamic programming</p>
               <h3>Door &amp; key</h3>
@@ -230,19 +230,19 @@
             </div>
           </article>
           <article class="card">
-            <div class="card-media"><img src="assets/images/thumbs/orientation.webp" alt="The IMU and camera sensor rig used for orientation tracking" width="640" height="425" loading="lazy" decoding="async"></div>
+            <div class="card-media"><img style="view-transition-name: p-orientation" src="assets/images/thumbs/orientation.webp" alt="The IMU and camera sensor rig used for orientation tracking" width="640" height="425" loading="lazy" decoding="async"></div>
             <div class="card-body">
               <p class="project-type">Sensor fusion</p>
               <h3>Orientation tracking</h3>
               <p>IMU calibration and quaternion orientation estimation by projected gradient descent, then a panorama stitched from the tracked camera.</p>
-              <div class="links"><a class="out" href="ECE276A_PR1_Report.pdf">Report</a></div>
+              <div class="links"><a class="arrow" href="orientation-tracking.html">Project</a><a class="out" href="ECE276A_PR1_Report.pdf">Report</a></div>
             </div>
           </article>
           <article class="card text-only">
             <div class="card-body">
-              <p class="project-type">Control · field robotics</p>
+              <p class="project-type">Control · team project</p>
               <h3>Model predictive control on rough terrain</h3>
-              <p>MPC for a vehicle driving over uneven farm terrain, with elevation and friction in the model.</p>
+              <p>Nonlinear MPC in MATLAB for a vehicle crossing simulated farm terrain, with elevation and friction in its model.</p>
               <div class="links"><a class="out" href="https://github.com/ManojReddy999/Model-Predictive-Control">Code</a></div>
             </div>
           </article>
@@ -257,7 +257,7 @@
             <p class="eyebrow">Software in production</p>
             <h2 id="production-title">Built for people at work</h2>
           </div>
-          <p>As AI Tech Lead I built two systems that are now in production. Both repositories are private, and I’m happy to walk through either.</p>
+          <p>As a tech consultant I built and deployed two systems that are now in production. Both repositories are private, and I’m happy to walk through either.</p>
         </div>
 
         <div class="features">
@@ -275,9 +275,9 @@
               </div>
             </div>
             <div class="feature-body">
-              <p class="eyebrow">In production · sole engineer</p>
+              <p class="eyebrow">In production · Tech Consultant</p>
               <h3>Growero HRMS</h3>
-              <p>An HR and payroll platform that a company’s employees use, which I built and maintain on my own.</p>
+              <p>An HR and payroll app I built and deployed for Growero, used by its employees.</p>
               <ul class="proof">
                 <li>Indian payroll: PF, PT, ESI and TDS, prorated from attendance, with runs that lock once approved</li>
                 <li>Geofenced attendance with per-shift location trails for field staff</li>
@@ -300,7 +300,7 @@ WHERE v.status &lt;&gt; 'SUBMITTED' …</code><small>Answer, the SQL behind it, 
               </div>
             </div>
             <div class="feature-body">
-              <p class="eyebrow">In production · AI Tech Lead</p>
+              <p class="eyebrow">In production · Tech Consultant</p>
               <h3>FarmInsta Chatbot</h3>
               <p>A deployed chatbot that answers field teams’ questions about farmer histories, unfinished visits and team activity by writing SQL against a read-only copy of the operational database.</p>
               <ul class="proof">
@@ -319,25 +319,22 @@ WHERE v.status &lt;&gt; 'SUBMITTED' …</code><small>Answer, the SQL behind it, 
 
     <section class="section" id="about" aria-labelledby="about-title">
       <div class="container about">
-        <div>
+        <div class="about-copy">
           <p class="eyebrow">About</p>
           <h2 class="section-title" id="about-title">Mechanical engineer turned roboticist</h2>
-          <p class="availability" style="margin-top:1.4rem">Open to robotics, RL and autonomy roles · based in India · remote preferred</p>
-        </div>
-        <div class="about-copy">
-          <p>I studied mechanical engineering at IIT Bombay, then did a master’s in robotics at UC San Diego. There I was a graduate student researcher in Prof. Nikolay Atanasov’s Existential Robotics Laboratory, working on reinforcement learning for autonomous navigation.</p>
-          <p>Back in India, as AI Tech Lead I built two systems that are now in production: an HR and payroll platform a company’s staff use, and a chatbot that answers field teams’ questions from their database. Alongside that, I have rebuilt my navigation research with a much stricter evaluation.</p>
-          <p>I am looking for work where I own learning or estimation systems end to end: simulation, training, evaluation, and getting them in front of people.</p>
+          <p>I studied mechanical engineering at IIT Bombay and robotics at UC San Diego, where I worked on reinforcement learning for autonomous navigation in Prof. Nikolay Atanasov’s Existential Robotics Lab.</p>
           <dl class="facts">
             <div><dt>Education</dt><dd>M.S. Mechanical Engineering (Robotics), UC San Diego, 2025<br>B.Tech. Mechanical Engineering, IIT Bombay, 2021</dd></div>
-            <div><dt>Research</dt><dd>Graduate Student Researcher, Existential Robotics Laboratory, UC San Diego</dd></div>
-            <div><dt>Production</dt><dd>AI Tech Lead: Growero HRMS and the FarmInsta Chatbot</dd></div>
+            <div><dt>Research</dt><dd>Graduate Student Researcher, Existential Robotics Lab, UC San Diego, 2024–2025</dd></div>
+            <div><dt>Production</dt><dd>Tech Consultant, FarmInsta &amp; Growero Technologies, 2026</dd></div>
           </dl>
-          <div class="skills">
-            <div><h3>Robotics &amp; learning</h3><ul class="tech-list"><li>MuJoCo</li><li>dm_control</li><li>PPO / SAC</li><li>Stable-Baselines3</li><li>PyTorch</li><li>Reward &amp; observation design</li><li>Multi-seed evaluation</li></ul></div>
-            <div><h3>Estimation &amp; perception</h3><ul class="tech-list"><li>EKF</li><li>Visual-inertial &amp; LiDAR SLAM</li><li>Motion planning</li><li>Optical flow</li><li>Camera calibration</li><li>OpenCV</li></ul></div>
-            <div><h3>Software</h3><ul class="tech-list"><li>Python</li><li>NumPy</li><li>SQL</li><li>TypeScript</li><li>Next.js</li><li>React</li><li>Prisma</li><li>PostgreSQL</li><li>Gemini API</li></ul></div>
-          </div>
+        </div>
+        <div class="skills">
+          <p class="eyebrow">Skills</p>
+          <div><h3>Robotics</h3><ul class="tech-list"><li>Reinforcement learning (PPO, SAC)</li><li>SLAM</li><li>State estimation (EKF)</li><li>Sensor fusion</li><li>Motion planning</li><li>MPC</li></ul></div>
+          <div><h3>Machine learning</h3><ul class="tech-list"><li>PyTorch</li><li>JAX</li><li>TensorFlow</li><li>Computer vision</li><li>OpenCV</li><li>CUDA</li><li>ONNX</li><li>TensorRT</li><li>Jetson</li></ul></div>
+          <div><h3>Simulation &amp; tools</h3><ul class="tech-list"><li>MuJoCo</li><li>dm_control</li><li>ROS</li><li>GTSAM</li><li>CasADi</li><li>CoppeliaSim</li><li>MATLAB</li><li>Simulink</li><li>Linux</li><li>Git</li></ul></div>
+          <div><h3>Software</h3><ul class="tech-list"><li>Python</li><li>SQL</li><li>TypeScript</li><li>Next.js</li><li>React</li><li>PostgreSQL</li><li>Gemini API</li></ul></div>
         </div>
       </div>
     </section>

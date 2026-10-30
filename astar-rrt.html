@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A robotics motion-planning project comparing grid-based A* with a library-backed RRT* planner in 3D obstacle environments.">
+  <meta name="description" content="Weighted A* on a 26-connected 3D grid with exact segment-box collision checking: collision-free paths through all 7 benchmark environments, up to 29% shorter than RRT.">
   <meta name="theme-color" content="#050b11">
   <title>3D Motion Planning | Manoj Reddy Manchala</title>
   <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/astar-rrt.html">
@@ -33,25 +33,25 @@
 
   <main id="main-content" class="container case-study-page">
     <a class="back-link" href="./#work">← All projects</a>
-<section class="case-hero">
+    <section class="case-hero">
       <div>
-        <p class="eyebrow">Planning / Search + sampling</p>
+        <p class="eyebrow">Motion planning · ECE 276B</p>
         <h1>Motion planning in 3D</h1>
-        <p>Compared a grid-based A* planner with a library-backed RRT* implementation across bounded 3D obstacle environments.</p>
+        <p>Weighted A* on a 26-connected 3D grid with exact segment–box collision checking, planning collision-free paths through all seven benchmark environments, and compared with sampling-based planners.</p>
         <div class="hero-actions">
           <a class="button" href="ECE276B_PR2_Report.pdf" target="_blank" rel="noopener noreferrer">Open report</a>
           <a class="button secondary" href="https://github.com/ManojReddy999/Motion-Planning" target="_blank" rel="noopener noreferrer">View code</a>
         </div>
       </div>
       <figure class="case-hero-media">
-        <img loading="lazy" decoding="async" src="assets/images/astar-rrt/Screenshot from 2024-05-24 20-41-04.webp" width="1112" height="1069" alt="Three-dimensional maze with a planned red path from start to goal">
+        <img style="view-transition-name: p-astar" loading="lazy" decoding="async" src="assets/images/astar-rrt/Screenshot from 2024-05-24 20-41-04.webp" alt="A 3D maze of box obstacles with a planned path from start to goal">
       </figure>
     </section>
 
     <dl class="case-meta">
-      <div><dt class="meta-label">Context</dt><dd>ECE 276B course project</dd></div>
-      <div><dt class="meta-label">Methods</dt><dd>A* / RRT* / AABB collision checks</dd></div>
-      <div><dt class="meta-label">Artifacts</dt><dd>Code + report</dd></div>
+      <div><dt class="meta-label">Environments solved</dt><dd>7 of 7, collision-free</dd></div>
+      <div><dt class="meta-label">vs plain RRT</dt><dd>Up to 29% shorter paths</dd></div>
+      <div><dt class="meta-label">Methods</dt><dd>Weighted A* · slab collision test</dd></div>
     </dl>
 
     <div class="case-layout">
@@ -59,42 +59,104 @@
         <p class="section-kicker">Contents</p>
         <ul>
           <li><a href="#problem">Problem</a></li>
-          <li><a href="#build">What I built</a></li>
-          <li><a href="#evaluation">Evaluation</a></li>
+          <li><a href="#astar">A* on a grid</a></li>
+          <li><a href="#collision">Collision checking</a></li>
+          <li><a href="#results">Results</a></li>
           <li><a href="#limits">Limits</a></li>
         </ul>
       </aside>
       <article class="case-content">
         <section id="problem">
           <p class="section-kicker">01 / Problem</p>
-          <h2>Find collision-free paths through bounded 3D space.</h2>
-          <p>The environment is represented by a rectangular workspace and axis-aligned bounding-box obstacles. Given start and goal coordinates, the planner must return a feasible path while balancing path length, search effort, and the representation of free space.</p>
+          <h2>Find a short, collision-free path through 3D clutter.</h2>
+          <p>Each environment is a box-shaped workspace filled with axis-aligned box obstacles: a single cube, a maze, a “flappy bird” course of gaps, the Monza track, a window, a tower and a room. Given a start and a goal, the planner must return a path for a point robot that never touches an obstacle, and keep it short.</p>
         </section>
-        <section id="build">
-          <p class="section-kicker">02 / What I built</p>
-          <h2>Two planning approaches with a shared collision model.</h2>
-          <h3>Grid-based A*</h3>
-          <p>I discretized the workspace, used accumulated path cost plus Euclidean goal distance to prioritize nodes, and reconstructed the path through parent pointers. A* is optimal on the chosen discretized graph when the heuristic and edge costs satisfy the required conditions; that does not imply optimality in the original continuous space.</p>
-          <h3>Library-backed RRT*</h3>
-          <p>I integrated the <code>rrt-algorithms</code> Python library for sampling-based planning and connected it to the project environment. The project work included setup, environment integration, collision checking, and evaluation rather than a ground-up RRT* implementation.</p>
-          <h3>Collision checking</h3>
-          <p>Line segments were tested against axis-aligned bounding boxes so candidate edges could be rejected before entering a returned path.</p>
-        </section>
-        <section id="evaluation">
-          <p class="section-kicker">03 / Results</p>
-          <h2>Compared behavior across several obstacle layouts.</h2>
-          <p>The course experiments covered simple environments and more cluttered mazes, rooms, and tower-like layouts. The report and repository contain the configurations and outputs. Quantitative comparisons are omitted because the original metric definitions were not documented consistently.</p>
-          <div class="case-note"><strong>Limitations:</strong> A coarse grid can erase narrow passages, while a fine grid increases search cost. Sampling-based results vary with random samples and planner settings.</div>
-        </section>
-        <section id="limits">
-          <p class="section-kicker">04 / Limits + next experiment</p>
-          <h2>Representation choices shape the answer.</h2>
+
+        <section id="astar">
+          <p class="section-kicker">02 / Search</p>
+          <h2>Weighted A* over 26 neighbours.</h2>
+          <p>I discretised the workspace into 0.5 m cells and searched it with A*, expanding each cell to its 26 neighbours (faces, edges and corners) at their true Euclidean cost. The heuristic is straight-line distance to the goal, inflated by a weight ε = 1.2 so the search commits towards the goal sooner; with ε above 1 the path can be up to ε times longer than the best grid path, in exchange for expanding fewer cells.</p>
           <ul>
-            <li>A* quality and computation depend on grid resolution and connectivity.</li>
-            <li>RRT* is stochastic and the implementation relies on a third-party planner library.</li>
-            <li>The work uses geometric point-robot planning rather than full vehicle dynamics.</li>
+            <li>Cells are created lazily in a dictionary as the search reaches them, so the grid is never built in full.</li>
+            <li>The open list is a priority queue keyed on <code>g + ε·h</code>; closed cells are never reopened.</li>
+            <li>The search stops within one cell of the goal and walks parent pointers back to the start.</li>
           </ul>
-          <p>A useful next experiment would define a fixed benchmark suite and report success rate, path length, clearance, and runtime over repeated seeded trials.</p>
+        </section>
+
+        <section id="collision">
+          <p class="section-kicker">03 / Collision checking</p>
+          <h2>Check every edge, not just every cell.</h2>
+          <p>A cell centre can be free while the straight line to its neighbour clips the corner of a box. So every edge A* considers is tested against every obstacle with the slab method: intersect the segment with each pair of parallel faces, keep the latest entry and earliest exit, and reject the edge if the segment is inside the box for any stretch of it. The returned path is then re-checked segment by segment in continuous space.</p>
+        </section>
+
+        <section id="results">
+          <p class="section-kicker">04 / Results</p>
+          <h2>Shorter than RRT; RRT* catches up on the hardest maps.</h2>
+          <p>For comparison I ran sampling-based planners from the <code>rrt-algorithms</code> library on the same maps, wired to the same environment: plain RRT where it found a path in reasonable time, and bidirectional RRT* on the maze, Monza and room, where it did not.</p>
+          <figure class="diagram">
+            <svg viewBox="0 0 820 366" role="img" aria-labelledby="bars-title">
+<title id="bars-title">Path length per map, A* versus the sampling-based planner. A* is shorter or equal on the four maps where plain RRT ran (single cube 8 vs 8, window 26 vs 28, flappy bird 27 vs 34, tower 30 vs 42). Bidirectional RRT* was shorter on room (10 vs 12) and maze (74 vs 77), and A* on monza (76 vs 77).</title>
+<g font-family="IBM Plex Mono, monospace" font-size="12">
+<rect x="150" y="6" width="12" height="10" fill="#58b9ff"/><text x="168" y="15" fill="#c3ced6">A*</text>
+<rect x="210" y="6" width="12" height="10" fill="#f2a93b"/><text x="228" y="15" fill="#c3ced6">RRT / bidirectional RRT* (library)</text>
+<text x="138" y="52" text-anchor="end" fill="#eef3f6" font-size="13">Single cube</text>
+<rect x="150" y="34" width="60.0" height="14" rx="2" fill="#58b9ff"/>
+<text x="216.0" y="45" fill="#c3ced6">8</text>
+<rect x="150" y="51" width="60.0" height="14" rx="2" fill="#f2a93b"/>
+<text x="216.0" y="62" fill="#c3ced6">8 <tspan fill="#8fa1af">RRT</tspan></text>
+<text x="138" y="98" text-anchor="end" fill="#eef3f6" font-size="13">Window</text>
+<rect x="150" y="80" width="195.0" height="14" rx="2" fill="#58b9ff"/>
+<text x="351.0" y="91" fill="#c3ced6">26</text>
+<rect x="150" y="97" width="210.0" height="14" rx="2" fill="#f2a93b"/>
+<text x="366.0" y="108" fill="#c3ced6">28 <tspan fill="#8fa1af">RRT</tspan></text>
+<text x="138" y="144" text-anchor="end" fill="#eef3f6" font-size="13">Flappy bird</text>
+<rect x="150" y="126" width="202.5" height="14" rx="2" fill="#58b9ff"/>
+<text x="358.5" y="137" fill="#c3ced6">27</text>
+<rect x="150" y="143" width="255.0" height="14" rx="2" fill="#f2a93b"/>
+<text x="411.0" y="154" fill="#c3ced6">34 <tspan fill="#8fa1af">RRT</tspan></text>
+<text x="138" y="190" text-anchor="end" fill="#eef3f6" font-size="13">Tower</text>
+<rect x="150" y="172" width="225.0" height="14" rx="2" fill="#58b9ff"/>
+<text x="381.0" y="183" fill="#c3ced6">30</text>
+<rect x="150" y="189" width="315.0" height="14" rx="2" fill="#f2a93b"/>
+<text x="471.0" y="200" fill="#c3ced6">42 <tspan fill="#8fa1af">RRT</tspan></text>
+<text x="138" y="236" text-anchor="end" fill="#eef3f6" font-size="13">Room</text>
+<rect x="150" y="218" width="90.0" height="14" rx="2" fill="#58b9ff"/>
+<text x="246.0" y="229" fill="#c3ced6">12</text>
+<rect x="150" y="235" width="75.0" height="14" rx="2" fill="#f2a93b"/>
+<text x="231.0" y="246" fill="#c3ced6">10 <tspan fill="#8fa1af">RRT*</tspan></text>
+<text x="138" y="282" text-anchor="end" fill="#eef3f6" font-size="13">Monza</text>
+<rect x="150" y="264" width="570.0" height="14" rx="2" fill="#58b9ff"/>
+<text x="726.0" y="275" fill="#c3ced6">76</text>
+<rect x="150" y="281" width="577.5" height="14" rx="2" fill="#f2a93b"/>
+<text x="733.5" y="292" fill="#c3ced6">77 <tspan fill="#8fa1af">RRT*</tspan></text>
+<text x="138" y="328" text-anchor="end" fill="#eef3f6" font-size="13">Maze</text>
+<rect x="150" y="310" width="577.5" height="14" rx="2" fill="#58b9ff"/>
+<text x="733.5" y="321" fill="#c3ced6">77</text>
+<rect x="150" y="327" width="555.0" height="14" rx="2" fill="#f2a93b"/>
+<text x="711.0" y="338" fill="#c3ced6">74 <tspan fill="#8fa1af">RRT*</tspan></text>
+</g></svg>
+            <figcaption>Path length per map (units of the map), as reported in the project. The sampling planners are single runs.</figcaption>
+          </figure>
+          <div class="gallery">
+            <figure><img src="assets/images/astar-rrt/astar-flappy.webp" width="700" height="542" loading="lazy" decoding="async" alt="Side view of the flappy-bird map: A*'s path weaves up and down through the gaps between pillars"><figcaption>A* through the flappy-bird gaps: 27.</figcaption></figure>
+            <figure><img src="assets/images/astar-rrt/rrt-flappy.webp" width="700" height="277" loading="lazy" decoding="async" alt="RRT's tree branching through the same gaps, with its path in red"><figcaption>RRT on the same map, with its tree: 34.</figcaption></figure>
+            <figure><img src="assets/images/astar-rrt/astar-maze.webp" width="700" height="660" loading="lazy" decoding="async" alt="Top view of the square spiral maze with A*'s path winding from the outside to the centre"><figcaption>A* in the maze: 77.</figcaption></figure>
+            <figure><img src="assets/images/astar-rrt/rrtstar-maze.webp" width="700" height="682" loading="lazy" decoding="async" alt="Bidirectional RRT* trees filling the space around and inside the maze"><figcaption>Bidirectional RRT* trees exploring the maze: 74.</figcaption></figure>
+          </div>
+          <ul>
+            <li><strong>Against plain RRT, A* was never longer:</strong> equal on the single cube and 7–29% shorter on the other three, because RRT accepts the first path its random tree finds.</li>
+            <li><strong>RRT* matched or beat A* on the maze and the room.</strong> RRT* keeps rewiring its tree towards straight lines, while A*’s paths can only turn in 26 grid directions, so they zig-zag slightly where the true shortest path runs diagonally.</li>
+          </ul>
+        </section>
+
+        <section id="limits">
+          <p class="section-kicker">05 / Limits</p>
+          <h2>Representation shapes the answer.</h2>
+          <ul>
+            <li>A coarse grid can close off narrow passages; a fine one multiplies the search. 0.5 m worked for all seven maps.</li>
+            <li>The robot is a point. A real vehicle needs its footprint and kinematics in the planner.</li>
+            <li>Sampling planners are random; a fair comparison would report many seeded runs, with runtime as well as length.</li>
+          </ul>
         </section>
       </article>
     </div>

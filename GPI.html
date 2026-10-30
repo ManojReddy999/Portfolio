@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A trajectory-tracking study using receding-horizon certainty-equivalent control and an exploratory discretized policy-iteration formulation.">
+  <meta name="description" content="A receding-horizon MPC (certainty-equivalent control) in CasADi and IPOPT that tracks a path with a noisy differential-drive robot around obstacles: 0.21 m mean error, 4.4 times below a P-controller baseline, about 5 ms per step.">
   <meta name="theme-color" content="#050b11">
-  <title>Stochastic Trajectory Tracking | Manoj Reddy Manchala</title>
+  <title>Trajectory Tracking with MPC | Manoj Reddy Manchala</title>
   <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/GPI.html">
   <link rel="icon" href="assets/images/car-unique.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,25 +33,25 @@
 
   <main id="main-content" class="container case-study-page">
     <a class="back-link" href="./#work">← All projects</a>
-<section class="case-hero">
+    <section class="case-hero">
       <div>
-        <p class="eyebrow">Control / Planning under uncertainty</p>
-        <h1>Stochastic trajectory tracking</h1>
-        <p>Implemented receding-horizon certainty-equivalent control and explored a discretized generalized-policy-iteration formulation for a noisy differential-drive system.</p>
+        <p class="eyebrow">Optimal control · ECE 276B</p>
+        <h1>Trajectory tracking with MPC</h1>
+        <p>A receding-horizon model predictive controller (certainty-equivalent control) that steers a noisy differential-drive robot along a figure-eight path, around two obstacles the path itself runs into.</p>
         <div class="hero-actions">
           <a class="button" href="ECE276B_PR3_Report.pdf" target="_blank" rel="noopener noreferrer">Open report</a>
           <a class="button secondary" href="https://github.com/ManojReddy999/Infinite-Horizon-Stochastic-Optimal-Control" target="_blank" rel="noopener noreferrer">View code</a>
         </div>
       </div>
-      <figure class="case-hero-media">
-        <img loading="lazy" decoding="async" src="assets/images/GPI/Figure_6.webp" alt="Trajectory tracking plot showing a robot path, reference path, and obstacles">
+      <figure class="case-hero-media contain">
+        <img style="view-transition-name: p-mpc" src="assets/images/GPI/mpc-paths.webp" width="1000" height="1000" alt="Top-down plot of a figure-eight reference path and two round obstacles. The MPC's path in blue stays close to the reference and goes around the obstacles; the P controller's path in amber wanders further and cuts through one obstacle.">
       </figure>
     </section>
 
     <dl class="case-meta">
-      <div><dt class="meta-label">Context</dt><dd>ECE 276B course project</dd></div>
-      <div><dt class="meta-label">Methods</dt><dd>CEC / CasADi / GPI exploration</dd></div>
-      <div><dt class="meta-label">Artifacts</dt><dd>Code + report</dd></div>
+      <div><dt class="meta-label">Mean tracking error</dt><dd>0.21 m · 4.4× below a P controller</dd></div>
+      <div><dt class="meta-label">Obstacle contacts</dt><dd>1 in 4,800 steps vs 184</dd></div>
+      <div><dt class="meta-label">Solve time</dt><dd>~5 ms per step · CasADi + IPOPT</dd></div>
     </dl>
 
     <div class="case-layout">
@@ -59,37 +59,91 @@
         <p class="section-kicker">Contents</p>
         <ul>
           <li><a href="#problem">Problem</a></li>
-          <li><a href="#cec">CEC controller</a></li>
-          <li><a href="#gpi">GPI exploration</a></li>
+          <li><a href="#controller">Controller</a></li>
+          <li><a href="#results">Results</a></li>
+          <li><a href="#design">Design choices</a></li>
           <li><a href="#limits">Limits</a></li>
         </ul>
       </aside>
       <article class="case-content">
         <section id="problem">
           <p class="section-kicker">01 / Problem</p>
-          <h2>Track a reference path with noisy motion.</h2>
-          <p>The differential-drive robot must trade position and heading error against control effort while respecting bounded linear and angular inputs. Gaussian motion noise makes the system state depart from its nominal trajectory.</p>
+          <h2>Follow a moving target with a noisy robot.</h2>
+          <p>A differential-drive robot moves as a unicycle, with linear speed <em>v</em> ∈ [0, 1] m/s and turn rate <em>ω</em> ∈ [−1, 1] rad/s, updated every 0.5 s. Every step adds Gaussian motion noise (σ = 0.04 m in position, 0.004 rad in heading), so the robot never goes exactly where it was told.</p>
+          <p>It has to track a reference point moving along a Lissajous figure-eight for 120 s while staying clear of two 0.5 m obstacles. The reference passes 0.3 m <em>inside</em> one of them, so a controller that tracked it perfectly would crash: it has to trade tracking error against clearance.</p>
         </section>
-        <section id="cec">
-          <p class="section-kicker">02 / Receding horizon</p>
-          <h2>Optimize a deterministic approximation at each step.</h2>
-          <p>The certainty-equivalent controller sets process noise to zero inside a finite-horizon nonlinear program, solves that program with CasADi, applies the first control, and plans again from the updated state. Tuning balances tracking error, orientation alignment, effort, and obstacle penalties.</p>
-          <div class="case-note"><strong>Measured constraint:</strong> The source notes report roughly 10 to 15 seconds to compute a control input in the tested setup. That is not real-time control; it is an offline simulation result and a clear optimization target.</div>
+
+        <section id="controller">
+          <p class="section-kicker">02 / Controller</p>
+          <h2>Plan 15 steps ahead, apply one, repeat.</h2>
+          <p>Every 0.5 s the controller solves a nonlinear program over the next 15 steps (7.5 s), applies only the first command, and solves again from wherever the noise has put the robot. Planning as if the noise were zero is the certainty-equivalence step; replanning every step is what absorbs it.</p>
+          <figure class="diagram">
+            <svg viewBox="0 0 820 170" role="img" aria-labelledby="loop-title">
+              <title id="loop-title">The receding-horizon loop: the current state and the next 15 reference points go into a nonlinear program solved by IPOPT; the first command drives the noisy robot; its new state starts the next solve.</title>
+              <defs><marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#58b9ff"/></marker></defs>
+              <g font-family="IBM Plex Mono, monospace" font-size="13" text-anchor="middle">
+                <rect x="10" y="30" width="170" height="70" rx="6" fill="#08121c" stroke="#344b5f"/><text x="95" y="60" fill="#eef3f6">State + reference</text><text x="95" y="80" font-size="11" fill="#8fa1af">x, y, θ · next 15 targets</text>
+                <rect x="250" y="30" width="200" height="70" rx="6" fill="#163d5c" stroke="#58b9ff"/><text x="350" y="60" fill="#eef3f6">Solve NLP (IPOPT)</text><text x="350" y="80" font-size="11" fill="#c3ced6">15 steps · warm-started</text>
+                <rect x="520" y="30" width="120" height="70" rx="6" fill="#08121c" stroke="#344b5f"/><text x="580" y="60" fill="#eef3f6">Apply u₀</text><text x="580" y="80" font-size="11" fill="#8fa1af">v, ω</text>
+                <rect x="690" y="30" width="120" height="70" rx="6" fill="#08121c" stroke="#f2a93b"/><text x="750" y="60" fill="#eef3f6">Robot</text><text x="750" y="80" font-size="11" fill="#8fa1af">+ motion noise</text>
+              </g>
+              <g stroke="#58b9ff" stroke-width="1.5" fill="none" marker-end="url(#a1)">
+                <path d="M180 65 L248 65"/><path d="M450 65 L518 65"/><path d="M640 65 L688 65"/>
+                <path d="M750 100 L750 140 L95 140 L95 102"/>
+              </g>
+              <text x="420" y="160" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#8fa1af">every 0.5 s, from the state the noise actually produced</text>
+            </svg>
+          </figure>
+          <p>The program minimises a discounted sum of position error, heading error and control effort, subject to the robot’s dynamics, its speed limits, and one inequality per obstacle per step:</p>
+          <pre class="math"><code>min  Σₖ γᵏ ( ‖pₖ − rₖ‖²_Q + q (1 − cos(θₖ − θᵣ,ₖ))² + uₖᵀ R uₖ )
+s.t. xₖ₊₁ = f(xₖ, uₖ)                     noise-free unicycle
+     0 ≤ v ≤ 1,  −1 ≤ ω ≤ 1
+     (xₖ − xₒ)² + (yₖ − yₒ)² ≥ (rₒ + 0.15)²   each obstacle, each step</code></pre>
+          <p>With Q = diag(400, 20), q = 10, R = diag(20, 2) and γ = 0.9: tracking dominates, and turning is cheap compared with speeding up.</p>
         </section>
-        <section id="gpi">
-          <p class="section-kicker">03 / Policy iteration</p>
-          <h2>Explore the stochastic formulation directly.</h2>
-          <p>I discretized error and control spaces and explored transition-probability, stage-cost, policy-evaluation, and policy-improvement computations. The formulation exposed a severe memory and computation scaling problem. The work did not establish a complete, benchmarked GPI controller, so this page does not claim smoother or better trajectories from it.</p>
+
+        <section id="results">
+          <p class="section-kicker">03 / Results</p>
+          <h2>4.4× closer to the path, and clear of the obstacles.</h2>
+          <p>Both controllers ran the same 20 noisy 120-second runs (same noise seeds), against the P controller the course provides as a baseline.</p>
+          <div class="table-wrap">
+            <table class="results">
+              <caption>20 runs × 240 steps; the script that produces this table is <code>code/evaluate.py</code> in the repository.</caption>
+              <thead><tr><th scope="col"></th><th scope="col" class="num">P controller</th><th scope="col" class="num">MPC</th></tr></thead>
+              <tbody>
+                <tr><td>Mean position error</td><td class="num">0.914 m</td><td class="num"><strong>0.209 m</strong></td></tr>
+                <tr><td>Range across runs</td><td class="num">0.59–1.74 m</td><td class="num">0.20–0.23 m</td></tr>
+                <tr><td>Worst position error</td><td class="num">5.81 m</td><td class="num"><strong>0.69 m</strong></td></tr>
+                <tr><td>Steps inside an obstacle (of 4,800)</td><td class="num">184, in 19 of 20 runs</td><td class="num"><strong>1</strong> (5 mm, one run)</td></tr>
+                <tr><td>Median time per control step</td><td class="num">&lt;0.1 ms</td><td class="num">5.1 ms</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <figure>
+            <img src="assets/images/GPI/mpc-error.webp" width="1400" height="560" loading="lazy" decoding="async" alt="Position error over 120 seconds for one run: the P controller's error swings between about 0.2 and 1 metre; the MPC's mostly stays below 0.4 metres.">
+            <figcaption>Position error over one 120 s run. The MPC’s largest errors are where it deliberately leaves the path to go around an obstacle.</figcaption>
+          </figure>
+          <p>The MPC is also consistent: its mean error varied by 3 cm across the 20 runs, the P controller’s by more than a metre.</p>
         </section>
-        <section id="limits">
-          <p class="section-kicker">04 / Limitations and next steps</p>
-          <h2>Computational scale, not theory, became the bottleneck.</h2>
+
+        <section id="design">
+          <p class="section-kicker">04 / Design choices</p>
+          <h2>What makes it fast and safe.</h2>
           <ul>
-            <li>The receding-horizon solution was sensitive to objective weights and horizon choice.</li>
-            <li>Its measured solve time was too slow for an online robot loop.</li>
-            <li>Discretized GPI produced state-action tables too large for a practical full-resolution implementation.</li>
+            <li><strong>Smooth obstacle constraints.</strong> Squared distance against squared radius is differentiable everywhere, so IPOPT can use its gradients. A yes/no “inside the obstacle” test gives the solver nothing to follow.</li>
+            <li><strong>Build once, solve many times.</strong> The program is built once with the current state and the 15 reference points as parameters, and each solve starts from the previous plan shifted by one step. That keeps the median solve at about 5 ms, far inside the 500 ms control period.</li>
+            <li><strong>A margin sized to the noise.</strong> Obstacles are inflated by 0.15 m, about 3.75 times the per-step noise. Constraints hold for the noise-free prediction, so a large enough noise kick can still push the robot inside after the plan is made: that is the single 5 mm contact in 4,800 steps.</li>
           </ul>
-          <p>A next iteration would first benchmark warm starts and solver settings for CEC, then test a compact function approximator for the value or policy instead of a dense GPI table.</p>
+        </section>
+
+        <section id="limits">
+          <p class="section-kicker">05 / Limits and next steps</p>
+          <h2>Certainty equivalence ignores the noise it plans around.</h2>
+          <ul>
+            <li>A fixed margin cannot rule out every contact under unbounded Gaussian noise. Chance constraints or tube MPC would bound the risk explicitly.</li>
+            <li>The controller knows the model exactly; real robots add model error, delay and slip.</li>
+            <li>I also set up generalised policy iteration on a discretised error space, with transition tables precomputed in parallel with Ray. It did not reach a working policy within the project, so the comparison here is against the P controller.</li>
+          </ul>
         </section>
       </article>
     </div>

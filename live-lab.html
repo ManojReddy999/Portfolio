@@ -80,11 +80,11 @@
             <table class="results">
               <thead><tr><th scope="col">Part</th><th scope="col">Status</th></tr></thead>
               <tbody>
-                <tr><th scope="row">Physics</th><td><strong>Real.</strong> MuJoCo 3.12 compiled to WebAssembly (the official DeepMind bindings), loading the exact scene my navigation policies train in.</td></tr>
+                <tr><th scope="row">Physics</th><td><strong>Real.</strong> MuJoCo 3.12 compiled to WebAssembly (the official DeepMind bindings), loading the exact training scene from my navigation research.</td></tr>
                 <tr><th scope="row">Scene</th><td><strong>Real.</strong> Exported from the training code, not rebuilt by hand. Obstacles are re-scattered on each visit using the training rule.</td></tr>
                 <tr><th scope="row">LiDAR</th><td><strong>Real raycasts</strong> by MuJoCo: 360 rays, 4 m range, from where the MuSHR car mounts its YDLidar.</td></tr>
                 <tr><th scope="row">SLAM</th><td><strong>Real algorithms on real simulated sensors.</strong> The sensor errors are synthetic: the simulated encoders and gyro are perfect, so a per-session wheel-scale error, a gyro bias and per-sample noise are injected.</td></tr>
-                <tr><th scope="row">Driver</th><td><strong>Stand-in.</strong> A classical arc-sampling planner that sees the full LiDAR scan. My trained depth-camera policy sees far less, and will replace it once it drives well enough.</td></tr>
+                <tr><th scope="row">Driver</th><td><strong>Stand-in.</strong> A classical arc-sampling planner that sees the full LiDAR scan.</td></tr>
               </tbody>
             </table>
           </div>
@@ -148,7 +148,6 @@
           <h3>Found in the tools</h3>
           <ul>
             <li><code>mj_multiRay</code> in MuJoCo 3.12 misses static geometry that has been moved through <code>geom_pos</code>, while <code>mj_ray</code> and the physics agree. The LiDAR uses one <code>mj_ray</code> per beam.</li>
-            <li>The training car model had its wheels tilted 26.6°: dm_control compiles with <code>angle="radian"</code>, so a wheel’s <code>euler="90 0 0"</code> meant 90 radians. That went back to the research as a bug report. The lab deliberately keeps the as-trained physics, so a policy trained on it sees what it trained on.</li>
             <li>A static dev server without cache headers let browsers keep running stale ES modules after edits, which cost one wrong conclusion. The dev server now sends <code>no-store</code>.</li>
           </ul>
         </section>
@@ -195,7 +194,7 @@
           <h2>Limits and next</h2>
           <ul>
             <li><strong>Drift between loop closures.</strong> The live estimate drifts while the car explores new ground, until a revisit lets a loop close. In this small arena, the previous version (tracking against the whole map) had lower worst moments.</li>
-            <li><strong>The trained policy.</strong> Export the actor to ONNX, render the same 64 × 128 depth image in the browser, prove it matches MuJoCo’s depth render, and replace the stand-in planner.</li>
+            <li><strong>A learned driver.</strong> Export a depth policy to ONNX, render the same 64 × 128 depth image in the browser, prove it matches MuJoCo’s depth render, and replace the stand-in planner.</li>
             <li>The slip detector raises occasional false alarms at speed along walls; the cost is half a second of paused calibration.</li>
           </ul>
           <div class="hero-actions">

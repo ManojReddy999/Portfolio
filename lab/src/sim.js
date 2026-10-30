@@ -41,9 +41,31 @@ async function fetchWithProgress(url, expected, onProgress) {
   return bytes;
 }
 
+// A wider copy of the training arena, for the home page: walls and floor moved out
+// to `arena` (half-size, m) and every obstacle repeated so the density matches training.
+// Copies keep their original class, so they collide and render exactly like the originals.
+function widenArena(xml, base, arena) {
+  const copies = Math.max(0, Math.round((arena / base) ** 2) - 1);
+  const isObstacle = (block) => !/size="[^"]*\b10\b/.test(block); // the walls are 10 m long
+  xml = xml.replace(/<body name="unnamed_model(?:_\d+)?\/">\s*<geom [^>]*\/>\s*<\/body>/g, (block) => {
+    if (!isObstacle(block)) {
+      return block
+        .replace(/size="([\d.e-]+) 10 ([\d.e-]+)"/, `size="$1 ${arena + 2} $2"`)
+        .replace(/size="10 ([\d.e-]+) ([\d.e-]+)"/, `size="${arena + 2} $1 $2"`)
+        .replace(/pos="(-?)8 0 /, `pos="$1${arena} 0 `)
+        .replace(/pos="0 (-?)8 /, `pos="0 $1${arena} `);
+    }
+    let out = block;
+    for (let c = 1; c <= copies; c++) out += '\n' + block.replace(/name="unnamed_model/g, `name="wide${c}_unnamed_model`);
+    return out;
+  });
+  return xml.replace(/(<geom name="groundplane"[^>]*size=")[\d.]+ [\d.]+/, `$1${arena} ${arena}`);
+}
+
 // onStep(step, fraction) reports real progress: 'wasm' (downloading, with a
 // fraction), 'compile' (instantiating the engine), 'scene' (compiling the model).
-export async function loadSim(onStep = () => {}) {
+// `arena`, if larger than the training arena, widens it (see widenArena).
+export async function loadSim(onStep = () => {}, { arena } = {}) {
   // The scene is small; fetch it while the engine downloads.
   const scene = fetch(new URL('manifest.json', SCENE))
     .then((r) => r.json())
@@ -62,6 +84,7 @@ export async function loadSim(onStep = () => {}) {
     if (name === manifest.scene) xml = new TextDecoder().decode(files[i]);
     else vfs.addBuffer(name.replace(/\.gz$/, ''), files[i]);
   });
+  if (arena && arena > manifest.arena_size) xml = widenArena(xml, manifest.arena_size, arena);
   const model = mujoco.MjModel.from_xml_string(xml, vfs);
   vfs.delete();
   return new Sim(mujoco, model, manifest);

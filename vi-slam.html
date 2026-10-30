@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Visual-inertial SLAM on vehicle driving data: an extended Kalman filter on SE(3) with IMU pose prediction and stereo landmark updates over a joint pose-landmark covariance.">
+  <meta name="theme-color" content="#050b11">
+  <title>Visual-Inertial SLAM | Manoj Reddy Manchala</title>
+  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/vi-slam.html">
+  <link rel="icon" href="assets/images/car-unique.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header">
+    <nav class="navbar" aria-label="Primary">
+      <div class="nav-logo"><a href="./" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">☰</button>
+      <ul class="nav-links" id="primary-navigation" data-open="false">
+        <li><a href="./#work">Robotics</a></li>
+        <li><a href="./#production">Production</a></li>
+        <li><a href="lab/">Lab</a></li>
+        <li><a href="./#about">About</a></li>
+        <li><a href="./#contact">Contact</a></li>
+        <li><a class="nav-cta" href="Resume_Manoj.pdf">Résumé</a></li>
+      </ul>
+    </nav>
+  </header>
+
+    <main id="main-content" class="container case-study-page">
+    <a class="back-link" href="./#work">← All projects</a>
+    <section class="case-hero">
+      <div>
+        <p class="eyebrow">State estimation · ECE 276A</p>
+        <h1>Visual-inertial SLAM</h1>
+        <p>An extended Kalman filter on SE(3) that fuses a car’s IMU with stereo camera landmarks, correcting dead-reckoning drift while it builds a 3D landmark map.</p>
+        <div class="hero-actions">
+          <a class="button" href="ECE276A_PR3_Report.pdf" target="_blank" rel="noopener noreferrer">Open report</a>
+          <a class="button secondary" href="https://github.com/ManojReddy999/Visual-Inertial-SLAM" target="_blank" rel="noopener noreferrer">View code</a>
+        </div>
+      </div>
+      <figure class="case-hero-media contain light">
+        <img style="view-transition-name: p-vislam" src="assets/images/slam/vi-slam.webp" width="1000" height="580" alt="The car's visual-inertial SLAM trajectory with the mapped landmarks along the route">
+      </figure>
+    </section>
+
+    <dl class="case-meta">
+      <div><dt class="meta-label">Data</dt><dd>Car IMU + stereo features</dd></div>
+      <div><dt class="meta-label">Filter</dt><dd>EKF on SE(3)</dd></div>
+      <div><dt class="meta-label">State</dt><dd>Pose + every landmark</dd></div>
+    </dl>
+
+    <div class="case-layout">
+      <aside class="case-aside" aria-label="Project sections">
+        <p class="section-kicker">Contents</p>
+        <ul>
+          <li><a href="#data">Data</a></li>
+          <li><a href="#filter">Filter</a></li>
+          <li><a href="#results">Results</a></li>
+          <li><a href="#limits">Limits</a></li>
+        </ul>
+      </aside>
+      <article class="case-content">
+        <section id="data">
+          <p class="section-kicker">01 / Data</p>
+          <h2>An IMU that drifts, a camera that remembers.</h2>
+          <p>A car drove with an IMU, reporting linear and angular velocity, and a stereo camera whose features were tracked from frame to frame, along with the camera intrinsics, the stereo baseline and the camera-to-IMU transform. Integrating the IMU alone gives a trajectory that is right over seconds and wrong over minutes; landmarks seen again and again by the camera are what can hold it in place.</p>
+        </section>
+
+        <section id="filter">
+          <p class="section-kicker">02 / Filter</p>
+          <h2>Predict on SE(3), update with what the cameras see.</h2>
+          <figure class="diagram">
+            <svg viewBox="0 0 820 150" role="img" aria-labelledby="vi-title">
+              <title id="vi-title">Extended Kalman filter loop: IMU velocities predict the pose on SE(3); stereo features update both the pose and the landmark positions through one joint covariance.</title>
+              <defs><marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#58b9ff"/></marker></defs>
+              <g font-family="IBM Plex Mono, monospace" font-size="13" text-anchor="middle">
+                <rect x="10" y="40" width="160" height="66" rx="6" fill="#08121c" stroke="#344b5f"/><text x="90" y="68" fill="#eef3f6">IMU velocities</text><text x="90" y="88" font-size="11" fill="#8fa1af">linear + angular</text>
+                <rect x="225" y="40" width="180" height="66" rx="6" fill="#163d5c" stroke="#58b9ff"/><text x="315" y="68" fill="#eef3f6">Predict pose</text><text x="315" y="88" font-size="11" fill="#c3ced6">exponential map on SE(3)</text>
+                <rect x="460" y="40" width="180" height="66" rx="6" fill="#163d5c" stroke="#58b9ff"/><text x="550" y="68" fill="#eef3f6">Update</text><text x="550" y="88" font-size="11" fill="#c3ced6">pose + landmarks jointly</text>
+                <rect x="695" y="40" width="115" height="66" rx="6" fill="#08121c" stroke="#344b5f"/><text x="752" y="68" fill="#eef3f6">Stereo</text><text x="752" y="88" font-size="11" fill="#8fa1af">features</text>
+              </g>
+              <g stroke="#58b9ff" stroke-width="1.5" fill="none" marker-end="url(#v1)">
+                <path d="M170 73 L223 73"/><path d="M405 73 L458 73"/><path d="M695 73 L642 73"/><path d="M550 106 L550 130 L315 130 L315 108"/>
+              </g>
+            </svg>
+          </figure>
+          <h3>Prediction</h3>
+          <p>The IMU’s linear and angular velocity form a twist. The pose, a 4 × 4 transform in SE(3), moves by the exponential map of that twist over each time step, and the pose covariance moves with the corresponding adjoint, so orientation is never forced through Euler angles.</p>
+          <h3>Landmarks</h3>
+          <p>The first time a feature is seen in both cameras, its depth comes from the disparity between them, and it is placed in the world from the current pose and the camera-to-IMU transform.</p>
+          <h3>Update</h3>
+          <p>For every visible landmark, the filter predicts where it should appear in both images and compares that with where it was seen. The Jacobians with respect to the landmark and to the pose both enter one Kalman update over a joint covariance, so a correction to the car’s pose and to the map happen together, and landmarks seen together stay consistent with each other.</p>
+        </section>
+
+        <section id="results">
+          <p class="section-kicker">03 / Results</p>
+          <h2>From dead reckoning to a map.</h2>
+          <div class="gallery">
+            <figure><img src="assets/images/slam/vi-imu-only.webp" width="590" height="465" loading="lazy" decoding="async" alt="The car's trajectory from integrating the IMU alone"><figcaption>The IMU alone: the prediction step with nothing to correct it.</figcaption></figure>
+            <figure><img src="assets/images/slam/vi-slam.webp" width="1000" height="580" loading="lazy" decoding="async" alt="The visual-inertial SLAM trajectory with the mapped landmarks along the route"><figcaption>Visual-inertial SLAM: the corrected trajectory, with landmarks lining the route.</figcaption></figure>
+          </div>
+          <p>The filter was run on two drives. With a larger motion-noise setting, one trajectory changed considerably and the other barely moved, so how much to trust the IMU against the cameras has to be tuned per drive.</p>
+        </section>
+
+        <section id="limits">
+          <p class="section-kicker">04 / Limits</p>
+          <h2>Flat motion, unknown truth.</h2>
+          <ul>
+            <li>The car barely moves vertically, so landmark heights are poorly constrained; the map is reliable in x and y.</li>
+            <li>There is no ground-truth trajectory, so the result is judged by how coherent the trajectory and map are.</li>
+            <li>A full joint covariance grows with the square of the number of landmarks; a larger map would need sparse or windowed estimation.</li>
+          </ul>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <p>© <span data-year>2026</span> Manoj Reddy Manchala</p>
+      <div class="footer-links"><a href="https://github.com/ManojReddy999">GitHub</a><a href="https://www.linkedin.com/in/manojreddymanchala/">LinkedIn</a><a href="mailto:manojreddymanchala@gmail.com">Email</a></div>
+    </div>
+  </footer>
+</body>
+</html>

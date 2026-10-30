@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="An ECE 228 team project for the Comma.ai Calibration Challenge, exploring monocular camera calibration with optical flow, vanishing-point geometry, and a Conv-LSTM model for pitch and yaw estimation." />
-  <meta name="theme-color" content="#050b11" />
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content="Comma.ai Calibration Challenge | Manoj Reddy Manchala" />
-  <meta property="og:description" content="ECE 228 team project for the Comma.ai Calibration Challenge: camera-motion estimation from monocular video using RGB frames, optical flow, and temporal deep learning." />
-  <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/Calibration-challenge.html" />
-  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/Calibration-challenge.html" />
-  <link rel="icon" type="image/png" href="assets/images/car-unique.png" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="An ECE 228 team project: a Conv-LSTM that estimates a dashcam's pitch and yaw from monocular video by stacking RGB frames with dense optical flow, with ablations of each input.">
+  <meta name="theme-color" content="#050b11">
   <title>Comma.ai Calibration Challenge | Manoj Reddy Manchala</title>
+  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/Calibration-challenge.html">
+  <link rel="icon" href="assets/images/car-unique.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
@@ -19,8 +15,7 @@
   <script src="assets/js/site.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
     <nav class="navbar" aria-label="Primary">
       <div class="nav-logo"><a href="./" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
@@ -36,145 +31,112 @@
     </nav>
   </header>
 
-  <main class="container project-details-page" id="main-content">
+    <main id="main-content" class="container case-study-page">
     <a class="back-link" href="./#work">← All projects</a>
-<div class="project-details-card">
-      <div class="heading-buttons">
-        <div>
-          <span class="project-type">ECE 228 team project · Computer vision / Temporal learning</span>
-          <h1>Comma.ai Calibration Challenge</h1>
-        </div>
-        <div class="button-group" aria-label="Project resources">
-          <a class="button secondary" href="ECE228_project_report_12.pdf" target="_blank" rel="noopener noreferrer">
-            Report
-          </a>
-          <a class="button" href="https://github.com/ManojReddy999/Calibration_Challenge" target="_blank" rel="noopener noreferrer">
-            GitHub
-          </a>
+    <section class="case-hero">
+      <div>
+        <p class="eyebrow">Computer vision · ECE 228 team project</p>
+        <h1>Comma.ai calibration challenge</h1>
+        <p>With two teammates: a Conv-LSTM that estimates a dashcam’s pitch and yaw from video by stacking RGB frames with dense optical flow. Ablations showed neither input works on its own.</p>
+        <div class="hero-actions">
+          <a class="button" href="ECE228_project_report_12.pdf" target="_blank" rel="noopener noreferrer">Open report</a>
+          <a class="button secondary" href="https://github.com/potladurthy/Direction_of_travel_estimation" target="_blank" rel="noopener noreferrer">Team repo</a>
         </div>
       </div>
+      <figure class="case-hero-media">
+        <img style="view-transition-name: p-calib" src="assets/images/Calibration challenge/optical_img_2.webp" alt="A road scene with dense optical-flow vectors drawn over it">
+      </figure>
+    </section>
 
-      <article>
-        <p class="status-line">ECE 228 team project · Manoj Kumar Reddy Manchala, Sai Praneeth Potladurthy, and Sesha Sai Rakesh Jonnavithula</p>
+    <dl class="case-meta">
+      <div><dt class="meta-label">Team</dt><dd>3 people · ECE 228</dd></div>
+      <div><dt class="meta-label">Model</dt><dd>Conv-LSTM · RGB + optical flow</dd></div>
+      <div><dt class="meta-label">Data</dt><dd>5 labelled minutes · 20 fps</dd></div>
+    </dl>
 
-        <aside class="case-note">
-          <strong>Scope note:</strong> The available project materials describe this as a three-person team project.
-          Methods and results are therefore presented at team level; subsystem ownership is not claimed where it is not documented.
-        </aside>
-
-        <section id="overview">
-          <h2>Problem and objective</h2>
-          <p>
-            A forward-facing vehicle camera can be misaligned with the vehicle coordinate frame.
-            The team investigated whether monocular video could be used to estimate the direction of motion—represented by pitch and yaw—and provide a signal for camera calibration.
-          </p>
-          <p>
-            The project combined geometric cues with learned temporal features: dense optical flow described motion between frames,
-            vanishing-point geometry provided an interpretable reference, and a Conv-LSTM model mapped short image sequences to pitch and yaw estimates.
-          </p>
+    <div class="case-layout">
+      <aside class="case-aside" aria-label="Project sections">
+        <p class="section-kicker">Contents</p>
+        <ul>
+          <li><a href="#problem">Problem</a></li>
+          <li><a href="#data">Data</a></li>
+          <li><a href="#model">Model</a></li>
+          <li><a href="#experiments">Experiments</a></li>
+          <li><a href="#limits">Limits</a></li>
+        </ul>
+      </aside>
+      <article class="case-content">
+        <section id="problem">
+          <p class="section-kicker">01 / Problem</p>
+          <h2>Which way is the car really going?</h2>
+          <p>A dashcam is never mounted perfectly straight, so the direction the car travels is not the direction the camera points. comma.ai’s challenge asks for that offset, as pitch and yaw angles of the direction of travel, from monocular video alone. Done well, it calibrates a camera without extra sensors.</p>
         </section>
 
-        <section id="geometry">
-          <h2>Motion and geometry cues</h2>
-          <h3>Dense optical flow</h3>
-          <p>
-            Farneback optical flow was computed between consecutive frames to approximate per-pixel motion.
-            The horizontal and vertical flow fields were concatenated with RGB channels, producing a five-channel representation for one model configuration.
-          </p>
-          <div class="media-row" aria-label="Optical flow examples">
-            <img src="assets/images/Calibration challenge/optical_img_2.webp" alt="Road frame with optical-flow vectors overlaid" loading="lazy" />
-            <img src="assets/images/Calibration challenge/optical_img_1.webp" alt="Optical-flow field extracted from a driving frame" loading="lazy" />
-            <img src="assets/images/Calibration challenge/optical_img_3.webp" alt="Additional driving-frame optical-flow example" loading="lazy" />
-          </div>
-
-          <h3>Vanishing-point estimate</h3>
-          <p>
-            Parallel structures in the scene converge toward a vanishing point in the image plane.
-            The team used this geometric cue to reason about the vehicle's direction of travel and its relationship to camera pitch and yaw.
-          </p>
-          <figure>
-            <img class="img-medium" src="assets/images/Calibration challenge/vanishing_point.webp" alt="Driving scene annotated with the estimated vanishing point" loading="lazy" />
-            <figcaption>Vanishing-point cue used as an interpretable reference for motion direction.</figcaption>
-          </figure>
-        </section>
-
-        <section id="pipeline">
-          <h2>Data pipeline</h2>
-          <p>
-            The dataset comprised five one-minute driving videos recorded at 20 frames per second.
-            The team reported substantial missing labels and relatively few frames with meaningful directional change,
-            so preprocessing was central to the experiment.
-          </p>
+        <section id="data">
+          <p class="section-kicker">02 / Data</p>
+          <h2>Five minutes of driving, mostly straight.</h2>
+          <p>The labelled data is five one-minute videos at 20 frames per second, about 6,000 frames. Two problems shaped everything:</p>
           <ul>
-            <li><strong>Frame preparation:</strong> video was split into frames and resized to 256 × 256 pixels.</li>
-            <li><strong>Label continuity:</strong> missing pitch and yaw labels were interpolated for training sequences.</li>
-            <li><strong>Feature construction:</strong> RGB and optical-flow channels were evaluated separately and together.</li>
-            <li><strong>Temporal windows:</strong> sequences of 15 frames were used to expose short-term motion context.</li>
+            <li><strong>Missing labels.</strong> Frames recorded below 4 m/s have none, about 40% of the data; they were filled by interpolation, since a slow car is mostly heading straight.</li>
+            <li><strong>Imbalance.</strong> About 80% of frames are straight driving with almost no change in pitch or yaw, and the turns are what matter. The loss weights frames where the car is turning more heavily.</li>
           </ul>
+          <p>Frames were resized to 256 × 256; flips are off limits because they would change the very angles being learned.</p>
         </section>
 
-        <section id="architecture">
-          <h2>Conv-LSTM architecture</h2>
-          <p>
-            Convolutional layers extracted spatial features from each frame, while LSTM layers modeled changes across the sequence.
-            A final fully connected layer produced pitch and yaw predictions. The combined-input variant accepted RGB plus the two optical-flow components.
-          </p>
-          <figure>
-            <img class="img-large" src="assets/images/Calibration challenge/architecture.webp" alt="Diagram of the convolutional and LSTM calibration architecture" loading="lazy" />
-            <figcaption>Spatial feature extraction followed by temporal modeling and two-angle regression.</figcaption>
+        <section id="model">
+          <p class="section-kicker">03 / Model</p>
+          <h2>Appearance plus motion, over time.</h2>
+          <h3>Dense optical flow</h3>
+          <p>Farneback optical flow between consecutive frames gives every pixel a motion vector. Its two channels are stacked with RGB into a five-channel input, so the network sees both what the road looks like and how it is moving.</p>
+          <div class="gallery">
+            <figure class="dark"><img src="assets/images/Calibration challenge/optical_img_1.webp" loading="lazy" decoding="async" alt="Optical-flow field extracted from a driving frame"><figcaption>The flow field between two frames.</figcaption></figure>
+            <figure class="dark"><img src="assets/images/Calibration challenge/optical_img_3.webp" loading="lazy" decoding="async" alt="Another driving frame with its optical flow"><figcaption>Flow highlights where the scene moves.</figcaption></figure>
+          </div>
+          <h3>Conv-LSTM</h3>
+          <p>Convolutions with average pooling extract features from each frame, an LSTM carries them across a sequence of frames, and a final layer regresses pitch and yaw for the sequence’s centre frame. It was trained with SGD, dropout and weight decay on the turn-weighted MSE.</p>
+          <figure class="light">
+            <img src="assets/images/Calibration challenge/architecture.webp" loading="lazy" decoding="async" alt="Conv-LSTM architecture: convolution and pooling layers per frame, an LSTM across frames, and a fully connected layer for pitch and yaw">
+            <figcaption>Spatial features per frame, temporal modelling across frames, two angles out.</figcaption>
           </figure>
-          <p>
-            The reported training setup used 30 epochs, batches of 10 sequences, stochastic gradient descent,
-            dropout, weight decay, and a weighted mean-squared-error objective intended to counter the imbalance between straight-driving and turning frames.
-          </p>
+          <h3>The vanishing point, explored first</h3>
+          <p>Lane markings converge on a vanishing point that points along the direction of travel. We first trained a CNN to regress its position, but turning it into pitch and yaw needed lane features and several networks, too slow for the task, so the final model learns direction from motion instead.</p>
+          <figure class="light">
+            <img src="assets/images/Calibration challenge/vanishing_point.webp" loading="lazy" decoding="async" alt="Driving scene annotated with the estimated vanishing point">
+            <figcaption>The vanishing point: explored as a geometric cue, then set aside for the learned model.</figcaption>
+          </figure>
         </section>
 
         <section id="experiments">
-          <h2>Experiment comparison</h2>
-          <p>
-            Three input configurations were compared: RGB frames alone, optical flow alone, and a fused RGB-plus-flow input.
-            The loss curves below compare the three training configurations; they are not production benchmarks.
-          </p>
-          <div class="media-row" aria-label="Training loss comparisons">
-            <img src="assets/images/Calibration challenge/without_optical_flow_loss.webp" alt="Training and validation loss for the RGB-only model" loading="lazy" />
-            <img src="assets/images/Calibration challenge/only_optical_loss.webp" alt="Training and validation loss for the optical-flow-only model" loading="lazy" />
-            <img src="assets/images/Calibration challenge/loss_curve.webp" alt="Training and validation loss for the fused RGB and optical-flow model" loading="lazy" />
+          <p class="section-kicker">04 / Experiments</p>
+          <h2>Neither input works alone.</h2>
+          <p>The same Conv-LSTM was trained on RGB only, optical flow only, and both together, and each held out 20% of the labelled data for testing.</p>
+          <div class="gallery three">
+            <figure class="light"><img src="assets/images/Calibration challenge/without_optical_flow_loss.webp" loading="lazy" decoding="async" alt="Train and test loss curves for RGB-only input"><figcaption>Loss: RGB only.</figcaption></figure>
+            <figure class="light"><img src="assets/images/Calibration challenge/only_optical_loss.webp" loading="lazy" decoding="async" alt="Train and test loss curves for optical-flow-only input"><figcaption>Loss: optical flow only.</figcaption></figure>
+            <figure class="light"><img src="assets/images/Calibration challenge/loss_curve.webp" loading="lazy" decoding="async" alt="Train and test loss curves for the fused input"><figcaption>Loss: both, fused.</figcaption></figure>
           </div>
-
-          <h3>RGB only</h3>
-          <figure>
-            <img class="img-large" src="assets/images/Calibration challenge/without_optical_flow_pitch_yaw.webp" alt="Ground-truth and predicted pitch and yaw traces for RGB-only input" loading="lazy" />
+          <figure class="light">
+            <img src="assets/images/Calibration challenge/without_optical_flow_pitch_yaw.webp" loading="lazy" decoding="async" alt="Predicted and true pitch and yaw for RGB-only input: the predictions stay nearly flat">
+            <figcaption>RGB only: nearly constant predictions; appearance alone does not reveal the motion.</figcaption>
           </figure>
-
-          <h3>Optical flow only</h3>
-          <figure>
-            <img class="img-large" src="assets/images/Calibration challenge/only_optical_flow_pitch_yaw.webp" alt="Ground-truth and predicted pitch and yaw traces for optical-flow-only input" loading="lazy" />
+          <figure class="light">
+            <img src="assets/images/Calibration challenge/only_optical_flow_pitch_yaw.webp" loading="lazy" decoding="async" alt="Predicted and true pitch and yaw for optical-flow-only input: noisy predictions">
+            <figcaption>Optical flow only: it reacts to motion, but the predictions are noisy.</figcaption>
           </figure>
-
-          <h3>RGB and optical flow</h3>
-          <figure>
-            <img class="img-large" src="assets/images/Calibration challenge/pitch_yaw_prediction.webp" alt="Ground-truth and predicted pitch and yaw traces for fused RGB and optical-flow input" loading="lazy" />
+          <figure class="light">
+            <img src="assets/images/Calibration challenge/pitch_yaw_prediction.webp" loading="lazy" decoding="async" alt="Predicted and true pitch and yaw for the fused input, following the trend of the true angles">
+            <figcaption>Both fused: the predictions follow the trend of the true angles, with high variance; yaw is tracked better than pitch.</figcaption>
           </figure>
-
-          <p>
-            The fused representation captured both appearance and motion, but its predictions also showed higher variance.
-            A plausible contributor was noise introduced by interpolated labels. Because the original summary did not define a reproducible denominator for its percentage-error claim,
-            this page does not present that number as a validated metric.
-          </p>
         </section>
 
-        <section id="limitations">
-          <h2>Limitations and next steps</h2>
+        <section id="limits">
+          <p class="section-kicker">05 / Limits</p>
+          <h2>Small data, precomputed motion.</h2>
           <ul>
-            <li><strong>Small, sparse dataset:</strong> a limited number of short videos restricted coverage of lighting, road geometry, and vehicle maneuvers.</li>
-            <li><strong>Interpolated supervision:</strong> filled labels improved continuity but may have introduced noise into the training target.</li>
-            <li><strong>Imbalanced motion:</strong> straight-driving frames dominated, making directional changes harder to learn.</li>
-            <li><strong>Offline features:</strong> precomputed dense flow added cost and did not establish real-time performance.</li>
+            <li>Five minutes of video cover few lighting conditions, roads and manoeuvres.</li>
+            <li>Interpolated labels smooth the target but add noise of their own, a likely source of the variance.</li>
+            <li>Dense flow is precomputed, which rules out real-time use; a learned flow network would remove that step.</li>
           </ul>
-          <p>
-            A stronger follow-up would define a held-out evaluation protocol, report angle errors in degrees with confidence intervals,
-            test across distinct drives, and compare learned flow features with classical dense flow under the same runtime budget.
-          </p>
         </section>
       </article>
     </div>

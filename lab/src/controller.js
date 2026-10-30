@@ -76,7 +76,9 @@ export class LocalPlanner {
     return horizon;
   }
 
-  act(lidar, t, speed, collided) {
+  // `home`, if given, is { angle, weight }: the direction back toward the middle of the
+  // arena in the body frame, and how strongly to prefer arcs that end facing it.
+  act(lidar, t, speed, collided, home = null) {
     this.collectPoints(lidar);
     const steers = Array.from({ length: CANDIDATES }, (_, i) => -STEER_LIMIT + (2 * STEER_LIMIT * i) / (CANDIDATES - 1));
 
@@ -92,8 +94,9 @@ export class LocalPlanner {
     let best = 0, bestScore = -Infinity, bestFree = 0;
     for (const d of steers) {
       const free = this.freeLength(d, 1, HORIZON);
-      const score = free / HORIZON + 0.35 * openness(d) - 0.08 * Math.abs(d) / STEER_LIMIT
+      let score = free / HORIZON + 0.35 * openness(d) - 0.08 * Math.abs(d) / STEER_LIMIT
         - 0.12 * Math.abs(d - this.prevSteer) / STEER_LIMIT;
+      if (home) score += home.weight * Math.cos(this.pose(d, HORIZON)[2] - home.angle);
       if (score > bestScore) { bestScore = score; best = d; bestFree = free; }
     }
 

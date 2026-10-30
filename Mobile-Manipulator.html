@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="A simulated YouBot pick-and-place controller combining kinematics, reference trajectory generation, and feedforward-plus-PI feedback control." />
-  <meta name="theme-color" content="#050b11" />
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content="YouBot Motion Control | Manoj Reddy Manchala" />
-  <meta property="og:description" content="Mobile-manipulator trajectory tracking and pick-and-place experiments in MATLAB and CoppeliaSim." />
-  <meta property="og:url" content="https://manojreddy999.github.io/Portfolio/Mobile-Manipulator.html" />
-  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/Mobile-Manipulator.html" />
-  <link rel="icon" type="image/png" href="assets/images/car-unique.png" />
-  <title>YouBot Motion Control | Manoj Reddy Manchala</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Control software for a simulated KUKA youBot: kinematics simulation, screw-motion trajectories and feedforward plus PI control through the base and arm Jacobian, recovering from a 30 degree, 0.2 m starting error before the grasp.">
+  <meta name="theme-color" content="#050b11">
+  <title>Mobile Manipulator Pick and Place | Manoj Reddy Manchala</title>
+  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/Mobile-Manipulator.html">
+  <link rel="icon" href="assets/images/car-unique.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
@@ -19,8 +15,7 @@
   <script src="assets/js/site.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
     <nav class="navbar" aria-label="Primary">
       <div class="nav-logo"><a href="./" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
@@ -36,136 +31,123 @@
     </nav>
   </header>
 
-  <main class="container project-details-page" id="main-content">
+    <main id="main-content" class="container case-study-page">
     <a class="back-link" href="./#work">← All projects</a>
-<div class="project-details-card">
-      <div class="heading-buttons">
-        <div>
-          <span class="project-type">Robot control · simulation</span>
-          <h1>Motion Control of a Mobile Manipulator</h1>
-        </div>
-        <div class="button-group" aria-label="Project resources">
-          <a class="button secondary" href="https://www.youtube.com/playlist?list=PLNTqfp1IsYFb94NbPhJJMrlI-eNQuOVJU" target="_blank" rel="noopener noreferrer">
-            Demo playlist
-          </a>
-          <a class="button" href="https://github.com/ManojReddy999/Motion-Control-of-Mobile-Manipulator-Robot" target="_blank" rel="noopener noreferrer">
-            GitHub
-          </a>
+    <section class="case-hero">
+      <div>
+        <p class="eyebrow">Manipulation · control · MAE 204</p>
+        <h1>Mobile manipulator pick and place</h1>
+        <p>Control software that drives a simulated KUKA youBot (mecanum base, 5-DOF arm) to a cube, picks it up and places it at a goal, closing a 30°, 0.2 m starting error before the grasp.</p>
+        <div class="hero-actions">
+          <a class="button" href="https://www.youtube.com/playlist?list=PLNTqfp1IsYFb94NbPhJJMrlI-eNQuOVJU" target="_blank" rel="noopener noreferrer">Demo playlist</a>
+          <a class="button secondary" href="https://github.com/ManojReddy999/Motion-Control-of-Mobile-Manipulator-Robot" target="_blank" rel="noopener noreferrer">View code</a>
         </div>
       </div>
+      <figure class="case-hero-media video">
+        <video style="view-transition-name: p-youbot" autoplay muted loop playsinline preload="auto" poster="assets/images/Mobile Manipulator/Best_Case-hero-poster.webp" width="900" height="720" aria-label="The youBot driving to the cube, picking it up and placing it at the goal"><source src="assets/images/Mobile Manipulator/Best_Case-hero.mp4" type="video/mp4"><source src="assets/images/Mobile Manipulator/Best_Case-hero.webm" type="video/webm"></video>
+      </figure>
+    </section>
 
-      <article>
-        <p class="status-line">MAE 204 final project · MATLAB · Modern Robotics Toolbox · CoppeliaSim</p>
+    <dl class="case-meta">
+      <div><dt class="meta-label">Starting error</dt><dd>30° · 0.2 m, closed before the grasp</dd></div>
+      <div><dt class="meta-label">Controller</dt><dd>Feedforward + PI through J⁺</dd></div>
+      <div><dt class="meta-label">Stack</dt><dd>MATLAB · Modern Robotics · CoppeliaSim</dd></div>
+    </dl>
 
-        <aside class="case-note">
-          <strong>Scope:</strong> All experiments were performed in CoppeliaSim; hardware validation and real-time sensing were outside the project scope.
-        </aside>
-
-        <section id="overview">
-          <h2>Task and system</h2>
-          <p>
-            The project built a motion-control pipeline for a KUKA YouBot to execute a pick-and-place task in simulation.
-            The robot had to move its mobile base and five-joint arm, approach a cube, close the gripper,
-            transport the cube, and release it at a target pose.
-          </p>
-          <p>
-            MATLAB generated robot states, reference trajectories, and feedback commands with the Modern Robotics Toolbox.
-            CSV output connected the controller results to CoppeliaSim for visual inspection of the task.
-          </p>
+    <div class="case-layout">
+      <aside class="case-aside" aria-label="Project sections">
+        <p class="section-kicker">Contents</p>
+        <ul>
+          <li><a href="#task">Task</a></li>
+          <li><a href="#controller">Controller</a></li>
+          <li><a href="#experiments">Experiments</a></li>
+          <li><a href="#limits">Limits</a></li>
+        </ul>
+      </aside>
+      <article class="case-content">
+        <section id="task">
+          <p class="section-kicker">01 / Task</p>
+          <h2>Drive, reach, grasp, carry, release.</h2>
+          <p>The youBot has a four-wheel mecanum base that can move in any direction and a five-joint arm. It has to approach a cube, close its gripper on it, carry it to a goal pose and let go, with base and arm moving together the whole time.</p>
+          <p>MATLAB computes the robot’s motion with the Modern Robotics library and writes it to a CSV that CoppeliaSim plays back, so every run can be watched.</p>
           <figure>
-            <img class="center-image" src="assets/images/Mobile Manipulator/Screenshot from 2025-03-12 11-46-40.webp" alt="YouBot mobile manipulator and cube in the simulated pick-and-place scene" loading="lazy" />
-            <figcaption>The YouBot and cube in the CoppeliaSim task environment.</figcaption>
+            <img src="assets/images/Mobile Manipulator/Screenshot from 2025-03-12 11-46-40.webp" loading="lazy" decoding="async" alt="The youBot mobile manipulator and the cube in the CoppeliaSim scene">
+            <figcaption>The youBot and the cube in CoppeliaSim.</figcaption>
           </figure>
         </section>
 
         <section id="controller">
-          <h2>Controller pipeline</h2>
-          <h3>1. State propagation</h3>
-          <p>
-            The <code>NextState</code> function used first-order Euler integration to propagate the chassis,
-            arm-joint, and wheel states from commanded velocities over a fixed time step.
-          </p>
-
-          <h3>2. Reference trajectory</h3>
-          <p>
-            <code>Trajectory_Generator</code> produced a sequence of desired end-effector configurations for the task phases:
-            approach, descend, grasp, lift, transfer, descend, release, and retreat.
-            Separate gripper-state values synchronized grasp and release with the motion sequence.
-          </p>
-
-          <h3>3. Feedforward and feedback control</h3>
-          <p>
-            <code>FeedbackControl</code> combined a feedforward end-effector twist with proportional and integral feedback on the pose error.
-            The commanded end-effector motion was mapped to chassis-wheel and arm-joint speeds through the combined robot Jacobian.
-          </p>
-          <p>
-            A numerical pseudoinverse with a tolerance was used around poorly conditioned Jacobian configurations.
-            The proportional and integral gains were varied to study convergence, overshoot, and oscillation across the tested scenarios.
-          </p>
+          <p class="section-kicker">02 / Controller</p>
+          <h2>Three pieces, one loop.</h2>
+          <h3>Kinematics simulator</h3>
+          <p><code>NextState</code> integrates wheel and joint speeds over each 10 ms step (first-order Euler), with the base’s motion from mecanum odometry and every speed clipped to a limit.</p>
+          <h3>Reference trajectory</h3>
+          <p><code>Trajectory_Generator</code> chains eight screw-motion segments for the end-effector: to a standoff above the cube, down, grasp, up, across, down, release, back up, with the gripper state attached to each point.</p>
+          <h3>Feedback control</h3>
+          <p><code>FeedbackControl</code> adds the reference’s own motion (feedforward) to proportional-integral feedback on the pose error, then maps that twist to wheel and joint speeds through the pseudoinverse of the combined base-and-arm Jacobian, with a tolerance that keeps it well behaved near singular arm configurations.</p>
+          <figure class="diagram">
+            <svg viewBox="0 0 820 190" role="img" aria-labelledby="mm-title">
+              <title id="mm-title">Control loop: the reference trajectory gives the desired end-effector pose and its feedforward twist; the pose error between actual and desired goes through proportional and integral gains; the combined twist is mapped through the pseudoinverse of the base-and-arm Jacobian to wheel and joint speeds; the kinematic simulator integrates them into the robot's next configuration.</title>
+              <defs><marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#58b9ff"/></marker></defs>
+              <g font-family="IBM Plex Mono, monospace" font-size="13" text-anchor="middle">
+                <rect x="10" y="20" width="150" height="62" rx="6" fill="#08121c" stroke="#344b5f"/><text x="85" y="47" fill="#eef3f6">Reference</text><text x="85" y="66" font-size="11" fill="#8fa1af">X_d, X_d,next</text>
+                <rect x="215" y="20" width="170" height="62" rx="6" fill="#08121c" stroke="#58b9ff"/><text x="300" y="47" fill="#eef3f6">Feedforward</text><text x="300" y="66" font-size="11" fill="#8fa1af">Ad · V_d</text>
+                <rect x="215" y="108" width="170" height="62" rx="6" fill="#08121c" stroke="#58b9ff"/><text x="300" y="135" fill="#eef3f6">PI on pose error</text><text x="300" y="154" font-size="11" fill="#8fa1af">X_err = log(X⁻¹X_d)</text>
+                <rect x="440" y="64" width="170" height="62" rx="6" fill="#163d5c" stroke="#58b9ff"/><text x="525" y="91" fill="#eef3f6">J_e⁺ (pinv)</text><text x="525" y="110" font-size="11" fill="#c3ced6">mecanum base + 5-DOF arm</text>
+                <rect x="665" y="64" width="145" height="62" rx="6" fill="#08121c" stroke="#f2a93b"/><text x="737" y="91" fill="#eef3f6">NextState</text><text x="737" y="110" font-size="11" fill="#8fa1af">wheel + joint speeds</text>
+              </g>
+              <g stroke="#58b9ff" stroke-width="1.5" fill="none" marker-end="url(#m1)">
+                <path d="M160 51 L213 51"/><path d="M85 82 L85 139 L213 139"/><path d="M385 51 L438 82"/><path d="M385 139 L438 108"/><path d="M610 95 L663 95"/>
+                <path d="M737 126 L737 182 L300 182 L300 172"/>
+              </g>
+              <text x="520" y="178" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#8fa1af">actual pose X fed back</text>
+            </svg>
+            <figcaption>V = Ad<sub>X⁻¹X_d</sub>·V<sub>d</sub> + K<sub>p</sub>X<sub>err</sub> + K<sub>i</sub>∫X<sub>err</sub>dt, mapped to wheel and joint speeds through the pseudoinverse of the combined Jacobian.</figcaption>
+          </figure>
         </section>
 
         <section id="experiments">
-          <h2>Simulation experiments</h2>
-          <p>
-            The documented test cases began with deliberate end-effector pose error relative to the first reference configuration.
-            The plots and animations compare several gain choices and one changed task configuration.
-          </p>
-
-          <h3>Balanced tracking response</h3>
-          <p>
-            One gain setting produced comparatively smooth trajectory tracking and rapid error reduction in the simulated task.
-          </p>
-          <div class="media-row" aria-label="Balanced controller response">
-            <img src="assets/images/Mobile Manipulator/Best_case.webp" alt="End-effector error curves for the balanced controller setting" loading="lazy" />
-            <video controls muted loop playsinline preload="none" poster="assets/images/Mobile Manipulator/Best_Case-poster.webp" aria-label="YouBot executing the pick-and-place sequence with the balanced controller setting"><source src="assets/images/Mobile Manipulator/Best_Case.webm" type="video/webm"><a href="assets/images/Mobile Manipulator/Best_Case.gif">YouBot executing the pick-and-place sequence with the balanced controller setting (GIF)</a></video>
+          <p class="section-kicker">03 / Experiments</p>
+          <h2>Five gain settings, one controller.</h2>
+          <p>Every run starts with the end-effector at least 30° and 0.2 m away from the first reference pose, so the controller has to close a real error while the task is already under way.</p>
+          <div class="table-wrap">
+            <table class="results">
+              <thead><tr><th scope="col">Case</th><th scope="col" class="num">K<sub>p</sub></th><th scope="col" class="num">K<sub>i</sub></th><th scope="col">Outcome</th></tr></thead>
+              <tbody>
+                <tr><td>Balanced</td><td class="num">1.5 I</td><td class="num">0.001 I</td><td>Error reaches zero before the first segment ends; smooth pick and place</td></tr>
+                <tr><td>Overshoot</td><td class="num">2.85 I</td><td class="num">2.37 I</td><td>Converges with a visible overshoot; task completes</td></tr>
+                <tr><td>Slow convergence</td><td class="num">0.2 I</td><td class="num">0</td><td>Still off target at the grasp, so the cube is missed</td></tr>
+                <tr><td>High oscillation</td><td class="num">0.75 I</td><td class="num">10 I</td><td>Oscillates before settling; task completes, but unsafely</td></tr>
+                <tr><td>New task</td><td class="num">1.5 I</td><td class="num">0.001 I</td><td>Cube moved and turned 90°; the same controller completes it</td></tr>
+              </tbody>
+            </table>
           </div>
-
-          <h3>Overshoot response</h3>
-          <p>
-            A more aggressive response overshot before settling, making the effect of gain selection visible in the error trajectory.
-          </p>
-          <figure>
-            <img class="center-image" src="assets/images/Mobile Manipulator/Overshoot.webp" alt="End-effector error curves showing controller overshoot" loading="lazy" />
-          </figure>
-
-          <h3>Changed task configuration</h3>
-          <p>
-            The same pipeline was also run with a changed cube goal that included a 90-degree orientation shift.
-            This additional configuration is a limited scenario check and does not establish general-purpose adaptability.
-          </p>
-          <div class="media-row" aria-label="Changed pick-and-place task">
-            <img src="assets/images/Mobile Manipulator/New_Task.webp" alt="Error curves for the changed pick-and-place target configuration" loading="lazy" />
-            <video controls muted loop playsinline preload="none" poster="assets/images/Mobile Manipulator/New_Task-poster.webp" aria-label="YouBot executing the changed pick-and-place task in simulation"><source src="assets/images/Mobile Manipulator/New_Task.webm" type="video/webm"><a href="assets/images/Mobile Manipulator/New_Task.gif">YouBot executing the changed pick-and-place task in simulation (GIF)</a></video>
+          <h3>Balanced</h3>
+          <div class="gallery">
+            <figure class="light"><img src="assets/images/Mobile Manipulator/Best_case.webp" loading="lazy" decoding="async" alt="End-effector error components for the balanced gains, all settling to zero early"><figcaption>Error components settle to zero within the first segment.</figcaption></figure>
+            <figure class="dark"><video controls muted loop playsinline preload="none" poster="assets/images/Mobile Manipulator/Best_Case-poster.webp" aria-label="The youBot completing the task with the balanced gains"><source src="assets/images/Mobile Manipulator/Best_Case.mp4" type="video/mp4"><source src="assets/images/Mobile Manipulator/Best_Case.webm" type="video/webm"></video><figcaption>The run in CoppeliaSim.</figcaption></figure>
           </div>
-
-          <h3>Slow convergence and oscillation</h3>
-          <p>
-            Lower feedback authority slowed convergence, while another gain choice produced sustained oscillation.
-            Together, these cases expose the response-speed and stability trade-off in the selected PI structure.
-          </p>
-          <div class="media-row" aria-label="Controller failure-mode comparisons">
-            <img src="assets/images/Mobile Manipulator/Slow_Convergence.webp" alt="End-effector error curves showing slow convergence" loading="lazy" />
-            <img src="assets/images/Mobile Manipulator/High_Oscillations.webp" alt="End-effector error curves showing high oscillation" loading="lazy" />
+          <h3>A changed task</h3>
+          <div class="gallery">
+            <figure class="light"><img src="assets/images/Mobile Manipulator/New_Task.webp" loading="lazy" decoding="async" alt="Error components for the changed task, settling to zero"><figcaption>Cube moved and rotated 90°: same gains, same convergence.</figcaption></figure>
+            <figure class="dark"><video controls muted loop playsinline preload="none" poster="assets/images/Mobile Manipulator/New_Task-poster.webp" aria-label="The youBot completing the changed task"><source src="assets/images/Mobile Manipulator/New_Task.mp4" type="video/mp4"><source src="assets/images/Mobile Manipulator/New_Task.webm" type="video/webm"></video><figcaption>The approach direction adapts to the new cube pose.</figcaption></figure>
+          </div>
+          <h3>When the gains are wrong</h3>
+          <div class="gallery three">
+            <figure class="light"><img src="assets/images/Mobile Manipulator/Overshoot.webp" loading="lazy" decoding="async" alt="Error components overshooting before settling"><figcaption>Overshoot: a large integral gain.</figcaption></figure>
+            <figure class="light"><img src="assets/images/Mobile Manipulator/Slow_Convergence.webp" loading="lazy" decoding="async" alt="Error components still large when the grasp happens"><figcaption>Slow convergence: the grasp misses.</figcaption></figure>
+            <figure class="light"><img src="assets/images/Mobile Manipulator/High_Oscillations.webp" loading="lazy" decoding="async" alt="Error components oscillating strongly before settling"><figcaption>High oscillation: completes, but unsafely.</figcaption></figure>
           </div>
         </section>
 
-        <section id="lessons">
-          <h2>What the project established</h2>
+        <section id="limits">
+          <p class="section-kicker">04 / Limits</p>
+          <h2>Kinematics, not dynamics.</h2>
           <ul>
-            <li>A complete simulated pipeline connected state propagation, reference generation, feedback control, and task visualization.</li>
-            <li>Gain sweeps made convergence, overshoot, and oscillatory behavior directly observable.</li>
-            <li>A Jacobian pseudoinverse provided a practical way to compute actuator commands near poorly conditioned configurations.</li>
-            <li>A changed target pose showed that task parameters could be modified without rewriting the controller pipeline.</li>
+            <li>The simulation is kinematic: commanded speeds are achieved exactly, with no torque limits, latency or contact physics.</li>
+            <li>The integral term has no anti-windup, which is part of why large integral gains overshoot.</li>
+            <li>The next step would close the loop on measured state and validate on hardware under conservative limits.</li>
           </ul>
-        </section>
-
-        <section id="next-steps">
-          <h2>Limitations and next steps</h2>
-          <p>
-            The experiments did not model sensing uncertainty, actuator latency, contact variation, or hardware safety constraints.
-            A stronger next iteration would close the loop on measured robot state, add anti-windup and explicit singularity handling,
-            define quantitative tracking metrics across a task suite, and validate the controller on hardware under conservative limits.
-          </p>
         </section>
       </article>
     </div>

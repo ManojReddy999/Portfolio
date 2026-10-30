@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="IMU orientation tracking by projected gradient descent on unit quaternions, checked against motion-capture ground truth, and a panorama stitched from the tracked camera.">
+  <meta name="theme-color" content="#050b11">
+  <title>Orientation Tracking | Manoj Reddy Manchala</title>
+  <link rel="canonical" href="https://manojreddy999.github.io/Portfolio/orientation-tracking.html">
+  <link rel="icon" href="assets/images/car-unique.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header">
+    <nav class="navbar" aria-label="Primary">
+      <div class="nav-logo"><a href="./" aria-label="Manoj Reddy Manchala, home">Manoj Reddy Manchala</a></div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">☰</button>
+      <ul class="nav-links" id="primary-navigation" data-open="false">
+        <li><a href="./#work">Robotics</a></li>
+        <li><a href="./#production">Production</a></li>
+        <li><a href="lab/">Lab</a></li>
+        <li><a href="./#about">About</a></li>
+        <li><a href="./#contact">Contact</a></li>
+        <li><a class="nav-cta" href="Resume_Manoj.pdf">Résumé</a></li>
+      </ul>
+    </nav>
+  </header>
+
+    <main id="main-content" class="container case-study-page">
+    <a class="back-link" href="./#work">← All projects</a>
+    <section class="case-hero">
+      <div>
+        <p class="eyebrow">Sensor fusion · ECE 276A</p>
+        <h1>Orientation tracking</h1>
+        <p>Calibrated an IMU, estimated a rotating rig’s orientation as unit quaternions by optimisation, checked it against motion capture, and used it to stitch the rig’s camera images into a panorama.</p>
+        <div class="hero-actions">
+          <a class="button" href="ECE276A_PR1_Report.pdf" target="_blank" rel="noopener noreferrer">Open report</a>
+        </div>
+      </div>
+      <figure class="case-hero-media">
+        <img style="view-transition-name: p-orientation" src="assets/images/slam/panorama.webp" width="1400" height="700" alt="A panorama of a lab room stitched from the rig's camera images using the estimated orientations">
+      </figure>
+    </section>
+
+    <dl class="case-meta">
+      <div><dt class="meta-label">Data</dt><dd>9 IMU logs · motion-capture truth</dd></div>
+      <div><dt class="meta-label">Method</dt><dd>Gradient descent on unit quaternions</dd></div>
+      <div><dt class="meta-label">Output</dt><dd>Orientation · panorama</dd></div>
+    </dl>
+
+    <div class="case-layout">
+      <aside class="case-aside" aria-label="Project sections">
+        <p class="section-kicker">Contents</p>
+        <ul>
+          <li><a href="#calibration">Calibration</a></li>
+          <li><a href="#optimisation">Optimisation</a></li>
+          <li><a href="#panorama">Panorama</a></li>
+          <li><a href="#results">Results</a></li>
+        </ul>
+      </aside>
+      <article class="case-content">
+        <section id="calibration">
+          <p class="section-kicker">01 / Calibration</p>
+          <h2>Raw counts to physical units.</h2>
+          <p>A rig with an IMU and a camera was rotated by hand, with a motion-capture system recording its true orientation. The IMU reports raw A/D counts, so each axis becomes a physical rate or acceleration as <code>(raw − bias) × V<sub>ref</sub> / 1023 / sensitivity</code>. The biases come from the first moments of each log, when the rig is still: the gyroscope should read zero and the accelerometer exactly one g, downwards.</p>
+          <p>Integrating the calibrated gyroscope gives a first orientation trajectory. Comparing it with motion capture showed the calibration was right, and also how the pure motion model slowly drifts away.</p>
+        </section>
+
+        <section id="optimisation">
+          <p class="section-kicker">02 / Optimisation</p>
+          <h2>Solve for the whole trajectory at once.</h2>
+          <p>Instead of filtering step by step, the whole trajectory of unit quaternions is optimised together. The cost has two equal parts:</p>
+          <ul>
+            <li><strong>Motion model:</strong> each quaternion should agree with the previous one rotated by the gyroscope, measured as the angle of the relative rotation, <code>‖2 log(q<sub>t+1</sub>⁻¹ ∘ f(q<sub>t</sub>, τω<sub>t</sub>))‖</code>.</li>
+            <li><strong>Gravity:</strong> since the rig only rotates, the accelerometer should see gravity rotated into the body frame by the estimated orientation.</li>
+          </ul>
+          <p>Starting from the motion-model trajectory, gradient descent (learning rate 0.0003) steps all quaternions downhill, then renormalises each to unit length, which keeps every step a valid rotation. It converged in about 100 iterations on every log.</p>
+        </section>
+
+        <section id="panorama">
+          <p class="section-kicker">03 / Panorama</p>
+          <h2>Paint every image onto a sphere.</h2>
+          <p>Each 320 × 240 image covers 60° by 45°. Every pixel gets a longitude and latitude on a unit sphere around the camera, is rotated into the world by the orientation at that image’s timestamp, and the sphere is unrolled onto a cylinder to form one panoramic image.</p>
+        </section>
+
+        <section id="results">
+          <p class="section-kicker">04 / Results</p>
+          <h2>Closer to motion capture than the gyroscope alone.</h2>
+          <figure class="light">
+            <img src="assets/images/slam/orientation-optimized.webp" width="996" height="591" loading="lazy" decoding="async" alt="Roll, pitch and yaw over time: the optimised estimate follows the motion-capture ground truth more closely than the gyroscope-only estimate">
+            <figcaption>Roll, pitch and yaw against motion-capture ground truth: the gyroscope-only motion model and the optimised estimate.</figcaption>
+          </figure>
+          <p>On several logs the optimised trajectory converged almost exactly onto the motion-capture truth; noisier logs kept small offsets in roll and pitch. The panorama above is stitched from the estimated orientations.</p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <p>© <span data-year>2026</span> Manoj Reddy Manchala</p>
+      <div class="footer-links"><a href="https://github.com/ManojReddy999">GitHub</a><a href="https://www.linkedin.com/in/manojreddymanchala/">LinkedIn</a><a href="mailto:manojreddymanchala@gmail.com">Email</a></div>
+    </div>
+  </footer>
+</body>
+</html>

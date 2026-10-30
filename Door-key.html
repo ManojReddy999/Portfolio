@@ -37,21 +37,21 @@
       <div>
         <p class="eyebrow">Decision-making / Dynamic programming</p>
         <h1>Door-and-key navigation</h1>
-        <p>Formulated grid navigation as a finite-horizon Markov decision process and computed policies for fixed and randomized layouts.</p>
+        <p>Shortest-path policies for a grid agent that may need a key to open a door, by dynamic programming over a state that tracks the task’s progress: one per known map, and a single policy for 36 random layouts.</p>
         <div class="hero-actions">
           <a class="button" href="ECE276B_PR1_Report.pdf" target="_blank" rel="noopener noreferrer">Open report</a>
           <a class="button secondary" href="https://github.com/ManojReddy999/Door-Key-Navigation-Task" target="_blank" rel="noopener noreferrer">View code</a>
         </div>
       </div>
       <figure class="case-hero-media">
-        <img loading="lazy" decoding="async" src="assets/images/Door-Key/-8x8-28.gif" width="768" height="768" alt="Door-and-key grid world with an agent, key, door, obstacles, and goal">
+        <img style="view-transition-name: p-doorkey" loading="lazy" decoding="async" src="assets/images/Door-Key/-8x8-28.gif" width="768" height="768" alt="Door-and-key grid world with an agent, key, door, obstacles, and goal">
       </figure>
     </section>
 
     <dl class="case-meta">
-      <div><dt class="meta-label">Context</dt><dd>ECE 276B course project</dd></div>
-      <div><dt class="meta-label">Methods</dt><dd>Finite-horizon DP / MDP</dd></div>
-      <div><dt class="meta-label">Artifacts</dt><dd>Code + report</dd></div>
+      <div><dt class="meta-label">Maps solved</dt><dd>7 known + 36 random</dd></div>
+      <div><dt class="meta-label">Random-map policy</dt><dd>One policy · 18,432 states</dd></div>
+      <div><dt class="meta-label">Method</dt><dd>Finite-horizon dynamic programming</dd></div>
     </dl>
 
     <div class="case-layout">
@@ -67,31 +67,38 @@
       <article class="case-content">
         <section id="problem">
           <p class="section-kicker">01 / Problem</p>
-          <h2>Sequence actions that change what is reachable.</h2>
-          <p>The agent must move through a grid, collect a key, unlock a door, and reach a goal. Position alone is not enough to describe the decision state: orientation, key possession, and door status all affect valid transitions.</p>
+          <h2>Some doors only open with a key.</h2>
+          <p>An agent in a MiniGrid world must reach a goal, but a wall blocks the way except through locked doors. It may need to walk to a key, pick it up, unlock a door and only then head for the goal, or there may be a shortcut that skips the key entirely. Where the agent is is not enough to decide what to do next: which way it faces, whether it holds the key and whether each door is open all change which moves are possible.</p>
         </section>
         <section id="model">
           <p class="section-kicker">02 / State + actions</p>
-          <h2>Represent task progress explicitly.</h2>
-          <p>For a fixed map, the state included grid position, orientation, key possession, and door status. Randomized layouts required additional variables for key and goal placement. Actions included moving forward, turning, picking up the key, and unlocking the door, with invalid actions handled by the transition and cost model.</p>
-          <pre><code>state = (x, y, orientation, has_key, door_state)
-actions = {forward, left, right, pickup, unlock}</code></pre>
+          <h2>Put task progress into the state.</h2>
+          <p>Each step costs 1 and the goal costs nothing, so the cheapest policy is the one that reaches the goal in the fewest moves. Five actions: move forward, turn left, turn right, pick up the key, unlock the door.</p>
+          <div class="table-wrap">
+            <table class="results">
+              <thead><tr><th scope="col"></th><th scope="col">State</th><th scope="col">Horizon</th></tr></thead>
+              <tbody>
+                <tr><td>7 known maps<br><small>5×5 to 8×8</small></td><td><code>(x, y, heading, has_key, door_open)</code>, one policy per map</td><td class="num">20 steps</td></tr>
+                <tr><td>36 random 8×8 maps</td><td><code>(x, y, heading, has_key, door₁_open, door₂_open, key_slot, goal_slot)</code>: 8 × 8 × 4 × 2 × 2 × 2 × 3 × 3 = <strong>18,432 states</strong>, one policy for every layout</td><td class="num">30 steps</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The random maps share their walls and two door positions but place the key in one of 3 spots, the goal in one of 3, and lock or open each door. Folding those choices into the state means one policy, computed once, covers all 36 layouts: at run time the agent just reads which layout it is in and follows the table.</p>
         </section>
         <section id="policy">
           <p class="section-kicker">03 / Method and results</p>
-          <h2>Use backward induction over a finite horizon.</h2>
-          <p>I initialized terminal-state cost, propagated value estimates backward through the deterministic transition model, and stored the lowest-cost action for each reachable state. The implementation generated separate policies for supplied fixed layouts and a state representation intended to cover the randomized 8 by 8 layout family described in the course project.</p>
-          <div class="case-note"><strong>Scope:</strong> The policy is optimal only for the finite-horizon, discretized model used in this project. The repository and report contain the environment definitions and rollouts.</div>
+          <h2>Backward induction, then follow the table.</h2>
+          <p>Starting from the terminal cost (zero at the goal, infinite elsewhere), I stepped backwards through the horizon, computing for every state the cost of each action through the deterministic motion model and keeping the cheapest. The result is an action for every state at every step.</p>
+          <p>The policies reached the goal on all 7 known maps and all 36 random layouts, including the cases where the shortest route skips the key or takes the second door.</p>
+          <div class="case-note"><strong>Scope:</strong> optimal for this discrete, fully known model; a longer path than the horizon would be missed.</div>
         </section>
         <section id="limits">
-          <p class="section-kicker">04 / Limitations and next steps</p>
-          <h2>State-space growth is the central constraint.</h2>
+          <p class="section-kicker">04 / Limits</p>
+          <h2>Every new variable multiplies the table.</h2>
           <ul>
-            <li>Every added map variable multiplies the table size.</li>
-            <li>A finite planning horizon can exclude solutions that require more steps.</li>
-            <li>The transition model is known and discrete; perception and model uncertainty are outside scope.</li>
+            <li>Adding one more key position or door multiplies the state count again; exact tables stop scaling quickly.</li>
+            <li>The model is known and deterministic; perception and noisy actions are outside its scope.</li>
           </ul>
-          <p>The next useful experiment would log policy success and planning cost across the full provided layout set, with failure cases grouped by horizon and state encoding.</p>
         </section>
       </article>
     </div>
