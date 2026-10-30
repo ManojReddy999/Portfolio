@@ -387,6 +387,25 @@ export class Renderer {
     this.world.add(this.trueTrail.line, this.estTrail.line);
   }
 
+  // The estimated route after a loop closure: the corrected keyframe positions.
+  setEstimatePath(path) {
+    this.estTrail.clear();
+    for (const [x, y] of path) this.estTrail.add(x, y);
+  }
+
+  // A loop closure: a bright line between the two places it joined, fading out.
+  flashLoop(from, to) {
+    const geo = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(from[0], from[1], 0.05), new THREE.Vector3(to[0], to[1], 0.05)]);
+    const line = new THREE.Line(geo, new THREE.LineBasicMaterial({
+      color: 0xfff4e6, transparent: true, opacity: 1, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
+    }));
+    line.renderOrder = 4;
+    line.frustumCulled = false;
+    this.world.add(line);
+    (this.flashes ||= []).push({ line, start: performance.now() });
+  }
+
   addTrailPoints(truth, estimate) {
     this.trueTrail.add(truth[0], truth[1]);
     if (estimate) this.estTrail.add(estimate[0], estimate[1]);
@@ -510,6 +529,12 @@ export class Renderer {
   }
 
   render() {
+    for (const f of this.flashes || []) {
+      const t = (performance.now() - f.start) / 3000;
+      f.line.material.opacity = Math.max(0, 1 - t);
+      if (t >= 1) { this.world.remove(f.line); f.line.geometry.dispose(); f.line.material.dispose(); f.done = true; }
+    }
+    if (this.flashes) this.flashes = this.flashes.filter((f) => !f.done);
     if (this.building) this.#applyBuild((performance.now() - this.build.start) / this.build.duration);
     for (const { mesh, g } of this.dynamic) this.#placeGeom(mesh, g);
     this.followCar();

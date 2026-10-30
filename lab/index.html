@@ -124,7 +124,7 @@
   <div class="fact real"><b>Physics:</b> MuJoCo 3.12 compiled to WebAssembly, loading the exact scene my navigation policy trains in — verified bit-identical to the Python simulator.</div>
   <div class="fact real"><b>Sensing:</b> a 360-ray, 4 m LiDAR cast by MuJoCo from where the MuSHR car mounts its YDLidar.</div>
   <div class="fact standin"><b>Driver:</b> a classical stand-in — it samples steering arcs, checks the car's real footprint against every LiDAR return, and takes the longest clear path. My trained depth-camera policy replaces it next.</div>
-  <div class="fact real"><b>SLAM:</b> the car doesn't know where it is. It dead-reckons from wheel encoders and a gyro in an EKF, builds the map from that estimate, and corrects itself by matching each scan against the map, learning its own gyro bias and wheel scale as it goes. The sensor errors are synthetic. No loop closure yet, so an error made early on stays baked into the map.</div>
+  <div class="fact real"><b>SLAM:</b> the car doesn't know where it is. It dead-reckons from wheel encoders and a gyro in an EKF, tracks against a map of its recent route, and learns its own gyro bias and wheel scale as it goes. When it comes back somewhere it mapped long ago, it recognises the place, and loop closure corrects the whole route and map. The sensor errors are synthetic.</div>
 </aside>
 
 <section class="hud panel" aria-label="Live map and statistics">
@@ -137,6 +137,7 @@
       <span>mapped</span><span id="stat-coverage">—</span>
       <span title="Distance and heading between where the car is and where it thinks it is">pose error</span><span id="stat-error">—</span>
       <span>localisation</span><span id="stat-loc">—</span>
+      <span title="Places it recognised from long ago, each confirmed by two matches, after which the whole route and map were corrected">loop closures</span><span id="stat-loops">—</span>
       <span title="The filter's estimate of its own gyro bias in degrees per second, with the true injected value in brackets">gyro bias °/s</span><span id="stat-bias">—</span>
       <span class="opt">collisions</span><span class="opt" id="stat-collisions">—</span>
       <span class="opt">driver</span><span class="opt" id="stat-mode">—</span>
@@ -145,6 +146,7 @@
   </div>
   <div class="slam-controls">
     <button id="btn-matching" class="on" type="button">Scan matching: on</button>
+    <button id="btn-loops" class="on" type="button">Loop closure: on</button>
     <label class="noise">odometry noise <input id="noise" type="range" min="0" max="3" step="0.25" value="1" aria-label="Odometry noise level"> <span id="noise-value">1×</span></label>
   </div>
   <div class="controls">

@@ -40,6 +40,8 @@ Then open <http://localhost:8765/lab/> (the trailing `..` serves the whole site,
 
 **Mapping only while localised.** Scans are written into the map only while tracking. When matching is switched off, they go to a separate **drift layer** (coral): the map as odometry alone would have drawn it. When matching resumes and relocalises, the drift layer clears.
 
+**Local map, keyframes and loop closure.** Tracking matches each scan against a *local* map of the last ~16 m of route, not the whole map, so drift genuinely builds up while the car explores. Every 0.4 m (or 15° of turning) the car drops a keyframe, its pose and that scan, into a pose graph linked to the previous keyframe by the front end's motion. When the graph puts the car within reach of a keyframe from far back along the route, a two-level correlative search (15 cm max-pooled cells, then the full field) matches the new scan against a small map built around the old keyframe, over up to ±2 m and ±20°. One match is never trusted: a second keyframe a little further on must imply the same rigid correction before either constraint enters the graph. Gauss-Newton then corrects the whole route at once. Its sparse normal equations are solved by conjugate gradients preconditioned with the odometry chain itself, which block elimination solves exactly, so only the loop closures need iterating. Both maps are rebuilt from the corrected keyframes, and the live estimate moves with its keyframe. Revisits that only confirm the map add their constraints without re-optimising.
+
 **Wheel slip.** If a good match says the car moved under half of what the encoders claimed, that is slip: the filter treats the encoder distance as an upper bound, and freezes learning of its calibration so a spinning wheel is never learned as a wheel-scale error.
 
 ## Verified
@@ -48,7 +50,7 @@ Then open <http://localhost:8765/lab/> (the trailing `..` serves the whole site,
 
 **Scan matcher, in isolation.** On a map built at the true pose, from offsets of up to 25 cm and 8° it recovers the true pose to within **0.9 cm and 0.5°**.
 
-**SLAM, over 10 layouts × 60 s at the default noise level** (600 simulated seconds, 19 respawns):
+**SLAM before loop closure (previous version), over 10 layouts × 60 s at the default noise level** (600 simulated seconds, 19 respawns):
 
 | | Result |
 |---|---:|
@@ -60,6 +62,19 @@ Then open <http://localhost:8765/lab/> (the trailing `..` serves the whole site,
 | Wheel scale learned to within (mean) | 0.47 percentage points |
 
 The error is bounded rather than growing — it wanders in a band of a few to ~35 cm. Without loop closure, an error made early stays baked into the map; the car is consistent with its own slightly shifted map, which is why the page shows "tracking" while the estimate sits beside the car.
+
+**Loop closure, over 10 layouts × 120 s per configuration** ([`bench.html`](bench.html); raw results in [`docs/bench-2026-10-30.json`](docs/bench-2026-10-30.json)):
+
+| | Previous version: tracks against the whole map | Local map, no loop closure | Local map + loop closure |
+|---|---:|---:|---:|
+| Mean position error | 9.3 cm | 12.7 cm | **9.9 cm** |
+| Median of the layouts' means | 8.3 cm | 11.8 cm | 9.5 cm |
+| Worst position error | 33.8 cm | 45.0 cm | 41.9 cm |
+| Map precision (wall cells within 5 cm of a real surface) | 78.0% | 65.7% | **80.1%** |
+| Time lost (control steps) | 28 | 0 | **0** |
+| Loop constraints, wrong against ground truth | — | — | **0 of 478** |
+
+Loop closure cuts the local-map front end's mean error from 12.7 to 9.9 cm and lifts map precision from 65.7% to 80.1%. It closed 239 loops, and every one of its 478 constraints was right when checked against the simulator's ground truth. Against the previous version, mean error is about the same and the map is more accurate. The previous version matched every scan against the whole map, which in this small, constantly revisited arena is close to relocalising all the time. The new version is never lost. Its worst moments are worse (41.9 against 33.8 cm): drift builds while the car explores new ground, until a revisit lets a loop close.
 
 **Recovery.** After learning, with matching switched off for 8 s at 2× and 3× noise (heading drift up to 10°), it returns to tracking within **0.5 s** of matching resuming.
 
@@ -80,6 +95,9 @@ Each of these was found by measuring, and each changed the design.
 3. **Wheel slip (multi-metre errors after respawns).** Respawns happen when the stand-in driver is stuck, and a stuck car spins its wheels. The encoders reported motion that wasn't happening; the window stayed too small to follow it, and the gate rejected the correct matches as implausible. My first hypothesis — getting lost in unmapped territory — was tested by teleporting the car into unmapped space, and it was wrong. Fix: the slip handling above.
 4. **Slip leaking into calibration.** Freezing the calibration update wasn't enough: during slip the prediction step still correlated position with wheel scale, and the first normal update afterwards turned that into a 19–28% "scale error". Re-initialising also reset the calibration's uncertainty, making it trivial to overwrite. Fix: no position–scale coupling during slip, and re-initialisation keeps learned calibration *and* its confidence.
 5. **Slow likelihood field (192 ms per simulated second).** It was rebuilt at every match with a closure call per blur tap. Fix: straight typed-array loops and a 4 Hz rebuild — the map barely changes in a quarter of a second, and a slightly older field avoids matching a scan against itself.
+6. **A robust kernel that ignored the closures that mattered.** The first optimiser down-weighted loop edges with a Cauchy kernel scaled to their noise. A correct closure carries the whole accumulated drift (2.6 m in a test loop), so it got 0.04% of its weight and the optimiser crawled. Fix: no kernel; wrong closures are stopped before they reach the graph, by the two-match confirmation.
+7. **Conjugate gradients needing one iteration per variable.** Preconditioned by the diagonal blocks alone, the solve took ~N iterations: about a second per Gauss-Newton step at 1,000 keyframes. Preconditioned by the odometry chain, solved exactly by block elimination, it takes 44 iterations for 1,041 keyframes and 72 loops: 129 ms from scratch, 20–30 ms per new closure.
+8. **A match that put the car behind where it started.** In slip mode the filter's along-track uncertainty stays inflated, and a match 33 cm *behind* the last pose passed the gate while the wheels said 21 cm forward: a 63 cm glitch. Slip can make the car go less far than the wheels claim, never backwards, so such matches are now rejected.
 
 ## Things found in the tools
 
@@ -94,10 +112,14 @@ Each of these was found by measuring, and each changed the design.
 ```
 index.html            the full lab: page, HUD and honesty notes
 parity.html           browser-vs-Python physics check
+bench.html            SLAM benchmark against ground truth (pose error, map precision, wrong loops)
 src/lab.js            startLab(): loop, minimap, HUD, layouts; embeddable (the home page uses hero mode)
 src/sim.js            loads the scene into MuJoCo WASM; stepping, car pose, collisions
 src/lidar.js          360-ray LiDAR via mj_ray
-src/slam.js           odometry, 5-state EKF, correlative scan matcher, slip handling
+src/slam.js           odometry, 5-state EKF, keyframes, local map, slip handling
+src/matcher.js        correlative scan matcher, plus the two-level wide search for loop closure
+src/graph.js          pose graph: Gauss-Newton with chain-preconditioned conjugate gradients
+src/loop.js           loop-closure candidates, submaps and the two-match confirmation
 src/mapping.js        log-odds occupancy grid
 src/controller.js     stand-in arc-sampling local planner
 src/render.js         three.js view: LiDAR-shaped light, map and drift layers, estimate and uncertainty
@@ -114,12 +136,11 @@ vendor/mujoco/        @mujoco/mujoco 3.12.0 (matches the training MuJoCo), debug
 
 ## Known limits
 
-- **No loop closure**, so errors made early stay in the map.
 - The slip detector has occasional false alarms at speed along walls.
 - Animation pauses while the tab is hidden, by design.
 
 ## Next
 
-1. **Loop closure:** recognise previously mapped places and correct the whole trajectory, removing the baked-in offset.
+1. **Tighter worst case:** drift between loop closures. Candidates: closing loops against the global map sooner after a respawn, and a denser local map.
 2. **The trained policy:** export the actor to ONNX, render the 64×128 depth image in the browser, verify it matches MuJoCo's depth render, and replace the stand-in.
-3. ~~Load time~~ and ~~portfolio hero~~: done (see Download above).
+3. ~~Loop closure~~, ~~load time~~ and ~~portfolio hero~~: done.

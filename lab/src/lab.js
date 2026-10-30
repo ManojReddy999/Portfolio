@@ -15,6 +15,7 @@ const CONTROL_DT = 0.05; // 20 Hz, as in training
 const ARENA = 8; // training arena half-size (m)
 const LIDAR = { rays: 360, range: 4.0 };
 const MAX_CONTROL_STEPS_PER_FRAME = 6;
+const HERO_ARENA_SECONDS = 180;
 
 const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 
@@ -70,7 +71,7 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
   const driftLayer = view.addMapLayer(drift, DRIFT_COLORS, 0.006);
 
   const state = {
-    seed: 0, driver: null, slam: null, noise: 1, matching: true,
+    seed: 0, driver: null, slam: null, noise: 1, matching: true, loopClosure: true, loops: [],
     distance: 0, collisions: 0, wasColliding: false,
     lastXY: null, progressAt: 0, progressXY: null, paused: false, speed: 1, visible: true,
     frames: 0, fpsAt: performance.now(), fps: 0, posErr: 0, headErr: 0,
@@ -80,9 +81,8 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
 
   // Start SLAM from a known pose: at the start, or after a respawn.
   function startLocalisation() {
-    state.slam.reinit(...sim.carPose());
     lidar.scan();
-    grid.integrate(lidar, state.slam.sensorPose());
+    state.slam.reinit(...sim.carPose(), lidar);
   }
 
   function newLayout(layout = Math.floor(Math.random() * 1e6)) {
@@ -95,8 +95,10 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
     drift.clear();
     view.clearTrail();
     state.driver = new LocalPlanner();
-    state.slam = new Slam(sim, grid, mulberry32(layout ^ 0x5bd1e995), state.noise, lidarOffset);
+    state.slam = new Slam(sim, grid, mulberry32(layout ^ 0x5bd1e995), state.noise, lidarOffset,
+      { loopClosure: state.loopClosure });
     state.slam.matching = state.matching;
+    state.loops = [];
     state.respawnRng = mulberry32(layout ^ 0x2545f491); // so a layout number reproduces the whole run
     state.distance = 0; state.collisions = 0; state.wasColliding = false;
     state.lastXY = null; state.progressAt = sim.time; state.progressXY = sim.carPosition();
@@ -112,6 +114,8 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
     grid.clear();
     drift.clear();
     view.clearTrail();
+    state.slam.resetMap();
+    state.loops = [];
     startLocalisation();
   }
 
@@ -128,7 +132,7 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
     }
     state.respawns = (state.respawns || 0) + 1;
     state.driver = new LocalPlanner();
-    state.slam.reinit(...sim.carPose());
+    state.slam.reinit(...sim.carPose(), lidar); // lidar holds the scan from the chosen spot
     drift.clear();
     state.lastXY = null; state.progressAt = sim.time; state.progressXY = sim.carPosition();
   }
@@ -145,7 +149,13 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
     sim.step(cmd.steer, cmd.throttle, (dt) => slam.odom.sample(dt));
     lidar.scan();
     if (slam.update(lidar)) drift.clear(); // relocalised: the drifted picture is no longer believed
-    (slam.localised ? grid : drift).integrate(lidar, slam.sensorPose());
+    // SLAM writes the map itself, from keyframes; scans taken blind go to the drift layer.
+    if (!slam.localised) drift.integrate(lidar, slam.sensorPose());
+    for (const loop of slam.takeLoopEvents()) {
+      view.flashLoop(loop.from, loop.to);
+      if (loop.path) view.setEstimatePath(loop.path); // the corrected route replaces the drifted one
+      state.loops.push({ ...loop, at: sim.time });
+    }
 
     const truth = sim.carPose(), est = slam.pose();
     state.posErr = Math.hypot(est[0] - truth[0], est[1] - truth[1]);
@@ -213,6 +223,16 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
       const [ex, ey] = lidar.endpoint(k);
       mctx.fillRect(sx(ex) - 0.6, sy(ey) - 0.6, 1.2, 1.2);
     }
+    for (const loop of state.loops) {
+      const age = sim.time - loop.at;
+      if (age > 4) continue;
+      mctx.strokeStyle = `rgba(255, 244, 230, ${0.9 * (1 - age / 4)})`;
+      mctx.lineWidth = 2;
+      mctx.beginPath();
+      mctx.moveTo(sx(loop.from[0]), sy(loop.from[1]));
+      mctx.lineTo(sx(loop.to[0]), sy(loop.to[1]));
+      mctx.stroke();
+    }
     const [tx, ty, tyaw] = sim.carPose(), [ex, ey, eyaw] = state.slam.pose();
     drawCar(tx, ty, tyaw, '#f2a93b', null);
     drawCar(ex, ey, eyaw, null, '#8fd3ff');
@@ -227,6 +247,7 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
     const cm = 100 * state.posErr;
     setText('stat-error', `${cm.toFixed(cm < 10 ? 1 : 0)} cm · ${(state.headErr * 180 / Math.PI).toFixed(1)}°`);
     const toDeg = 180 / Math.PI, s = state.slam;
+    setText('stat-loops', String(s.closer.closures));
     setText('stat-bias', `${(s.ekf.x[3] * toDeg).toFixed(2)} (${(s.odom.gyroBias * toDeg).toFixed(2)})`);
     setText('stat-loc', s.slipping ? `${s.state} · wheel slip` : s.state);
     const loc = $('stat-loc');
@@ -256,6 +277,9 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
         while (acc >= CONTROL_DT && n < MAX_CONTROL_STEPS_PER_FRAME) { controlStep(); acc -= CONTROL_DT; n++; }
         if (n === MAX_CONTROL_STEPS_PER_FRAME) acc = 0; // fell behind; don't spiral
         if (n > 0) view.updateMask(lidar);
+        // The hero runs for as long as the page is open: start a fresh arena every
+        // few minutes, so the map and pose graph stay small and the build plays again.
+        if (hero && sim.time > HERO_ARENA_SECONDS) newLayout();
       }
       drawFrame();
       if (++state.frames % 10 === 0) {
@@ -283,6 +307,12 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
       ui.querySelectorAll('[data-speed]').forEach((o) => o.classList.toggle('on', o === b));
     };
   }
+  on('btn-loops', () => {
+    state.loopClosure = !state.loopClosure;
+    state.slam.loopClosure = state.loopClosure;
+    setText('btn-loops', state.loopClosure ? 'Loop closure: on' : 'Loop closure: off');
+    $('btn-loops').classList.toggle('on', state.loopClosure);
+  });
   on('btn-matching', () => {
     state.matching = !state.matching;
     state.slam.matching = state.matching;
@@ -308,6 +338,8 @@ export async function startLab({ stage, ui = document, hero = false, frame, onSt
   const lab = {
     sim, lidar, grid, view, state, newLayout, restartMapping, setPaused,
     get built() { return built; },
+    // Benchmark hook: n control steps with no drawing at all.
+    step(n = 1) { view.finishBuild(); for (let i = 0; i < n; i++) controlStep(); },
     advance(seconds) {
       view.finishBuild();
       for (let i = 0, n = Math.round(seconds / CONTROL_DT); i < n; i++) controlStep();

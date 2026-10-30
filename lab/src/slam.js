@@ -1,6 +1,8 @@
-// 2D SLAM front end: noisy wheel/gyro odometry in an EKF that also estimates
+// 2D SLAM. Front end: noisy wheel/gyro odometry in an EKF that also estimates
 // the gyro bias and wheel scale error, corrected by correlative scan matching
-// against the occupancy map being built.
+// against a local map of the recent route. Back end: keyframes in a pose graph,
+// with loop closures when the car comes back to a place it mapped long ago; the
+// graph is then re-optimised and the map rebuilt from the corrected keyframes.
 //
 // The simulated encoders and gyro are perfect (the gyro is exactly the previous
 // physics step's yaw rate), so all error here comes from the synthetic noise
@@ -12,8 +14,12 @@
 // filter becomes overconfident, its gain toward scan matches collapses, and
 // the 3-sigma search window shrinks around a pose that has already drifted.
 
+import { OccupancyGrid } from './mapping.js';
+import { ScanMatcher } from './matcher.js';
+import { PoseGraph, relPose, compose } from './graph.js';
+import { LoopCloser, LOOP_SIGMA } from './loop.js';
+
 const REAR_AXLE_TO_ORIGIN = 0.158; // body origin sits this far ahead of the rear axle (buddy.xml)
-const FIELD_REFRESH_EVERY = 5; // map updates between likelihood-field rebuilds
 const BIAS_LIMIT = 0.1; // rad/s (5.7 deg/s); injected bias is at most 0.06 at 3x noise
 const SCALE_LIMIT = 0.15; // injected wheel scale error is at most 9% at 3x noise
 // Effective rolling radius, calibrated from the simulator: least squares of true
@@ -215,118 +221,6 @@ export class PoseEKF {
 }
 
 // ---------------------------------------------------------------------------
-// Correlative scan matcher (after Olson, 2009): exhaustive search over a pose
-// window, scoring each candidate by how well the scan's returns land on mapped
-// surfaces in a blurred likelihood field. The window is the EKF's 3-sigma
-// uncertainty, so the filter tells the matcher where to look.
-//
-// Tested in isolation on a map built at the true pose: from offsets of up to
-// 25 cm and 8 degrees it recovers the true pose to within 0.9 cm and 0.5 deg.
-
-export class ScanMatcher {
-  constructor(grid, lidarOffset) {
-    this.grid = grid;
-    this.lidarOffset = lidarOffset;
-    this.field = new Float32Array(grid.size * grid.size);
-    this.tmp = new Float32Array(grid.size * grid.size);
-    this.fieldVersion = -Infinity;
-    this.fieldEpoch = -1;
-    this.occupied = 0;
-  }
-
-  // Likelihood field: occupied cells, blurred twice with a 5-tap binomial kernel (sigma ~ 1.4 cells).
-  // Rebuilt every few map updates rather than every one: the map barely changes in
-  // a quarter of a second, and a slightly older field keeps a scan from being
-  // matched against itself. A cleared map forces an immediate rebuild.
-  refreshField() {
-    const g = this.grid;
-    if (this.fieldEpoch === g.epoch && g.version - this.fieldVersion < FIELD_REFRESH_EVERY) return;
-    const n = g.size, F = this.field, T = this.tmp, L = g.logodds, last = n - 1;
-    let occ = 0;
-    for (let i = 0; i < n * n; i++) { const o = L[i] > 0.8 ? 1 : 0; F[i] = o; occ += o; }
-    this.occupied = occ;
-    for (let pass = 0; pass < 2; pass++) {
-      for (let j = 0; j < n; j++) {
-        const r = j * n;
-        for (let i = 0; i < n; i++) {
-          T[r + i] = (F[r + (i > 1 ? i - 2 : 0)] + 4 * F[r + (i > 0 ? i - 1 : 0)] + 6 * F[r + i]
-            + 4 * F[r + (i < last ? i + 1 : last)] + F[r + (i < last - 1 ? i + 2 : last)]) * 0.0625;
-        }
-      }
-      for (let j = 0; j < n; j++) {
-        const a = (j > 1 ? j - 2 : 0) * n, b = (j > 0 ? j - 1 : 0) * n, c = j * n;
-        const d = (j < last ? j + 1 : last) * n, e = (j < last - 1 ? j + 2 : last) * n;
-        for (let i = 0; i < n; i++) F[c + i] = (T[a + i] + 4 * T[b + i] + 6 * T[c + i] + 4 * T[d + i] + T[e + i]) * 0.0625;
-      }
-    }
-    this.fieldVersion = g.version;
-    this.fieldEpoch = g.epoch;
-  }
-
-  // LiDAR returns relative to the body origin: [x0, y0, x1, y1, ...].
-  points(lidar, stride = 1) {
-    const [ox, oy] = this.lidarOffset, out = [];
-    for (let k = 0; k < lidar.n; k += stride) {
-      if (!lidar.hit[k]) continue;
-      const a = (k * 2 * Math.PI) / lidar.n, r = lidar.ranges[k];
-      out.push(ox + r * Math.cos(a), oy + r * Math.sin(a));
-    }
-    return out;
-  }
-
-  score(pts, x, y, th) {
-    const g = this.grid, n = g.size, inv = 1 / g.res, h = g.half, F = this.field;
-    const c = Math.cos(th), s = Math.sin(th);
-    let sum = 0;
-    for (let p = 0; p < pts.length; p += 2) {
-      const wx = x + c * pts[p] - s * pts[p + 1], wy = y + s * pts[p] + c * pts[p + 1];
-      const i = Math.floor((wx + h) * inv), j = Math.floor((wy + h) * inv);
-      if (i >= 0 && j >= 0 && i < n && j < n) sum += F[j * n + i];
-    }
-    return sum / (pts.length / 2);
-  }
-
-  // Search a window around `pred` and return the best pose and its mean likelihood.
-  // Small windows (tracking) scale the grid to the window; large ones (relocalising)
-  // use a fixed 5 cm / 1 degree grid on a subsample of returns to stay affordable.
-  match(lidar, pred, window) {
-    this.refreshField();
-    const [wx, wt] = window;
-    const wide = wx > 0.25;
-    const coarse = this.points(lidar, wide ? 6 : 3), fine = this.points(lidar, 1);
-    const sxy = wide ? 0.05 : Math.max(0.015, wx / 8);
-    const sth = wide ? 0.0175 : Math.max(0.004, wt / 8);
-    let best = { x: pred[0], y: pred[1], th: pred[2], score: -1 };
-    for (let dt = -wt; dt <= wt + 1e-9; dt += sth) {
-      for (let dx = -wx; dx <= wx + 1e-9; dx += sxy) {
-        for (let dy = -wx; dy <= wx + 1e-9; dy += sxy) {
-          const sc = this.score(coarse, pred[0] + dx, pred[1] + dy, pred[2] + dt);
-          if (sc > best.score) best = { x: pred[0] + dx, y: pred[1] + dy, th: pred[2] + dt, score: sc };
-        }
-      }
-    }
-    // A coarse optimum on the window's edge means the true pose may lie outside it.
-    const atEdge = Math.abs(best.x - pred[0]) > wx - sxy / 2 || Math.abs(best.y - pred[1]) > wx - sxy / 2
-      || Math.abs(wrap(best.th - pred[2])) > wt - sth / 2;
-    // Refine around the coarse optimum with every return.
-    const c0 = { ...best };
-    best.score = this.score(fine, c0.x, c0.y, c0.th);
-    for (let dt = -sth; dt <= sth + 1e-9; dt += sth / 3) {
-      for (let dx = -sxy; dx <= sxy + 1e-9; dx += sxy / 3) {
-        for (let dy = -sxy; dy <= sxy + 1e-9; dy += sxy / 3) {
-          const sc = this.score(fine, c0.x + dx, c0.y + dy, c0.th + dt);
-          if (sc > best.score) best = { x: c0.x + dx, y: c0.y + dy, th: c0.th + dt, score: sc };
-        }
-      }
-    }
-    best.th = wrap(best.th);
-    best.points = fine.length / 2;
-    best.atEdge = atEdge;
-    return best;
-  }
-}
-
-// ---------------------------------------------------------------------------
 // The pieces wired together.
 
 const MATCH_EVERY = 2; // control steps between scan matches while tracking (10 Hz)
@@ -337,12 +231,39 @@ const MIN_OCCUPIED = 250; // cells; don't match against a map that is barely the
 const MIN_SCORE = 0.2; // mean likelihood per return to accept a match (about 0.32 when aligned)
 const R_MATCH = [0.012 ** 2, 0.012 ** 2, 0.006 ** 2]; // from the isolated matcher test
 const GATE = 16.27; // chi-square, 3 dof, 99.9%: reject matches the filter finds implausible
+const KF_DIST = 0.4; // m of travel between keyframes
+const KF_TURN = 0.26; // rad (15 degrees) of turning between keyframes
+const LOCAL_KEYFRAMES = 40; // the front end's local map: the last ~16 m of route
+const LOCAL_REBUILD_EVERY = 20; // keyframes between local-map rebuilds
+const LOOP_SEARCH_EVERY = 2; // keyframes between loop-closure searches
+export const TUNING = { odomScale: 1, searchEvery: LOOP_SEARCH_EVERY }; // benchmark experiments only
+const SMALL_CORRECTION = [0.03, 0.017]; // m, rad (1 degree): below this a closure only confirms the map
+// Odometry-edge noise per keyframe step, for the front end's scan-matched motion.
+const odomSigma = (d, dth) => [0.01 + 0.03 * d, 0.01 + 0.03 * d, 0.005 + 0.03 * Math.abs(dth) + 0.01 * d];
 
 export class Slam {
-  constructor(sim, grid, rng, level, lidarOffset) {
+  // `grid` is the global map: drawn on screen, and used to relocalise after the
+  // car has been driving blind. Tracking matches against a local map of the
+  // recent route instead, so drift really does build up and loop closure has to
+  // remove it. `truth()` (the simulator's pose) is recorded per keyframe for
+  // evaluation only; nothing here reads it.
+  constructor(sim, grid, rng, level, lidarOffset, { loopClosure = true } = {}) {
     this.odom = new Odometry(sim, rng, level);
     this.ekf = new PoseEKF();
-    this.matcher = new ScanMatcher(grid, lidarOffset);
+    this.global = grid;
+    this.local = new OccupancyGrid({ half: grid.half, res: grid.res });
+    this.matcher = new ScanMatcher(this.local, lidarOffset);
+    this.globalMatcher = new ScanMatcher(grid, lidarOffset);
+    this.graph = new PoseGraph();
+    this.closer = new LoopCloser(this.graph, lidarOffset, grid);
+    this.loopClosure = loopClosure;
+    this.loopEvents = [];
+    this.truth = () => sim.carPose();
+    this.segment = 0;
+    this.lastKf = -1; // the newest keyframe of the current segment
+    this.kfSinceRebuild = 0;
+    this.sinceClosure = 0; // metres of route since the estimate was last pinned down
+    this.blindSince = false; // drove without localisation since the last keyframe
     this.lidarOffset = lidarOffset;
     this.matching = true;
     this.level = level;
@@ -364,8 +285,9 @@ export class Slam {
     this.ekf.reopenBiases(level);
   }
 
-  // Known (re)initialisation, e.g. at the start or after a respawn.
-  reinit(x, y, th) {
+  // Known (re)initialisation, e.g. at the start or after a respawn. Given the
+  // scan taken there, it anchors a new segment of the pose graph.
+  reinit(x, y, th, lidar = null) {
     const [b, s] = [this.ekf.x[3], this.ekf.x[4]];
     const [vb, vs] = [this.ekf.P[3][3], this.ekf.P[4][4]];
     const fresh = this.steps === 0;
@@ -382,7 +304,106 @@ export class Slam {
     this.encAlongSinceMatch = 0;
     this.slipUntil = 0;
     this.state = this.matching ? 'tracking' : 'dead reckoning';
+    this.segment++;
+    this.lastKf = -1;
+    this.sinceClosure = 0;
+    this.blindSince = false;
+    this.closer.reset();
+    this.local.clear();
+    if (lidar) {
+      this.#addKeyframe(lidar, true);
+      this.local.integrate(lidar, this.sensorPose());
+    }
   }
+
+  // Forget the map and the graph (the lab's "restart map").
+  resetMap() {
+    this.graph = new PoseGraph();
+    this.closer = new LoopCloser(this.graph, this.lidarOffset, this.global);
+    this.lastKf = -1;
+    this.loopEvents = [];
+  }
+
+  // ---- keyframes, local map and loop closure --------------------------------
+
+  #addKeyframe(lidar, anchor = false) {
+    const pose = this.pose();
+    const k = this.graph.addNode(pose, {
+      segment: this.segment,
+      scan: { n: lidar.n, ranges: Float32Array.from(lidar.ranges), hit: Uint8Array.from(lidar.hit) },
+      truth: this.truth(), // evaluation only
+    });
+    if (anchor) {
+      this.graph.nodes[k].fixed = true; // a known pose: the start, or a respawn
+    } else if (this.lastKf >= 0) {
+      const z = relPose(this.lastKfFront, pose);
+      // After driving blind, the step back to the last keyframe is only dead reckoning.
+      const sigma = this.blindSince ? [0.3, 0.3, 0.15] : odomSigma(Math.hypot(z[0], z[1]), z[2]).map((v) => v * TUNING.odomScale);
+      this.graph.addEdge(this.lastKf, k, z, sigma, 'odom');
+      this.sinceClosure += Math.hypot(z[0], z[1]);
+    }
+    this.blindSince = false;
+    this.lastKf = k;
+    this.lastKfFront = pose;
+    this.global.integrate(lidar, this.sensorPose());
+    if (++this.kfSinceRebuild >= LOCAL_REBUILD_EVERY) this.#rebuildLocal();
+    if (!anchor && this.loopClosure && k % TUNING.searchEvery === 0) {
+      const radius = Math.min(2.0, 0.6 + 0.03 * this.sinceClosure);
+      const pair = this.closer.attempt(k, radius);
+      if (pair) this.#close(pair);
+    }
+  }
+
+  // The local map: the last LOCAL_KEYFRAMES keyframes of this segment, at their graph poses.
+  #rebuildLocal() {
+    this.kfSinceRebuild = 0;
+    this.local.clear();
+    const nodes = this.graph.nodes;
+    for (let c = this.lastKf, used = 0; c >= 0 && used < LOCAL_KEYFRAMES; c--, used++) {
+      if (nodes[c].segment !== this.segment) break;
+      this.local.integrate(nodes[c].scan, this.#sensorAt(nodes[c].pose));
+    }
+  }
+
+  #sensorAt(pose) {
+    const [ox, oy] = this.lidarOffset, c = Math.cos(pose[2]), s = Math.sin(pose[2]);
+    return { x: pose[0] + c * ox - s * oy, y: pose[1] + s * ox + c * oy, yaw: pose[2] };
+  }
+
+  // A confirmed loop: add both constraints, re-optimise, carry the live estimate
+  // along with its keyframe, and rebuild both maps from the corrected keyframes.
+  #close(pair) {
+    for (const h of pair) this.graph.addEdge(h.c, h.k, h.z, LOOP_SIGMA, 'loop');
+    // Once the map is consistent, most revisits only confirm it. Keep those
+    // constraints, but skip the re-optimisation and map rebuild until a closure
+    // actually implies a correction.
+    const h = pair[1], off = Math.hypot(h.found[0] - h.pose[0], h.found[1] - h.pose[1]);
+    const turn = Math.abs(Math.atan2(Math.sin(h.found[2] - h.pose[2]), Math.cos(h.found[2] - h.pose[2])));
+    if (off < SMALL_CORRECTION[0] && turn < SMALL_CORRECTION[1]) {
+      this.sinceClosure = 0;
+      this.loopEvents.push({ from: this.graph.nodes[h.c].pose.slice(), to: h.pose.slice(), shift: 0, path: null, ms: 0, iterations: 0 });
+      return;
+    }
+    const before = this.graph.nodes[this.lastKf].pose.slice();
+    const t0 = performance.now();
+    const res = this.graph.optimize(8);
+    const after = this.graph.nodes[this.lastKf].pose;
+    const moved = compose(after, relPose(before, this.ekf.x.slice(0, 3)));
+    this.ekf.x[0] = moved[0]; this.ekf.x[1] = moved[1]; this.ekf.x[2] = moved[2];
+    this.lastKfFront = after.slice();
+    this.sinceClosure = 0;
+    this.global.clear();
+    for (const nd of this.graph.nodes) this.global.integrate(nd.scan, this.#sensorAt(nd.pose));
+    this.#rebuildLocal();
+    this.loopEvents.push({
+      from: this.graph.nodes[pair[1].c].pose.slice(), to: after.slice(),
+      shift: Math.hypot(after[0] - before[0], after[1] - before[1]),
+      path: this.graph.nodes.map((nd) => [nd.pose[0], nd.pose[1], nd.segment]),
+      ms: performance.now() - t0, iterations: res.iterations,
+    });
+  }
+
+  takeLoopEvents() { const e = this.loopEvents; this.loopEvents = []; return e; }
 
   // Whether scans should be written into the map. Without localisation they
   // would corrupt it: later matches would then confirm the drift (a false lock).
@@ -397,28 +418,34 @@ export class Slam {
     this.encSinceMatch += d.ds;
     this.encAlongSinceMatch += d.dx;
     this.steps++;
-    if (!this.matching) { this.state = 'dead reckoning'; return false; }
-    if (this.steps % (this.state === 'tracking' ? MATCH_EVERY : RELOCALISE_EVERY)) return false;
+    if (!this.matching) { this.state = 'dead reckoning'; this.blindSince = true; return false; }
+    if (this.steps % (this.state === 'tracking' ? MATCH_EVERY : RELOCALISE_EVERY)) {
+      this.#afterStep(lidar);
+      return false;
+    }
+    // Tracking matches the recent route; finding a lost pose needs the whole map.
+    const matcher = this.state === 'tracking' ? this.matcher : this.globalMatcher;
 
     const [sx, sy, st] = this.ekf.sigma();
     let window = [
       Math.min(MAX_WINDOW[0], Math.max(0.04, 3 * Math.max(sx, sy))),
       Math.min(MAX_WINDOW[1], Math.max(0.02, 3 * st)),
     ];
-    this.matcher.refreshField();
+    matcher.refreshField();
     let hits = 0;
     for (let k = 0; k < lidar.n; k++) hits += lidar.hit[k];
     const wasUnlocalised = this.state !== 'tracking';
-    if (hits < MIN_POINTS || this.matcher.occupied < MIN_OCCUPIED) {
+    if (hits < MIN_POINTS || matcher.occupied < MIN_OCCUPIED) {
       if (this.state === 'dead reckoning') this.state = 'relocalising';
+      this.#afterStep(lidar);
       return false;
     }
 
-    let m = this.matcher.match(lidar, this.ekf.x, window);
+    let m = matcher.match(lidar, this.ekf.x, window);
     // Best pose on the window's edge: the truth may lie outside it, so look wider.
     for (let k = 0; k < 2 && m.atEdge && window[0] < MAX_WINDOW[0]; k++) {
       window = [Math.min(MAX_WINDOW[0], 2 * window[0]), Math.min(MAX_WINDOW[1], 2 * window[1])];
-      m = this.matcher.match(lidar, this.ekf.x, window);
+      m = matcher.match(lidar, this.ekf.x, window);
     }
     this.lastScore = m.score;
     const z = [m.x, m.y, m.th];
@@ -428,12 +455,16 @@ export class Slam {
     // contradicts: positive when the car went less far than the wheels said.
     const enc = this.encAlongSinceMatch;
     const shortfall = Math.sign(enc) * -this.ekf.alongTrack(z);
+    // Slip can make the car go less far than the wheels claim, never backwards:
+    // a match that puts it behind where it started (when the wheels say it went
+    // forward) is a wrong match, however plausible an inflated covariance makes it.
+    if (Math.abs(enc) > 0.03 && shortfall > Math.abs(enc) + 0.05) accept = false;
 
     // A good match the filter calls implausible, where the car went less far than
     // the encoders said: test the hypothesis that the wheels spun and that motion
     // never happened. Accept it only if that makes it plausible.
     let slip = false;
-    if (!accept && m.score >= MIN_SCORE && shortfall > 0.03 && Math.abs(enc) > 0.03) {
+    if (!accept && m.score >= MIN_SCORE && shortfall > 0.03 && Math.abs(enc) > 0.03 && shortfall <= Math.abs(enc) + 0.05) {
       const saved = this.ekf.P.map((row) => row.slice());
       this.ekf.inflateAlongTrack(Math.abs(enc));
       if (this.ekf.mahalanobis2(z, R_MATCH) < GATE) accept = slip = true;
@@ -457,12 +488,25 @@ export class Slam {
       this.encAlongSinceMatch = 0;
       this.rejected = 0;
       this.state = 'tracking';
+      if (wasUnlocalised) this.#rebuildLocal(); // the local map may be far behind the car
+      this.#afterStep(lidar);
       return wasUnlocalised;
     }
     this.rejected++;
     if (this.rejected > 10) this.state = 'lost';
     else if (this.state === 'dead reckoning') this.state = 'relocalising';
+    if (this.state !== 'tracking') this.blindSince = true;
     return false;
+  }
+
+  // Every control step while localised: extend the local map, and add a
+  // keyframe once the car has moved or turned far enough.
+  #afterStep(lidar) {
+    if (!this.localised) return;
+    this.local.integrate(lidar, this.sensorPose());
+    if (this.lastKf < 0) { this.#addKeyframe(lidar); return; }
+    const z = relPose(this.lastKfFront, this.pose());
+    if (Math.hypot(z[0], z[1]) >= KF_DIST || Math.abs(z[2]) >= KF_TURN) this.#addKeyframe(lidar);
   }
 
   // Estimated sensor pose, for building the map.

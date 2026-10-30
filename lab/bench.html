@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SLAM benchmark</title>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }
+</script>
+<style>
+  body { margin: 0; padding: 24px; background: #050b11; color: #c3ced6; font: 14px/1.5 ui-monospace, Consolas, monospace; }
+  #stage { position: fixed; right: 0; bottom: 0; width: 320px; height: 200px; opacity: 0.4; }
+  table { border-collapse: collapse; } td, th { padding: 2px 10px; text-align: right; border-bottom: 1px solid #263746; }
+</style>
+</head>
+<body>
+<h1>SLAM benchmark</h1>
+<p>Runs each layout for a fixed time and compares the SLAM estimate and map with ground truth.
+`?impl=src` (default) or another source folder; `?loops=0` turns loop closure off.
+Call <code>runBench(layouts, seconds)</code> from the console; results land in <code>window.__bench</code>, one layout at a time.</p>
+<div id="out"></div>
+<div id="stage"></div>
+<script type="module">
+  import { OccupancyGrid } from './src/mapping.js';
+  const q = new URLSearchParams(location.search);
+  const impl = q.get('impl') || 'src', loops = q.get('loops') !== '0';
+  const { startLab } = await import(`./${impl}/lab.js`);
+  // Experiments: ?odom=2 scales the odometry-edge noise, ?every=1 searches for loops at every keyframe.
+  if (q.get('odom') || q.get('every')) {
+    const { TUNING } = await import(`./${impl}/slam.js`);
+    if (q.get('odom')) TUNING.odomScale = Number(q.get('odom'));
+    if (q.get('every')) TUNING.searchEvery = Number(q.get('every'));
+  }
+  const lab = await startLab({ stage: document.getElementById('stage'), hero: true, seed: 1 });
+  lab.setPaused(true);
+  const SAMPLE = 0.05; // every control step: errors sampled, and the true map built from every scan
+
+  // Fraction of the estimated map's occupied cells within one cell of a surface in
+  // the true map (built from the same scans at the true poses).
+  function mapPrecision(est, truth) {
+    const n = est.size, E = est.logodds, T = truth.logodds;
+    let occ = 0, good = 0;
+    for (let j = 1; j < n - 1; j++) for (let i = 1; i < n - 1; i++) {
+      if (E[j * n + i] <= 1.2) continue;
+      occ++;
+      let near = false;
+      for (let dj = -1; dj <= 1 && !near; dj++) for (let di = -1; di <= 1; di++) if (T[(j + dj) * n + i + di] > 0.8) { near = true; break; }
+      if (near) good++;
+    }
+    return occ ? good / occ : 0;
+  }
+
+  function wrongLoops(slam) {
+    if (!slam.graph) return null;
+    const rel = (a, b) => { const c = Math.cos(a[2]), s = Math.sin(a[2]), dx = b[0] - a[0], dy = b[1] - a[1];
+      return [c * dx + s * dy, -s * dx + c * dy, Math.atan2(Math.sin(b[2] - a[2]), Math.cos(b[2] - a[2]))]; };
+    let bad = 0, total = 0;
+    for (const e of slam.graph.edges) {
+      if (e.kind !== 'loop') continue;
+      total++;
+      const t = rel(slam.graph.nodes[e.i].truth, slam.graph.nodes[e.j].truth);
+      if (Math.hypot(t[0] - e.z[0], t[1] - e.z[1]) > 0.15 || Math.abs(t[2] - e.z[2]) > 0.09) bad++;
+    }
+    return { total, bad };
+  }
+
+  // Async so a long run doesn't block the page: poll window.__bench (and __benchDone).
+  window.runBench = async (layouts, seconds) => {
+    window.__benchDone = false;
+    const rows = [];
+    for (const seed of layouts) {
+      await new Promise((r) => setTimeout(r, 0));
+      lab.state.loopClosure = loops;
+      lab.newLayout(seed);
+      const respawns0 = lab.state.respawns || 0;
+      const truth = new OccupancyGrid({ half: lab.grid.half, res: lab.grid.res });
+      const errs = [], heads = [], t0 = performance.now();
+      let lost = 0;
+      for (let t = 0; t < seconds; t += SAMPLE) {
+        lab.advance(SAMPLE);
+        errs.push(lab.state.posErr); heads.push(lab.state.headErr);
+        truth.integrate(lab.lidar); // at the true pose
+        if (lab.state.slam.state === 'lost') lost++;
+      }
+      const s = lab.state.slam;
+      rows.push({
+        seed, mean: 100 * errs.reduce((a, b) => a + b) / errs.length, max: 100 * Math.max(...errs),
+        head: Math.max(...heads) * 180 / Math.PI, lost, map: 100 * mapPrecision(lab.grid, truth),
+        closures: s.closer ? s.closer.closures : null, loops: wrongLoops(s), respawns: (lab.state.respawns || 0) - respawns0,
+        wall: Math.round(performance.now() - t0),
+      });
+      window.__bench = (window.__bench || []).concat(rows.slice(-1));
+    }
+    window.__benchDone = true;
+    return rows;
+  };
+  window.__ready = true;
+  document.getElementById('out').textContent = `ready: impl=${impl}, loops=${loops}`;
+</script>
+</body>
+</html>
